@@ -1,14 +1,10 @@
 #EXTM3U
-#EXTINF:-1 tvg-name="Aaj Tak" group-title="News",Aaj Tak
-https://aajtaklive-amd.akamaized.net/hls/live/2014416/aajtak/aajtaklive/playlist.m3u8
 #EXTINF:-1 tvg-name="Aaj Tak Day" group-title="News",Aaj Tak Day
 https://feeds.intoday.in/aajtak/api/aajtakhd/master.m3u8
 #EXTINF:-1 tvg-name="Aastha Bhajan" group-title="Devotional",Aastha Bhajan
 https://aasthaott.akamaized.net/110923/smil:bhajan.smil/chunklist_b264000.m3u8
 #EXTINF:-1 tvg-name="ABP Ganga" group-title="News",ABP Ganga
 https://abplivetv.akamaized.net/hls/live/2043013/ganga/master.m3u8
-#EXTINF:-1 tvg-name="Anjan" group-title="Regional",Anjan
-https://anjantvevent.pc.cdn.bitgravity.com/anjantv/live/amlst:event_anjan_,b400,b800,b1024,b1200,b1500,b4000,.smil/playlist.m3u8
 #EXTINF:-1 tvg-name="Ayush TV" group-title="Lifestyle",Ayush TV
 https://95eryw39dwn4-hls-live.wmncdn.net/Ayushu/271ddf829afeece44d8732757fba1a66.sdp/index.m3u8
 #EXTINF:-1 tvg-name="Balle Balle" group-title="Music",Balle Balle
@@ -17,34 +13,14 @@ https://mcncdndigital.com/balleballetv/index.m3u8
 https://idvd.multitvsolution.com/idvo/bharatsamachar.m3u
 #EXTINF:-1 tvg-name="Dangal TV" group-title="Entertainment",Dangal TV
 https://live-dangal.akamaized.net/liveabr/pub-iodang10p4al/live_240p/chunks.m3u8
-#EXTINF:-1 tvg-name="DD Arun Prabha" group-title="Regional",DD Arun Prabha
-https://d2lk5u59tns74c.cloudfront.net/out/v1/308556d9fd1246adb479ef012a39bbfe/index_3.m3u8
-#EXTINF:-1 tvg-name="DD Haryana" group-title="Regional",DD Haryana
-https://d2lk5u59tns74c.cloudfront.net/out/v1/950fc69666474351bde0a32b9600c804/index_1.m3u8
-#EXTINF:-1 tvg-name="DD Jharkhand" group-title="Regional",DD Jharkhand
-https://d3eyhgoylams0m.cloudfront.net/v1/manifest/93ce20f0f52760bf38be911ff4c91ed02aa2fd92/ed7bd2c7-8d10-4051-b397-2f6b90f99acb/2c6c5c20-6afe-47c4-934f-a0d7002cb151/2.m3u8
-#EXTINF:-1 tvg-name="Dheeren TV" group-title="Entertainment",Dheeren TV
-https://live.we2live.in/dheerantv/dheerantv/playlist.m3u8
-#EXTINF:-1 tvg-name="E 24" group-title="Entertainment",E 24
-https://live-e24.dailyhunt.in/eternowsa/live/amlst:E24_,b256,b512,b1024,b1824,.smil/playlist.m3u8
 #EXTINF:-1 tvg-name="First India News" group-title="News",First India News
 https://xlbor37ydvaj-hls-live.wmncdn.net/firstindianewstv1/live.stream/index.m3u8
 #EXTINF:-1 tvg-name="News India MP/CH" group-title="News",News India MP/CH
 https://livetv.newsx.com/itv/itvnetwork7/playlist.m3u8
-#EXTINF:-1 tvg-name="India News Raj" group-title="News",India News Raj
-https://livetv.newsx.com/itv/itvnetwork9/playlist.m3u8
 #EXTINF:-1 tvg-name="India Today Eng" group-title="News",India Today Eng
 https://indiatodaylive.akamaized.net/hls/live/2014320/indiatoday/indiatodaylive/live_180p/chunks.m3u8
-#EXTINF:-1 tvg-name="INH 24" group-title="News",INH 24
-https://7epd6o8edk9b-hls-live.wmncdn.net/inh24/live.stream/playlist.m3u8
 #EXTINF:-1 tvg-name="Ishwar Bhakti" group-title="Devotional",Ishwar Bhakti
 https://6n3yow8pl9ok-hls-live.5centscdn.com/ishwartvlive/tv.stream/playlist.m3u8
-#EXTINF:-1 tvg-name="JK 24x7" group-title="News",JK 24x7
-https://live.gulistannews.in/hls/jk.m3u8
-#EXTINF:-1 tvg-name="K News" group-title="News",K News
-https://knews.livebox.co.in/youtubehls/live.m3u8
-#EXTINF:-1 tvg-name="Kaumudi TV" group-title="Regional",Kaumudi TV
-https://oqgdrkxby4rm-hls-live.5centscdn.com/kaumudytv/live.stream/playlist.m3u
 #EXTINF:-1 tvg-name="Lok Sabha TV" group-title="News",Lok Sabha TV
 https://playhls.media.nic.in/hls/live/lstv/lstv.m3u8
 #EXTINF:-1 tvg-name="NDTV India" group-title="News",NDTV India (480p) [Not 24/7]
@@ -95,8 +71,6 @@ https://vg-theqlive.akamaized.net/v1/master/611d79b11b77e2f571934fd80ca141345377
 https://streams2.sofast.tv/ptnr-yupptv/title-KIDDO-ENG_yupptv/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/5bcf9d24-04f2-401d-a93f-7af54f29461a/3ed20915-7a5a-424e-afa8-b5c7692b08ee/0.m3u8
 #EXTINF:-1 tvg-name="Masti Music" group-title="Music",Masti Music
 https://sabliveyupp.akamaized.net/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/sablive_https/mastii/playlist.m3u8
-#EXTINF:-1 tvg-name="Insync Music" group-title="Music",Insync Music
-https://yuppftalive.akamaized.net/080823/insync/playlist.m3u8
 #EXTINF:-1 tvg-name="Bollywood 4U" group-title="Movies",Bollywood 4U
 https://streams2.sofast.tv/ptnr-yupptv/title-BOLLYWOOD-4U-ENG_yupptv/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/22d13e33-8705-40e8-9809-4e80aa795f15/e1479e4d-f60d-4ebc-b706-82ca9d15cfdd/0.m3u8
 #EXTINF:-1 tvg-name="Zee Business" group-title="News",Zee Business
@@ -109,8 +83,6 @@ https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26
 http://cdn12.henico.net:8080/live/jbani/index.m3u8
 #EXTINF:-1 tvg-name="Bollywood Classic OTT" group-title="Movies",Bollywood Classic OTT
 https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/bollywood-classic/manifest.m3u8
-#EXTINF:-1 tvg-name="Indo Oz TV" group-title="Entertainment",Indo Oz TV (720p)
-https://stream.e2is.in/hls/indoztv.m3u8
 #EXTINF:-1 tvg-name="9X Tashan" group-title="Music",9X Tashan
 https://amg01281-9xmediapvtltd-9xtashan-samsungin-xz1sd.amagi.tv/playlist/amg01281-9xmediapvtltd-9xtashan-samsungin/playlist.m3u8
 #EXTINF:-1 tvg-name="9X Jhakaas" group-title="Music",9X Jhakaas
