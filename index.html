@@ -7,24 +7,33 @@
   <style>
     :root{--bg:#0b1020;--fg:#e7ecff;--muted:#9aa3b2;--card:#121936;--acc:#4da3ff}
     *{box-sizing:border-box;margin:0;padding:0}
-    body{display:flex;min-height:100vh;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Roboto,sans-serif}
-    .sidebar{width:260px;background:var(--card);padding:12px;overflow-y:auto}
+    body{display:flex;min-height:100vh;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Roboto,sans-serif;transition:.3s}
+    .sidebar{width:260px;min-width:200px;background:var(--card);padding:12px;overflow-y:auto;transition:.3s}
     .sidebar h2{font-size:16px;margin-bottom:8px;color:var(--acc)}
     .channel{padding:10px;border-radius:10px;margin-bottom:6px;background:#1b2447;cursor:pointer;transition:.2s}
     .channel:hover{background:#2c386d}
     .channel.active{background:var(--acc);color:#001028;font-weight:600}
-    .main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
-    video{width:100%;max-width:1000px;border-radius:16px;background:#000;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+    .main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;transition:.3s}
+    video{width:100%;height:80vh;max-width:100%;border-radius:16px;background:#000;box-shadow:0 10px 30px rgba(0,0,0,.4)}
     .error{margin-top:10px;color:#ffb4b4}
     @media(max-width:700px){.sidebar{width:180px}}
+    /* Toggle button */
+    .toggle-btn{position:absolute;top:10px;left:260px;width:24px;height:40px;background:var(--acc);color:#001028;
+      border-radius:0 8px 8px 0;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:bold;transition:.3s}
+    .collapsed .sidebar{margin-left:-260px}
+    .collapsed .toggle-btn{left:0;border-radius:8px 0 0 8px}
+    .search-box{margin-bottom:12px}
+    .search-box input{width:100%;padding:8px 10px;border-radius:8px;border:1px solid #2a355e;background:#0e1533;color:var(--fg)}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
 </head>
 <body>
   <div class="sidebar">
     <h2>Channels</h2>
+    <div class="search-box"><input id="search" type="text" placeholder="Search..."></div>
     <div id="channels"></div>
   </div>
+  <div class="toggle-btn" id="toggle">❮</div>
   <div class="main">
     <video id="video" controls autoplay playsinline></video>
     <div class="error" id="error"></div>
@@ -35,7 +44,9 @@ const playlistURL = "https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/P
 const channelList = document.getElementById("channels");
 const video = document.getElementById("video");
 const errorBox = document.getElementById("error");
-let hls;
+const searchInput = document.getElementById("search");
+const toggleBtn = document.getElementById("toggle");
+let hls, channels = [];
 
 // Parse M3U file
 async function loadPlaylist(){
@@ -43,11 +54,9 @@ async function loadPlaylist(){
     const res = await fetch(playlistURL);
     const text = await res.text();
     const lines = text.split(/\r?\n/).filter(l=>l.trim() !== "");
-    let channels = [];
     let currentName = null;
     for(let line of lines){
       if(line.startsWith("#EXTINF")){
-        // Extract name
         const nameMatch = line.match(/,(.*)$/);
         if(nameMatch) currentName = nameMatch[1].trim();
       } else if(!line.startsWith("#")){
@@ -59,10 +68,10 @@ async function loadPlaylist(){
   }catch(e){ errorBox.textContent="Failed to load playlist: "+e; }
 }
 
-// Render sidebar
-function renderChannels(channels){
+// Render sidebar list
+function renderChannels(list){
   channelList.innerHTML="";
-  channels.forEach((ch,i)=>{
+  list.forEach((ch,i)=>{
     const div=document.createElement("div");
     div.textContent=ch.name;
     div.className="channel";
@@ -76,7 +85,7 @@ function renderChannels(channels){
   });
 }
 
-// Play with HLS.js
+// Play stream
 function playStream(url){
   errorBox.textContent="";
   if(hls){hls.destroy();}
@@ -89,6 +98,19 @@ function playStream(url){
     errorBox.textContent="This browser does not support HLS.";
   }
 }
+
+// Search filter
+searchInput.addEventListener("input",()=>{
+  const q=searchInput.value.toLowerCase();
+  const filtered=channels.filter(c=>c.name.toLowerCase().includes(q));
+  renderChannels(filtered);
+});
+
+// Sidebar toggle
+toggleBtn.addEventListener("click",()=>{
+  document.body.classList.toggle("collapsed");
+  toggleBtn.textContent=document.body.classList.contains("collapsed")?"❯":"❮";
+});
 
 loadPlaylist();
 </script>
