@@ -1,0 +1,204 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Live Stream Player</title>
+  <meta name="description" content="Simple live video player for HLS (.m3u8) and DASH (.mpd). Host on GitHub Pages." />
+  <style>
+    :root{--bg:#0b1020;--fg:#e7ecff;--muted:#9aa3b2;--card:#121936;--acc:#4da3ff}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+    .wrap{max-width:1000px;margin:24px auto;padding:16px}
+    .card{background:var(--card);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:16px}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    label{font-size:12px;color:var(--muted)}
+    input[type="text"],select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #2a355e;background:#0e1533;color:var(--fg);outline:none}
+    button{padding:10px 16px;border-radius:12px;border:0;background:var(--acc);color:#001028;font-weight:700;cursor:pointer}
+    button:disabled{opacity:.6;cursor:not-allowed}
+    .controls{display:flex;gap:10px;flex-wrap:wrap}
+    .hint{color:var(--muted);font-size:13px}
+    .videoShell{position:relative;background:#000;border-radius:16px;overflow:hidden}
+    video{width:100%;height:auto;display:block;background:#000}
+    .badge{position:absolute;top:10px;left:10px;background:#e11d48;color:#fff;padding:4px 8px;border-radius:999px;font-size:12px;letter-spacing:.08em}
+    .error{margin-top:10px;color:#ffb4b4;font-size:13px}
+    .footer{margin-top:18px;font-size:12px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr auto auto;gap:10px}
+    @media (max-width:700px){.grid{grid-template-columns:1fr}}
+  </style>
+  <!-- HLS.js for .m3u8 on browsers without native HLS (most non‑Safari) -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js" integrity="sha256-+wI1Nf0IbgpoXdWkzGQb3i8u0uuzkB6jN4n1+e6sY3A=" crossorigin="anonymous"></script>
+  <!-- dash.js for MPEG‑DASH .mpd -->
+  <script src="https://cdn.jsdelivr.net/npm/dashjs@4.7.4/dist/dash.all.min.js" integrity="sha256-vI7qvOOWnbddt6UzR2Uq9F+K9m1sru4GsGKeYygbYVM=" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="wrap">
+    <h1 style="margin:0 0 12px">Live Stream Player</h1>
+    <p class="hint" style="margin-top:0">Paste a live stream URL (<code>.m3u8</code> HLS or <code>.mpd</code> DASH) or pass it via <code>?src=...</code> in the page URL.</p><div class="card" style="margin-bottom:16px">
+  <div class="grid">
+    <div>
+      <label for="src">Stream URL</label>
+      <input id="src" type="text" placeholder="https://example.com/live/playlist.m3u8" />
+    </div>
+    <div>
+      <label for="type">Type</label>
+      <select id="type">
+        <option value="auto" selected>Detect automatically</option>
+        <option value="hls">HLS (.m3u8)</option>
+        <option value="dash">MPEG-DASH (.mpd)</option>
+      </select>
+    </div>
+    <div style="align-self:end">
+      <button id="playBtn">Play</button>
+    </div>
+  </div>
+  <div class="controls" style="margin-top:10px">
+    <button id="stopBtn">Stop</button>
+    <button id="muteBtn">Mute</button>
+    <button id="pipBtn">PiP</button>
+    <button id="fsBtn">Fullscreen</button>
+    <label><input type="checkbox" id="lowLatency"> Low‑latency (HLS)</label>
+  </div>
+  <div class="hint">Tip: This page must be served over <b>HTTPS</b> and your stream server must allow <b>CORS</b> for this origin. RTSP/RTMP are not supported by browsers directly.</div>
+</div>
+
+<div class="videoShell card">
+  <span class="badge" id="liveBadge">LIVE</span>
+  <video id="video" playsinline controls poster="" preload="metadata"></video>
+  <div class="error" id="error"></div>
+</div>
+
+<div class="footer">
+  Works on Safari (native HLS) and other browsers via hls.js or dash.js. Paste a URL or use <code>?src=</code>.
+</div>
+
+  </div>  <script>
+    const $ = (s)=>document.querySelector(s);
+    const video = $('#video');
+    const srcInput = $('#src');
+    const typeSel = $('#type');
+    const playBtn = $('#playBtn');
+    const stopBtn = $('#stopBtn');
+    const muteBtn = $('#muteBtn');
+    const pipBtn = $('#pipBtn');
+    const fsBtn = $('#fsBtn');
+    const lowLatency = $('#lowLatency');
+    const errBox = $('#error');
+
+    let hls, dashPlayer;
+
+    function setError(msg){
+      console.error(msg);
+      errBox.textContent = (msg && msg.message) ? msg.message : (msg||'');
+    }
+
+    function clearError(){ errBox.textContent = '' }
+
+    function guessType(u){
+      if(!u) return 'auto';
+      const q = u.split('?')[0].toLowerCase();
+      if(q.endsWith('.m3u8')) return 'hls';
+      if(q.endsWith('.mpd')) return 'dash';
+      return 'auto';
+    }
+
+    function detachPlayers(){
+      try{ if(hls){ hls.destroy(); hls=null; } }catch{}
+      try{ if(dashPlayer){ dashPlayer.reset(); dashPlayer=null; } }catch{}
+      video.removeAttribute('src');
+      video.load();
+    }
+
+    async function startPlayback(url, kind){
+      clearError();
+      detachPlayers();
+
+      if(kind==='auto') kind = guessType(url);
+
+      if(kind==='hls'){
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        // Native HLS on Safari/iOS
+        if(video.canPlayType('application/vnd.apple.mpegurl') && isSafari){
+          video.src = url;
+          await video.play().catch(setError);
+          return;
+        }
+        if(Hls.isSupported()){
+          hls = new Hls({
+            enableWorker: true,
+            lowLatencyMode: !!lowLatency.checked,
+            liveDurationInfinity: true,
+          });
+          hls.on(Hls.Events.ERROR, (_, data)=>{
+            if(data?.fatal){ setError('HLS fatal error: '+data.details); hls.destroy(); }
+          });
+          hls.loadSource(url);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED, async ()=>{
+            try{ await video.play(); }catch(e){ setError(e); }
+          });
+        } else {
+          setError('HLS not supported by this browser');
+        }
+        return;
+      }
+
+      if(kind==='dash'){
+        try{
+          dashPlayer = dashjs.MediaPlayer().create();
+          dashPlayer.initialize(video, url, true);
+          dashPlayer.updateSettings({
+            streaming:{lowLatencyEnabled: true, liveCatchup:{ enabled:true, minDrift:0.02, playbackRate:0.5 }}
+          });
+        }catch(e){ setError(e); }
+        return;
+      }
+
+      // Fallback: try native <video>
+      try{
+        video.src = url; await video.play();
+      }catch(e){ setError('Cannot detect stream type. Select HLS or DASH.'); }
+    }
+
+    function stopPlayback(){
+      try{ video.pause(); }catch{}
+      detachPlayers();
+    }
+
+    // UI hooks
+    playBtn.addEventListener('click', ()=>{
+      const url = srcInput.value.trim();
+      if(!url){ setError('Please enter a stream URL'); return; }
+      localStorage.setItem('live_player_src', url);
+      localStorage.setItem('live_player_type', typeSel.value);
+      startPlayback(url, typeSel.value);
+    });
+
+    stopBtn.addEventListener('click', stopPlayback);
+
+    muteBtn.addEventListener('click', ()=>{
+      video.muted = !video.muted; muteBtn.textContent = video.muted ? 'Unmute' : 'Mute';
+    });
+
+    pipBtn.addEventListener('click', async ()=>{
+      if(document.pictureInPictureElement){ await document.exitPictureInPicture(); return; }
+      if(document.pictureInPictureEnabled && !video.disablePictureInPicture){
+        try{ await video.requestPictureInPicture(); }catch(e){ setError(e); }
+      } else setError('PiP not supported');
+    });
+
+    fsBtn.addEventListener('click', ()=>{
+      const el = document.fullscreenElement ? document : document.documentElement;
+      if(document.fullscreenElement){ el.exitFullscreen?.(); }
+      else { $('.videoShell').requestFullscreen?.(); }
+    });
+
+    // Load from query string or localStorage
+    (function init(){
+      const params = new URLSearchParams(location.search);
+      let src = params.get('src') || localStorage.getItem('live_player_src') || '';
+      let kind = params.get('type') || localStorage.getItem('live_player_type') || 'auto';
+      if(src){ srcInput.value = src; typeSel.value = ['hls','dash','auto'].includes(kind)?kind:'auto'; startPlayback(src, typeSel.value); }
+    })();
+  </script></body>
+</html>
