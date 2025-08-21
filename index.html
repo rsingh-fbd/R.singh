@@ -1,102 +1,130 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Live TV Player</title>
-  <style>
-    :root{--bg:#0b1020;--fg:#e7ecff;--muted:#9aa3b2;--card:#121936;--acc:#4da3ff}
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{display:flex;min-height:100vh;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Roboto,sans-serif;transition:.3s}
-    .sidebar{width:260px;min-width:200px;background:var(--card);padding:12px;overflow-y:auto;transition:.3s}
-    .sidebar h2{font-size:16px;margin-bottom:8px;color:var(--acc)}
-    .channel{padding:10px;border-radius:10px;margin-bottom:6px;background:#1b2447;cursor:pointer;transition:.2s}
-    .channel:hover{background:#2c386d}
-    .channel.active{background:var(--acc);color:#001028;font-weight:600}
-    .main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;transition:.3s}
-    video{width:100%;height:80vh;max-width:100%;border-radius:16px;background:#000;box-shadow:0 10px 30px rgba(0,0,0,.4)}
-    .error{margin-top:10px;color:#ffb4b4}
-    @media(max-width:700px){.sidebar{width:180px}}
-    /* Toggle button */
-    .toggle-btn{position:absolute;top:10px;left:260px;width:24px;height:40px;background:var(--acc);color:#001028;
-      border-radius:0 8px 8px 0;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:bold;transition:.3s}
-    .collapsed .sidebar{margin-left:-260px}
-    .collapsed .toggle-btn{left:0;border-radius:8px 0 0 8px}
-    .search-box{margin-bottom:12px}
-    .search-box input{width:100%;padding:8px 10px;border-radius:8px;border:1px solid #2a355e;background:#0e1533;color:var(--fg)}
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Live TV Player</title>
+<style>
+  :root{--bg:#0b1020;--fg:#e7ecff;--muted:#9aa3b2;--card:#121936;--acc:#4da3ff}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Roboto,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .player-container{position:relative;width:100%;max-width:1000px}
+  video{width:100%;height:80vh;max-height:80vh;background:#000;border-radius:12px}
+  .error{margin-top:6px;color:#ffb4b4;text-align:center}
+
+  /* Overlay channel list */
+  .channel-overlay{position:absolute;top:0;left:0;bottom:0;width:280px;max-width:80%;background:rgba(18,25,54,.95);
+    overflow-y:auto;transform:translateX(-100%);transition:.3s;border-radius:0 12px 12px 0;padding:12px;z-index:20}
+  .channel-overlay.active{transform:translateX(0)}
+  .channel{padding:10px;border-radius:8px;margin-bottom:6px;background:#1b2447;cursor:pointer}
+  .channel:hover{background:#2c386d}
+  .channel.active{background:var(--acc);color:#001028;font-weight:600}
+  .search-box{margin-bottom:12px}
+  .search-box input{width:100%;padding:8px 10px;border-radius:8px;border:1px solid #2a355e;background:#0e1533;color:var(--fg)}
+
+  /* Toggle button for channel list */
+  .toggle-btn{position:absolute;top:50%;left:10px;transform:translateY(-50%);background:var(--acc);color:#001028;
+    border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:30}
+
+  /* Next/Prev buttons */
+  .nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);color:#fff;border-radius:50%;
+    width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:15}
+  .prev-btn{left:50px}
+  .next-btn{right:50px}
+
+  /* Channel title overlay */
+  .channel-title{position:absolute;top:12px;left:50%;transform:translateX(-50%);padding:6px 14px;background:rgba(0,0,0,.6);
+    color:#fff;border-radius:12px;font-size:14px;opacity:0;transition:.3s;z-index:25;pointer-events:none}
+  .show-title .channel-title{opacity:1}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
 </head>
 <body>
-  <div class="sidebar">
-    <h2>Channels</h2>
+<div class="player-container">
+  <video id="video" controls autoplay playsinline></video>
+  <div class="error" id="error"></div>
+
+  <div class="channel-title" id="channelTitle"></div>
+  <div class="toggle-btn" id="toggle">☰</div>
+  <div class="nav-btn prev-btn" id="prev">⟨</div>
+  <div class="nav-btn next-btn" id="next">⟩</div>
+
+  <div class="channel-overlay" id="overlay">
     <div class="search-box"><input id="search" type="text" placeholder="Search..."></div>
     <div id="channels"></div>
   </div>
-  <div class="toggle-btn" id="toggle">❮</div>
-  <div class="main">
-    <video id="video" controls autoplay playsinline></video>
-    <div class="error" id="error"></div>
-  </div>
+</div>
 
 <script>
-const playlistURL = "https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u";
-const channelList = document.getElementById("channels");
-const video = document.getElementById("video");
-const errorBox = document.getElementById("error");
-const searchInput = document.getElementById("search");
-const toggleBtn = document.getElementById("toggle");
-let hls, channels = [];
+const playlistURL="https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u";
+const video=document.getElementById("video");
+const errorBox=document.getElementById("error");
+const overlay=document.getElementById("overlay");
+const channelList=document.getElementById("channels");
+const searchInput=document.getElementById("search");
+const titleBox=document.getElementById("channelTitle");
+const toggleBtn=document.getElementById("toggle");
+const prevBtn=document.getElementById("prev");
+const nextBtn=document.getElementById("next");
 
-// Parse M3U file
+let hls,channels=[],currentIndex=0;
+
+// Load and parse playlist
 async function loadPlaylist(){
   try{
-    const res = await fetch(playlistURL);
-    const text = await res.text();
-    const lines = text.split(/\r?\n/).filter(l=>l.trim() !== "");
-    let currentName = null;
+    const res=await fetch(playlistURL); const text=await res.text();
+    const lines=text.split(/\\r?\\n/).filter(l=>l.trim()!=="");
+    let currentName=null;
     for(let line of lines){
       if(line.startsWith("#EXTINF")){
-        const nameMatch = line.match(/,(.*)$/);
-        if(nameMatch) currentName = nameMatch[1].trim();
+        const nameMatch=line.match(/,(.*)$/); if(nameMatch) currentName=nameMatch[1].trim();
       } else if(!line.startsWith("#")){
         if(currentName) channels.push({name:currentName,url:line});
         currentName=null;
       }
     }
     renderChannels(channels);
-  }catch(e){ errorBox.textContent="Failed to load playlist: "+e; }
+  }catch(e){errorBox.textContent="Failed to load playlist: "+e;}
 }
 
-// Render sidebar list
+// Render channel list
 function renderChannels(list){
   channelList.innerHTML="";
   list.forEach((ch,i)=>{
     const div=document.createElement("div");
     div.textContent=ch.name;
     div.className="channel";
-    div.onclick=()=>{ 
-      document.querySelectorAll(".channel").forEach(c=>c.classList.remove("active"));
-      div.classList.add("active");
-      playStream(ch.url);
-    };
+    div.onclick=()=>selectChannel(i);
     channelList.appendChild(div);
-    if(i===0){div.classList.add("active"); playStream(ch.url);} // auto play first
   });
+  if(list.length){selectChannel(0);}
+}
+
+// Select & play channel
+function selectChannel(i){
+  currentIndex=i;
+  document.querySelectorAll(".channel").forEach((c,j)=>c.classList.toggle("active",j===i));
+  playStream(channels[i].url);
+  showTitle(channels[i].name);
+}
+
+// Show channel name overlay
+function showTitle(name){
+  titleBox.textContent=name;
+  document.body.classList.add("show-title");
+  setTimeout(()=>document.body.classList.remove("show-title"),3000);
 }
 
 // Play stream
 function playStream(url){
   errorBox.textContent="";
   if(hls){hls.destroy();}
-  if(video.canPlayType('application/vnd.apple.mpegurl')){
+  if(video.canPlayType("application/vnd.apple.mpegurl")){
     video.src=url; video.play().catch(err=>errorBox.textContent=err);
   } else if(Hls.isSupported()){
     hls=new Hls(); hls.loadSource(url); hls.attachMedia(video);
     hls.on(Hls.Events.ERROR,(ev,data)=>{ if(data.fatal) errorBox.textContent="Stream error: "+data.details; });
-  } else {
-    errorBox.textContent="This browser does not support HLS.";
-  }
+  } else { errorBox.textContent="This browser does not support HLS."; }
 }
 
 // Search filter
@@ -106,11 +134,16 @@ searchInput.addEventListener("input",()=>{
   renderChannels(filtered);
 });
 
-// Sidebar toggle
-toggleBtn.addEventListener("click",()=>{
-  document.body.classList.toggle("collapsed");
-  toggleBtn.textContent=document.body.classList.contains("collapsed")?"❯":"❮";
-});
+// Toggle overlay
+toggleBtn.onclick=()=>overlay.classList.toggle("active");
+
+// Next/Prev
+prevBtn.onclick=()=>{ if(currentIndex>0) selectChannel(currentIndex-1); }
+nextBtn.onclick=()=>{ if(currentIndex<channels.length-1) selectChannel(currentIndex+1); }
+
+// Show title when controls appear
+video.addEventListener("play",()=>showTitle(channels[currentIndex]?.name||""));
+video.addEventListener("pause",()=>showTitle(channels[currentIndex]?.name||""));
 
 loadPlaylist();
 </script>
