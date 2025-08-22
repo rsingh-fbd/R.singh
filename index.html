@@ -32,8 +32,6 @@
       background: #000;
       object-fit: contain;
     }
-
-    /* Controls (auto-hide) */
     #controls {
       position: absolute;
       left: 50%;
@@ -84,8 +82,6 @@
       opacity: .2;
       background: #fff;
     }
-
-    /* Channel overlay */
     #channelOverlay {
       position: fixed;
       top: 0;
@@ -130,8 +126,6 @@
     #channelOverlay li span { flex: 1; }
     #channelOverlay li.active { background: rgba(255,255,255,.06); }
     #channelOverlay li.highlight { background: var(--blue); color: #fff; }
-
-    /* Toast */
     #toast {
       position: fixed;
       left: 20px;
@@ -153,8 +147,6 @@
       height: 28px;
       object-fit: contain;
     }
-
-    /* Buffering + Error */
     #buffering, #error {
       position: absolute;
       top: 50%;
@@ -177,8 +169,6 @@
       max-width: 80vw;
     }
     #error.show { display: block; }
-
-    /* Quality menu (YouTube-style) */
     #qualityMenu {
       position: absolute;
       right: 20px;
@@ -204,8 +194,6 @@
     #qualityMenu .qitem:last-child { border-bottom: none; }
     #qualityMenu .qitem:hover { background: rgba(255,255,255,.06); }
     #qualityMenu .qitem.active { color: #fff; background: rgba(45,124,255,.25); }
-
-    /* Spinner for buffering */
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
@@ -221,20 +209,16 @@
       margin-right: 8px;
       vertical-align: middle;
     }
-
     @media (max-width: 720px) {
       #controls { bottom: 16px; }
       #qualityMenu { right: 12px; bottom: 72px; }
     }
   </style>
-  <!-- HLS.js -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
 </head>
 <body>
   <div id="player">
-    <video id="video" controls autoplay playsinline></video>
-
-    <!-- Controls -->
+    <video id="video" autoplay playsinline></video>
     <div id="controls" role="region" aria-label="Player controls">
       <button class="btn" id="prevBtn" aria-label="Previous Channel">⏮</button>
       <button class="btn" id="nextBtn" aria-label="Next Channel">⏭</button>
@@ -245,22 +229,14 @@
       <button class="btn" id="qualityBtn" aria-label="Quality">⚙️ Quality</button>
       <button class="btn" id="fsBtn" aria-label="Toggle Fullscreen">⤢ Fullscreen</button>
     </div>
-
-    <!-- Buffering & Error -->
     <div id="buffering">Buffering…</div>
     <div id="error" role="alert"></div>
-
-    <!-- Quality menu -->
     <div id="qualityMenu" role="menu" aria-label="Quality options"></div>
   </div>
-
-  <!-- Channel Overlay -->
   <div id="channelOverlay" role="menu" aria-label="Channel list">
     <header>Channels</header>
     <ul id="channelList"></ul>
   </div>
-
-  <!-- Toast -->
   <div id="toast" role="status" aria-live="polite">
     <img id="toastLogo" alt="Channel logo" loading="lazy">
     <span id="toastText"></span>
@@ -468,14 +444,19 @@
         renderQualityMenu();
 
         clearHls();
-        if (DOM.video.canPlayType('application/vnd.apple.mpegurl')) {
+        const isHlsStream = ch.url.endsWith('.m3u8');
+        if (DOM.video.canPlayType('application/vnd.apple.mpegurl') && isHlsStream) {
+          console.debug('Using native HLS playback');
           DOM.video.src = ch.url;
-        } else if (window.Hls && Hls.isSupported()) {
+          qualityLevels = []; // Native HLS doesn't expose quality levels
+          renderQualityMenu();
+        } else if (window.Hls && Hls.isSupported() && isHlsStream) {
+          console.debug('Using HLS.js for playback');
           hls = new Hls({ enableWorker: true, lowLatencyMode: true, liveDurationInfinity: true });
           hls.on(Hls.Events.ERROR, (_, data) => {
             if (data.fatal) {
               const msg = data.type === Hls.ErrorTypes.NETWORK_ERROR
-                ? "Network error: Check your connection"
+                ? "Network error: Check your connection or stream URL"
                 : data.type === Hls.ErrorTypes.MEDIA_ERROR
                 ? "Media error: Stream may be corrupted"
                 : `Stream error: ${data.details || 'unknown'}`;
@@ -483,29 +464,41 @@
             }
           });
           hls.on(Hls.Events.MANIFEST_PARSED, (_, data) => {
+            console.debug('HLS manifest parsed:', data);
             qualityLevels = (hls.levels || []).map((lvl, i) => ({
               index: i,
-              bitrate: lvl.bitrate,
+              bitrate: lvl.bitrate || 0,
               height: lvl.height || 0,
               name: lvl.name || (lvl.height ? `${lvl.height}p` : `${Math.round((lvl.bitrate || 0) / 1000)} kbps`)
             }));
             qualityLevels.sort((a, b) => (b.height || b.bitrate) - (a.height || a.bitrate));
+            if (!qualityLevels.length) {
+              console.debug('No quality levels found in manifest');
+              showError("No quality variants available for this stream");
+            }
             renderQualityMenu();
           });
           hls.on(Hls.Events.LEVEL_SWITCHED, (_, data) => {
+            console.debug('HLS level switched to:', data.level);
             highlightQualityItem(data.level);
           });
           hls.loadSource(ch.url);
           hls.attachMedia(DOM.video);
         } else {
-          showError("HLS not supported. Falling back to direct playback.");
+          console.debug('Falling back to direct playback');
           DOM.video.src = ch.url;
+          qualityLevels = [];
+          renderQualityMenu();
+          showError("Quality selection unavailable (non-HLS stream or HLS not supported)");
         }
 
-        await DOM.video.play().catch(() => {});
+        await DOM.video.play().catch((e) => {
+          console.debug('Play error:', e);
+        });
         showToast(ch);
         updateActiveChannel();
       } catch (e) {
+        console.error('Channel playback error:', e);
         showError(`Failed to play channel: ${e.message}`);
       } finally {
         DOM.buffering.classList.remove("show");
@@ -520,11 +513,15 @@
     function renderQualityMenu() {
       const items = [];
       items.push(`<div class="qitem ${selectedQuality === 'auto' ? 'active' : ''}" data-q="auto" role="menuitem" aria-checked="${selectedQuality === 'auto'}"><span>Auto</span><span></span></div>`);
-      qualityLevels.forEach(q => {
-        items.push(`<div class="qitem" data-q="${q.index}" role="menuitem" aria-checked="${selectedQuality === q.index}"><span>${humanResName(q)}</span><span></span></div>`);
-      });
+      if (qualityLevels.length) {
+        qualityLevels.forEach(q => {
+          items.push(`<div class="qitem" data-q="${q.index}" role="menuitem" aria-checked="${selectedQuality === q.index}"><span>${humanResName(q)}</span><span>${q.bitrate ? `${Math.round(q.bitrate / 1000)} kbps` : ''}</span></div>`);
+        });
+      } else {
+        items.push(`<div class="qitem disabled" role="menuitem" aria-disabled="true"><span>No quality options available</span><span></span></div>`);
+      }
       DOM.qualityMenu.innerHTML = items.join("");
-      [...DOM.qualityMenu.querySelectorAll('.qitem')].forEach(el => {
+      [...DOM.qualityMenu.querySelectorAll('.qitem:not(.disabled)')].forEach(el => {
         el.onclick = () => {
           const val = el.getAttribute('data-q');
           setQuality(val === 'auto' ? 'auto' : Number(val));
@@ -559,7 +556,7 @@
       selectedQuality = q;
       if (!hls) {
         selectedQuality = 'auto';
-        showError("Quality selection not supported on this browser (native HLS).");
+        showError("Quality selection not supported (native HLS or non-HLS stream)");
         renderQualityMenu();
         return;
       }
@@ -601,7 +598,6 @@
 
     // ===== Listeners =====
     function setupEventListeners() {
-      // Buttons
       DOM.prevBtn.onclick = () => playChannel(currentIndex - 1);
       DOM.nextBtn.onclick = () => playChannel(currentIndex + 1);
       DOM.channelBtn.onclick = () => toggleOverlay();
@@ -610,34 +606,24 @@
         e.stopPropagation();
       };
       DOM.fsBtn.onclick = toggleFullscreen;
-
-      // Volume
       DOM.volume.addEventListener("input", () => {
         DOM.video.volume = Number(DOM.volume.value);
         localStorage.setItem("volume", DOM.volume.value);
       });
-
-      // Video events
       DOM.video.addEventListener("waiting", () => DOM.buffering.classList.add("show"));
       DOM.video.addEventListener("playing", () => DOM.buffering.classList.remove("show"));
       DOM.video.addEventListener("error", () => showError("Error playing channel"));
-
-      // Global interactions
       const interactionEvents = [
         { type: "mousemove", handler: showControls, options: { passive: true } },
         { type: "touchstart", handler: showControls, options: { passive: true } },
         { type: "keydown", handler: showControls, options: {} }
       ];
       interactionEvents.forEach(event => document.addEventListener(event.type, event.handler, event.options));
-
-      // Click outside to close quality menu
       document.addEventListener("click", (e) => {
         if (!DOM.qualityMenu.contains(e.target) && e.target !== DOM.qualityBtn) {
           toggleQualityMenu(false);
         }
       });
-
-      // Keyboard / TV remote
       document.addEventListener("keydown", (e) => {
         switch (e.key) {
           case "ArrowUp":
@@ -678,12 +664,12 @@
           case "ArrowLeft":
             DOM.video.volume = Math.max(0, DOM.video.volume - 0.05);
             DOM.volume.value = DOM.video.volume;
-            localStorage.setItem("volume", DOM.volume.value);
+            localStorage.setItem("volume", DOM.video.volume);
             break;
           case "ArrowRight":
             DOM.video.volume = Math.min(1, DOM.video.volume + 0.05);
             DOM.volume.value = DOM.video.volume;
-            localStorage.setItem("volume", DOM.volume.value);
+            localStorage.setItem("volume", DOM.video.volume);
             break;
           case "f":
           case "F":
@@ -703,8 +689,6 @@
             break;
         }
       });
-
-      // Touch swipe channel zap
       let sx = 0, sy = 0;
       const touchStart = (e) => {
         sx = e.touches[0].clientX;
@@ -720,8 +704,6 @@
       };
       DOM.player.addEventListener("touchstart", touchStart, { passive: true });
       DOM.player.addEventListener("touchend", touchEnd, { passive: true });
-
-      // Cleanup function
       return () => {
         interactionEvents.forEach(event => document.removeEventListener(event.type, event.handler, event.options));
         DOM.player.removeEventListener("touchstart", touchStart);
@@ -739,7 +721,6 @@
       }
       const cleanup = setupEventListeners();
       loadM3U();
-      // Cleanup on page unload
       window.addEventListener("unload", cleanup);
     }
     init();
