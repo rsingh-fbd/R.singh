@@ -5,86 +5,128 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart TV Live Player</title>
   <style>
-    body { margin:0; background:#000; color:#fff; font-family:Arial,sans-serif; overflow:hidden; }
-    #player { width:100%; height:100vh; background:#000; position:relative; }
+    :root{
+      --bg:#000; --fg:#fff; --glass:rgba(0,0,0,.7);
+      --blue:#2d7cff; --card:rgba(20,20,20,.95); --muted:#aaa;
+    }
+    body { margin:0; background:var(--bg); color:var(--fg); font-family:system-ui,Segoe UI,Arial,sans-serif; overflow:hidden; }
+    #player { width:100%; height:100vh; position:relative; background:#000; }
     video { width:100%; height:100%; background:#000; object-fit:contain; }
 
-    /* Overlay channel list */
-    #channelOverlay {
-      position:fixed; top:0; left:0; bottom:0; width:280px;
-      background:rgba(20,20,20,0.95); overflow-y:auto;
-      transform:translateX(-100%); transition:transform .3s ease; z-index:1000;
-    }
-    #channelOverlay.show { transform:translateX(0); }
-    #channelOverlay ul { list-style:none; margin:0; padding:0; }
-    #channelOverlay li {
-      padding:12px; display:flex; align-items:center;
-      border-bottom:1px solid #333; cursor:pointer; transition:background .2s;
-    }
-    #channelOverlay li img { width:36px; height:36px; margin-right:10px; object-fit:contain; }
-    #channelOverlay li span { flex:1; }
-    #channelOverlay li.active, #channelOverlay li.highlight { background:#0066ff; color:#fff; }
-
-    /* Now Playing toast */
-    #toast {
-      position:fixed; bottom:20px; left:20px;
-      background:rgba(0,0,0,0.8); padding:10px 16px; border-radius:6px;
-      display:flex; align-items:center; opacity:0; transition:opacity .5s; z-index:1100;
-    }
-    #toast.show { opacity:1; }
-    #toast img { width:28px; height:28px; margin-right:8px; }
-
-    /* Controls */
+    /* Controls (auto-hide) */
     #controls {
-      position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
-      display:flex; align-items:center; gap:12px; opacity:0; transition:opacity .3s; z-index:900;
+      position:absolute; left:50%; bottom:24px; transform:translateX(-50%);
+      display:flex; align-items:center; gap:10px;
+      background:var(--glass); padding:8px 10px; border-radius:12px;
+      opacity:0; transition:opacity .25s; z-index:900; backdrop-filter:blur(4px) saturate(120%);
     }
     #controls.show { opacity:1; }
-    #controls button {
-      background:rgba(0,0,0,0.6); border:none; color:#fff;
-      padding:10px 14px; border-radius:6px; cursor:pointer; font-size:14px;
+    .btn {
+      display:flex; align-items:center; gap:6px;
+      background:transparent; border:1px solid rgba(255,255,255,.2);
+      color:#fff; padding:8px 10px; border-radius:10px; cursor:pointer; font-size:14px;
     }
-    #controls button:hover { background:rgba(0,0,0,0.8); }
-    #volume { -webkit-appearance:none; width:100px; height:6px; border-radius:4px; background:#444; }
-    #volume::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:#fff; cursor:pointer; }
+    .btn:active { transform:translateY(1px); }
+    #volume { -webkit-appearance:none; width:110px; height:6px; border-radius:4px; background:#444; }
+    #volume::-webkit-slider-thumb{ -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:#fff; }
+    .spacer{ width:8px; height:1px; opacity:.2; background:#fff; }
 
-    /* Buffering & error */
-    #buffering, #error { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:950; }
-    #buffering { color:#fff; font-size:18px; display:none; }
-    #buffering.show { display:block; }
-    #error { background:rgba(255,0,0,0.8); padding:20px; border-radius:8px; display:none; text-align:center; z-index:1000; }
-    #error.show { display:block; }
+    /* Channel overlay */
+    #channelOverlay{
+      position:fixed; top:0; left:0; bottom:0; width:300px; max-width:88%;
+      background:var(--card); overflow-y:auto; transform:translateX(-100%);
+      transition:transform .3s ease; z-index:1000; box-shadow:2px 0 18px rgba(0,0,0,.35);
+    }
+    #channelOverlay.show{ transform:translateX(0); }
+    #channelOverlay header{ position:sticky; top:0; background:var(--card); padding:12px; font-weight:600; border-bottom:1px solid rgba(255,255,255,.08); }
+    #channelOverlay ul{ list-style:none; margin:0; padding:0; }
+    #channelOverlay li{
+      padding:12px; display:flex; align-items:center; gap:10px; border-bottom:1px solid rgba(255,255,255,.06); cursor:pointer;
+    }
+    #channelOverlay li img{ width:36px; height:36px; object-fit:contain; }
+    #channelOverlay li span{ flex:1; }
+    #channelOverlay li.active{ background:rgba(255,255,255,.06); }
+    #channelOverlay li.highlight{ background:var(--blue); color:#fff; }
+
+    /* Toast */
+    #toast{
+      position:fixed; left:20px; bottom:20px; display:flex; align-items:center; gap:10px;
+      background:var(--glass); padding:10px 14px; border-radius:10px; opacity:0; transition:opacity .35s; z-index:1100; backdrop-filter:blur(4px);
+    }
+    #toast.show{ opacity:1; }
+    #toast img{ width:28px; height:28px; object-fit:contain; }
+
+    /* Buffering + Error */
+    #buffering, #error{
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:950; text-align:center;
+    }
+    #buffering{ color:#fff; font-size:18px; display:none; }
+    #buffering.show{ display:block; }
+    #error{ background:rgba(255,0,0,.85); padding:18px 20px; border-radius:10px; display:none; max-width:80vw; }
+    #error.show{ display:block; }
+
+    /* Quality menu (YouTube-style) */
+    #qualityMenu{
+      position:absolute; right:20px; bottom:78px; /* floats above controls */
+      background:var(--card); border:1px solid rgba(255,255,255,.08);
+      border-radius:12px; overflow:hidden; display:none; z-index:1005;
+      min-width:160px; box-shadow:0 12px 24px rgba(0,0,0,.35);
+    }
+    #qualityMenu.show{ display:block; }
+    #qualityMenu .qitem{
+      padding:10px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    #qualityMenu .qitem:last-child{ border-bottom:none; }
+    #qualityMenu .qitem:hover{ background:rgba(255,255,255,.06); }
+    #qualityMenu .qitem.active{ color:#fff; background:rgba(45,124,255,.25); }
+
+    @media (max-width:720px){
+      #controls{ bottom:16px; }
+      #qualityMenu{ right:12px; bottom:72px; }
+    }
   </style>
-  <!-- HLS.js for non-native HLS playback -->
+  <!-- HLS.js -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
 </head>
 <body>
   <div id="player">
     <video id="video" autoplay playsinline></video>
 
+    <!-- Controls -->
     <div id="controls" role="region" aria-label="Player controls">
-      <button id="prevBtn" aria-label="Previous Channel">⏮ Prev</button>
-      <button id="nextBtn" aria-label="Next Channel">Next ⏭</button>
-      <input type="range" id="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume control">
+      <button class="btn" id="prevBtn" aria-label="Previous Channel">⏮ Prev</button>
+      <button class="btn" id="nextBtn" aria-label="Next Channel">Next ⏭</button>
+      <div class="spacer"></div>
+      <span>🔊</span><input type="range" id="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume">
+      <div class="spacer"></div>
+      <button class="btn" id="channelBtn" aria-label="Channels">📺 Channels</button>
+      <button class="btn" id="qualityBtn" aria-label="Quality">⚙️ Quality</button>
+      <button class="btn" id="fsBtn" aria-label="Fullscreen">⤢ Fullscreen</button>
     </div>
 
-    <div id="buffering">Buffering...</div>
+    <!-- Buffering & Error -->
+    <div id="buffering">Buffering…</div>
     <div id="error" role="alert"></div>
+
+    <!-- Quality menu -->
+    <div id="qualityMenu" role="menu" aria-label="Quality options"></div>
   </div>
 
-  <!-- Channel List Overlay -->
+  <!-- Channel Overlay -->
   <div id="channelOverlay" role="menu" aria-label="Channel list">
+    <header>Channels</header>
     <ul id="channelList"></ul>
   </div>
 
-  <!-- Now Playing Toast -->
+  <!-- Toast -->
   <div id="toast" role="status" aria-live="polite">
     <img id="toastLogo" alt="Channel logo" loading="lazy">
     <span id="toastText"></span>
   </div>
 
   <script>
-    // Config
+    // ===== Config =====
     const CONFIG = {
       m3uUrl: "https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u",
       toastDuration: 3000,
@@ -92,215 +134,288 @@
       debounceDelay: 200,
     };
 
-    // DOM
+    // ===== DOM =====
     const DOM = {
-      player: document.getElementById("player"),            // ✅ added (fix)
+      player: document.getElementById("player"),
       video: document.getElementById("video"),
-      channelOverlay: document.getElementById("channelOverlay"),
-      channelList: document.getElementById("channelList"),
+      controls: document.getElementById("controls"),
+      prevBtn: document.getElementById("prevBtn"),
+      nextBtn: document.getElementById("nextBtn"),
+      volume: document.getElementById("volume"),
+      channelBtn: document.getElementById("channelBtn"),
+      qualityBtn: document.getElementById("qualityBtn"),
+      fsBtn: document.getElementById("fsBtn"),
+      buffering: document.getElementById("buffering"),
+      error: document.getElementById("error"),
       toast: document.getElementById("toast"),
       toastText: document.getElementById("toastText"),
       toastLogo: document.getElementById("toastLogo"),
-      controls: document.getElementById("controls"),
-      volume: document.getElementById("volume"),
-      prevBtn: document.getElementById("prevBtn"),
-      nextBtn: document.getElementById("nextBtn"),
-      buffering: document.getElementById("buffering"),
-      error: document.getElementById("error"),
+      channelOverlay: document.getElementById("channelOverlay"),
+      channelList: document.getElementById("channelList"),
+      qualityMenu: document.getElementById("qualityMenu"),
     };
 
-    // State
+    // ===== State =====
     let channels = [];
     let currentIndex = 0;
     let highlightIndex = 0;
     let overlayOpen = false;
     let hideControlsTimeout = null;
     let hls = null;
+    let qualityLevels = [];       // [{height, bitrate, name}]
+    let selectedQuality = 'auto'; // 'auto' or level index
 
-    // Utils
-    const debounce = (fn, delay) => { let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), delay); }; };
-    const sanitize = (s) => { const d=document.createElement("div"); d.textContent=s; return d.innerHTML; };
-    const clearHls = () => { try { if (hls) { hls.destroy(); hls = null; } } catch {} };
+    // ===== Utils =====
+    const debounce = (fn, delay)=>{ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), delay); }; };
+    const sanitize = (s)=>{ const d=document.createElement("div"); d.textContent=s; return d.innerHTML; };
+    const clearHls = ()=>{ try{ if(hls){ hls.destroy(); hls=null; } }catch{} };
+    const showError = (msg)=>{ DOM.error.textContent = msg; DOM.error.classList.add("show"); setTimeout(()=>DOM.error.classList.remove("show"), 5000); };
 
-    // Load M3U
-    async function loadM3U() {
-      try {
-        const res = await fetch(CONFIG.m3uUrl, { cache: "no-cache" });
-        if (!res.ok) throw new Error(`Failed to fetch M3U: ${res.status}`);
+    // ===== Playlist =====
+    async function loadM3U(){
+      try{
+        const res = await fetch(CONFIG.m3uUrl, { cache:"no-cache" });
+        if(!res.ok) throw new Error(`Failed to fetch M3U: ${res.status}`);
         const text = await res.text();
         parseM3U(text);
-      } catch (err) {
-        showError(`Error loading playlist: ${err.message}`);
-      }
+      }catch(e){ showError(`Error loading playlist: ${e.message}`); }
     }
 
-    // Parse M3U
-    function parseM3U(data) {
-      try {
-        const lines = data.split(/\r?\n/).map(l => l.trim());
-        let current = {};
-        channels = [];
-        for (const line of lines) {
-          if (!line) continue;
-          if (line.startsWith("#EXTINF")) {
-            const nameMatch = line.match(/,(.*)$/);
-            const logoMatch = line.match(/tvg-logo="([^"]*)"/i);
-            current = {
-              name: nameMatch ? sanitize(nameMatch[1]) : "Unnamed",
-              logo: logoMatch ? sanitize(logoMatch[1]) : null,
-              url: null,
-            };
-          } else if (!line.startsWith("#")) {
-            current.url = line;
-            if (current.name && current.url) channels.push(current);
-            current = {};
-          }
+    function parseM3U(data){
+      const lines = data.split(/\r?\n/).map(l=>l.trim());
+      channels = [];
+      let current = {};
+      for(const line of lines){
+        if(!line) continue;
+        if(line.startsWith("#EXTINF")){
+          const name = (line.match(/,(.*)$/) || [,'Unnamed'])[1];
+          const logo = (line.match(/tvg-logo="([^"]*)"/i) || [,''])[1];
+          current = { name: sanitize(name), logo: sanitize(logo), url:null };
+        }else if(!line.startsWith("#")){
+          current.url = line;
+          if(current.name && current.url) channels.push(current);
+          current = {};
         }
-        if (!channels.length) throw new Error("No valid channels found in playlist");
-        renderChannelList();
-        playChannel(0);
-      } catch (err) {
-        showError(`Error parsing playlist: ${err.message}`);
       }
+      if(!channels.length){ showError("No valid channels found in playlist"); return; }
+      renderChannelList();
+      playChannel(0);
     }
 
-    // Render Channel List
-    function renderChannelList() {
+    // ===== Channels UI =====
+    function renderChannelList(){
       DOM.channelList.innerHTML = "";
-      channels.forEach((ch, idx) => {
+      channels.forEach((ch, idx)=>{
         const li = document.createElement("li");
-        li.setAttribute("role", "menuitem");
-        li.setAttribute("tabindex", idx === currentIndex ? "0" : "-1");
-        if (ch.logo) {
-          const img = document.createElement("img");
-          img.src = ch.logo;
-          img.alt = `${ch.name} logo`;
-          img.loading = "lazy";
+        li.setAttribute("role","menuitem");
+        li.setAttribute("tabindex", idx===currentIndex ? "0" : "-1");
+        if(ch.logo){
+          const img=document.createElement("img");
+          img.src=ch.logo; img.alt=`${ch.name} logo`; img.loading="lazy";
           li.appendChild(img);
         }
-        const span = document.createElement("span");
-        span.textContent = ch.name;
-        li.appendChild(span);
-
-        li.addEventListener("click", () => { playChannel(idx); closeOverlay(); });
+        const span=document.createElement("span"); span.textContent=ch.name; li.appendChild(span);
+        li.addEventListener("click", ()=>{ playChannel(idx); closeOverlay(); });
         DOM.channelList.appendChild(li);
       });
-      updateHighlight();
-      updateActiveChannel();
+      updateHighlight(); updateActiveChannel();
     }
-
-    // Play Channel with HLS fallback
-    async function playChannel(index) {
-      if (!channels.length) return;
-      index = ((index % channels.length) + channels.length) % channels.length;
-      currentIndex = index;
-      const ch = channels[index];
-
-      try {
-        DOM.buffering.classList.add("show");
-        DOM.error.classList.remove("show");
-
-        clearHls();
-        if (DOM.video.canPlayType('application/vnd.apple.mpegurl')) {
-          DOM.video.src = ch.url;
-        } else if (window.Hls && Hls.isSupported()) {
-          hls = new Hls({ enableWorker:true, lowLatencyMode:true, liveDurationInfinity:true });
-          hls.on(Hls.Events.ERROR, (_, data) => {
-            if (data?.fatal) showError(`Stream error: ${data.details || 'fatal'}`);
-          });
-          hls.loadSource(ch.url);
-          hls.attachMedia(DOM.video);
-        } else {
-          // Fallback: let browser try anyway
-          DOM.video.src = ch.url;
-        }
-
-        await DOM.video.play().catch(()=>{}); // allow autoplay differences
-        showToast(ch);
-        updateActiveChannel();
-      } catch (err) {
-        showError(`Failed to play channel: ${err.message}`);
-      } finally {
-        DOM.buffering.classList.remove("show");
-      }
-    }
-
-    function updateActiveChannel() {
-      [...DOM.channelList.children].forEach((li, i) => {
-        li.classList.toggle("active", i === currentIndex);
-        li.setAttribute("tabindex", i === currentIndex ? "0" : "-1");
+    function updateActiveChannel(){
+      [...DOM.channelList.children].forEach((li,i)=>{
+        li.classList.toggle("active", i===currentIndex);
+        li.setAttribute("tabindex", i===currentIndex ? "0" : "-1");
       });
     }
-
-    // Toast
-    function showToast(ch) {
-      DOM.toastText.textContent = ch.name;
-      if (ch.logo) { DOM.toastLogo.src = ch.logo; DOM.toastLogo.style.display = "block"; }
-      else { DOM.toastLogo.style.display = "none"; }
-      DOM.toast.classList.add("show");
-      setTimeout(() => DOM.toast.classList.remove("show"), CONFIG.toastDuration);
-    }
-
-    // Error
-    function showError(message) {
-      DOM.error.textContent = message;
-      DOM.error.classList.add("show");
-      setTimeout(() => DOM.error.classList.remove("show"), 5000);
-    }
-
-    // Overlay
-    function openOverlay() {
+    function openOverlay(){
       overlayOpen = true;
       DOM.channelOverlay.classList.add("show");
       highlightIndex = currentIndex;
       updateHighlight();
       DOM.channelList.children[highlightIndex]?.focus();
     }
-    function closeOverlay() {
+    function closeOverlay(){
       overlayOpen = false;
       DOM.channelOverlay.classList.remove("show");
       DOM.video.focus();
     }
-    function toggleOverlay() { overlayOpen ? closeOverlay() : openOverlay(); }
-
-    function updateHighlight() {
-      [...DOM.channelList.children].forEach((li, i) => li.classList.toggle("highlight", i === highlightIndex));
+    function toggleOverlay(){ overlayOpen ? closeOverlay() : openOverlay(); }
+    function updateHighlight(){
+      [...DOM.channelList.children].forEach((li,i)=> li.classList.toggle("highlight", i===highlightIndex));
+      DOM.channelList.children[highlightIndex]?.scrollIntoView({ block:"nearest" });
     }
 
-    // Controls auto-hide
-    const showControls = debounce(() => {
+    // ===== HLS Playback + Quality =====
+    async function playChannel(index){
+      if(!channels.length) return;
+      index = ((index % channels.length) + channels.length) % channels.length;
+      currentIndex = index;
+      const ch = channels[index];
+
+      try{
+        DOM.buffering.classList.add("show");
+        DOM.error.classList.remove("show");
+        qualityLevels = []; selectedQuality = 'auto';
+        renderQualityMenu(); // reset UI
+
+        clearHls();
+        if(DOM.video.canPlayType('application/vnd.apple.mpegurl')){
+          // Native HLS (Safari) – we cannot enumerate variants reliably; keep Auto only
+          DOM.video.src = ch.url;
+        }else if(window.Hls && Hls.isSupported()){
+          hls = new Hls({ enableWorker:true, lowLatencyMode:true, liveDurationInfinity:true });
+          hls.on(Hls.Events.ERROR, (_, data)=>{ if(data?.fatal){ showError(`Stream error: ${data.details || 'fatal'}`); }});
+          hls.on(Hls.Events.MANIFEST_PARSED, (_, data)=>{
+            // Build quality list
+            qualityLevels = (hls.levels || []).map((lvl, i)=>({
+              index:i,
+              bitrate: lvl.bitrate,
+              height:  lvl.height || 0,
+              name:    lvl.name || (lvl.height ? `${lvl.height}p` : `${Math.round((lvl.bitrate||0)/1000)} kbps`)
+            }))
+            // Highest first like YouTube
+            qualityLevels.sort((a,b)=> (b.height||b.bitrate) - (a.height||a.bitrate));
+            renderQualityMenu();
+          });
+          hls.on(Hls.Events.LEVEL_SWITCHED, (_, data)=>{
+            // Mark active quality in menu
+            const active = data.level; // -1 when auto selecting?
+            // If hls.autoLevelEnabled && active>=0, we still show the resolution
+            highlightQualityItem(active);
+          });
+          hls.loadSource(ch.url);
+          hls.attachMedia(DOM.video);
+        }else{
+          DOM.video.src = ch.url; // fallback
+        }
+
+        await DOM.video.play().catch(()=>{ /* ignore autoplay policy errors */});
+        showToast(ch);
+        updateActiveChannel();
+      }catch(e){
+        showError(`Failed to play channel: ${e.message}`);
+      }finally{
+        DOM.buffering.classList.remove("show");
+      }
+    }
+
+    function humanResName(q){
+      if(q==='auto') return 'Auto';
+      return q.height ? `${q.height}p` : (q.bitrate ? `${Math.round(q.bitrate/1000)} kbps` : 'Level');
+    }
+
+    function renderQualityMenu(){
+      const items = [];
+      // Auto item
+      items.push(`<div class="qitem ${selectedQuality==='auto' ? 'active':''}" data-q="auto"><span>Auto</span><span></span></div>`);
+      // Levels
+      qualityLevels.forEach(q=>{
+        items.push(`<div class="qitem" data-q="${q.index}"><span>${humanResName(q)}</span><span></span></div>`);
+      });
+      DOM.qualityMenu.innerHTML = items.join("");
+      // Attach listeners
+      [...DOM.qualityMenu.querySelectorAll('.qitem')].forEach(el=>{
+        el.onclick = ()=>{
+          const val = el.getAttribute('data-q');
+          setQuality(val === 'auto' ? 'auto' : Number(val));
+          toggleQualityMenu(false);
+        };
+      });
+      highlightQualityItem(selectedQuality==='auto' ? -1 : selectedQuality);
+    }
+
+    function highlightQualityItem(levelIndex){
+      // If auto is on, consider -1 as active
+      const isAuto = (selectedQuality==='auto') || (hls && hls.autoLevelEnabled && levelIndex===-1);
+      [...DOM.qualityMenu.querySelectorAll('.qitem')].forEach(el=> el.classList.remove('active'));
+      if(isAuto) {
+        const autoItem = DOM.qualityMenu.querySelector('.qitem[data-q="auto"]');
+        autoItem && autoItem.classList.add('active');
+      } else {
+        const item = DOM.qualityMenu.querySelector(`.qitem[data-q="${levelIndex}"]`);
+        item && item.classList.add('active');
+      }
+    }
+
+    function setQuality(q){
+      selectedQuality = q;
+      if(!hls){
+        // Native HLS – cannot force level; keep Auto
+        selectedQuality = 'auto';
+        showError("Quality selection not supported on this browser (native HLS).");
+        renderQualityMenu();
+        return;
+      }
+      if(q==='auto'){
+        hls.currentLevel = -1;   // let ABR pick
+        hls.autoLevelEnabled = true;
+        highlightQualityItem(-1);
+      }else{
+        hls.autoLevelEnabled = false;
+        // Find the level index in original hls.levels that matches our sorted list
+        // We stored 'index' from original levels in qualityLevels, so q is already correct index.
+        hls.currentLevel = q;
+        highlightQualityItem(q);
+      }
+    }
+
+    function toggleQualityMenu(force){
+      const show = (typeof force==='boolean') ? force : !DOM.qualityMenu.classList.contains('show');
+      DOM.qualityMenu.classList.toggle('show', show);
+    }
+
+    // ===== Toast =====
+    function showToast(ch){
+      DOM.toastText.textContent = ch.name;
+      if(ch.logo){ DOM.toastLogo.src = ch.logo; DOM.toastLogo.style.display='block'; }
+      else { DOM.toastLogo.style.display='none'; }
+      DOM.toast.classList.add("show");
+      setTimeout(()=> DOM.toast.classList.remove("show"), CONFIG.toastDuration);
+    }
+
+    // ===== Controls visibility =====
+    const showControls = debounce(()=>{
       DOM.controls.classList.add("show");
       clearTimeout(hideControlsTimeout);
-      hideControlsTimeout = setTimeout(() => DOM.controls.classList.remove("show"), CONFIG.controlsHideDelay);
+      hideControlsTimeout = setTimeout(()=> DOM.controls.classList.remove("show"), CONFIG.controlsHideDelay);
     }, CONFIG.debounceDelay);
 
-    // Listeners
-    function setupEventListeners() {
+    // ===== Listeners =====
+    function setupEventListeners(){
+      // Buttons
+      DOM.prevBtn.onclick = ()=> playChannel(currentIndex - 1);
+      DOM.nextBtn.onclick = ()=> playChannel(currentIndex + 1);
+      DOM.channelBtn.onclick = ()=> toggleOverlay();
+      DOM.qualityBtn.onclick = (e)=> { toggleQualityMenu(); e.stopPropagation(); };
+      DOM.fsBtn.onclick = ()=> { if(document.fullscreenElement) document.exitFullscreen(); else DOM.video.requestFullscreen?.(); };
+
       // Volume
-      DOM.volume.addEventListener("input", () => {
+      DOM.volume.addEventListener("input", ()=>{
         DOM.video.volume = Number(DOM.volume.value);
         localStorage.setItem("volume", DOM.volume.value);
       });
 
-      // Buttons
-      DOM.nextBtn.addEventListener("click", () => playChannel(currentIndex + 1));
-      DOM.prevBtn.addEventListener("click", () => playChannel(currentIndex - 1));
-
       // Video events
-      DOM.video.addEventListener("waiting", () => DOM.buffering.classList.add("show"));
-      DOM.video.addEventListener("playing", () => DOM.buffering.classList.remove("show"));
-      DOM.video.addEventListener("error", () => showError("Error playing channel"));
+      DOM.video.addEventListener("waiting", ()=> DOM.buffering.classList.add("show"));
+      DOM.video.addEventListener("playing", ()=> DOM.buffering.classList.remove("show"));
+      DOM.video.addEventListener("error", ()=> showError("Error playing channel"));
 
-      // Show controls on interaction
-      document.addEventListener("mousemove", showControls);
-      document.addEventListener("touchstart", showControls);
+      // Global interactions show controls
+      document.addEventListener("mousemove", showControls, {passive:true});
+      document.addEventListener("touchstart", showControls, {passive:true});
       document.addEventListener("keydown", showControls);
 
+      // Click outside to close quality menu
+      document.addEventListener("click", (e)=>{
+        if(!DOM.qualityMenu.contains(e.target) && e.target !== DOM.qualityBtn){
+          toggleQualityMenu(false);
+        }
+      });
+
       // Keyboard / TV remote
-      document.addEventListener("keydown", (e) => {
-        switch (e.key) {
+      document.addEventListener("keydown", (e)=>{
+        switch(e.key){
           case "ArrowUp":
-            if (overlayOpen) {
+            if(overlayOpen){
               highlightIndex = (highlightIndex - 1 + channels.length) % channels.length;
               updateHighlight();
               DOM.channelList.children[highlightIndex]?.focus();
@@ -309,7 +424,7 @@
             }
             break;
           case "ArrowDown":
-            if (overlayOpen) {
+            if(overlayOpen){
               highlightIndex = (highlightIndex + 1) % channels.length;
               updateHighlight();
               DOM.channelList.children[highlightIndex]?.focus();
@@ -319,12 +434,13 @@
             break;
           case "Enter":
           case "OK":
-            if (overlayOpen) { playChannel(highlightIndex); closeOverlay(); }
+            if(overlayOpen){ playChannel(highlightIndex); closeOverlay(); }
             else { openOverlay(); }
             break;
           case "Escape":
           case "Backspace":
-            if (overlayOpen) closeOverlay();
+            if(overlayOpen) closeOverlay();
+            toggleQualityMenu(false);
             break;
           case "ArrowLeft":
             DOM.video.volume = Math.max(0, DOM.video.volume - 0.05);
@@ -337,34 +453,33 @@
             localStorage.setItem("volume", DOM.volume.value);
             break;
           case "f": case "F":
-            if (document.fullscreenElement) document.exitFullscreen();
-            else DOM.video.requestFullscreen?.();
+            if(document.fullscreenElement) document.exitFullscreen(); else DOM.video.requestFullscreen?.();
             break;
           case "m": case "M":
             DOM.video.muted = !DOM.video.muted;
             break;
+          // Quick toggles
+          case "c": case "C": toggleOverlay(); break;
+          case "q": case "Q": toggleQualityMenu(); break;
         }
       });
 
-      // Touch swipe (mobile)
-      let touchStartX = 0, touchStartY = 0;
-      DOM.player.addEventListener("touchstart", (e) => {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-      });
-      DOM.player.addEventListener("touchend", (e) => {
-        const dx = e.changedTouches[0].clientX - touchStartX;
-        const dy = e.changedTouches[0].clientY - touchStartY;
-        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-          if (dx > 0) playChannel(currentIndex - 1); else playChannel(currentIndex + 1);
+      // Touch swipe channel zap
+      let sx=0, sy=0;
+      DOM.player.addEventListener("touchstart",(e)=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
+      DOM.player.addEventListener("touchend",(e)=>{
+        const dx=e.changedTouches[0].clientX - sx;
+        const dy=e.changedTouches[0].clientY - sy;
+        if(Math.abs(dx)>Math.abs(dy) && Math.abs(dx)>50){
+          if(dx>0) playChannel(currentIndex - 1); else playChannel(currentIndex + 1);
         }
-      });
+      },{passive:true});
     }
 
-    // Init
-    function init() {
+    // ===== Init =====
+    function init(){
       const savedVol = localStorage.getItem("volume");
-      if (savedVol !== null) { DOM.video.volume = Number(savedVol); DOM.volume.value = savedVol; }
+      if(savedVol !== null){ DOM.video.volume = Number(savedVol); DOM.volume.value = savedVol; }
       setupEventListeners();
       loadM3U();
     }
