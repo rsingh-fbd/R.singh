@@ -1,167 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Live Stream Player — Fullscreen Mode</title>
+  <meta charset="UTF-8">
+  <title>Smart TV IPTV Player</title>
   <style>
-    html,body { margin:0; height:100%; background:#000; overflow:hidden; }
-    body { display:flex; align-items:center; justify-content:center; }
-    .player-wrap { position:relative; width:100%; height:100%; background:#000; }
-    video { width:100%; height:100%; object-fit:contain; background:#000; }
-
-    /* Overlay UI */
-    .ui{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;opacity:0;transition:opacity .25s;pointer-events:none;z-index:25}
-    .ui.show{opacity:1;pointer-events:auto}
-    .ui .topbar{display:flex;justify-content:center;margin-top:12px}
-    .chip{background:rgba(0,0,0,.55);color:#fff;padding:6px 14px;border-radius:999px;font-size:14px;backdrop-filter:saturate(120%) blur(2px)}
-    .ui .mid{display:flex;justify-content:space-between;align-items:center;padding:0 56px}
-    .round{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;user-select:none}
-    .ui .bot{display:flex;justify-content:space-between;align-items:center;padding:10px}
-    .counter{font-size:12px;color:#aaa}
-
-    .vol{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.55);padding:6px 10px;border-radius:999px}
-    .vol input[type="range"]{width:0;transition:width .25s;accent-color:#4da3ff}
-    .ui.show .vol input[type="range"], .vol:hover input[type="range"]{width:120px}
-    .vol-btn{cursor:pointer}
-
-    .hamburger{position:absolute;top:50%;left:10px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:#4da3ff;color:#001028;display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer;z-index:32}
-
-    .chan-overlay{position:absolute;top:0;left:0;bottom:0;width:320px;max-width:85%;background:rgba(18,25,54,.96);border-radius:0 12px 12px 0;transform:translateX(-100%);transition:.28s ease;z-index:30;display:flex;flex-direction:column;gap:10px;padding:12px}
-    .chan-overlay.active{transform:translateX(0)}
-    .search{padding:8px 10px;border-radius:8px;border:1px solid #2a355e;background:#0e1533;color:#fff;outline:none}
-    .list{overflow:auto;flex:1}
-    .item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#1b2447;border-bottom:1px solid #2a355e;cursor:pointer}
-    .item:hover{background:#2c386d}
-    .item.active{background:#4da3ff;color:#001028;font-weight:600}
-    .logo{width:28px;height:28px;border-radius:6px;object-fit:contain;background:#000}
-
-    .toast{position:absolute;left:14px;bottom:14px;background:rgba(0,0,0,.55);border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(10px);transition:.25s;z-index:26}
-    .toast.show{opacity:1;transform:translateY(0)}
-    .toast .tlogo{width:26px;height:26px;border-radius:6px;object-fit:contain;background:#000}
+    body {margin:0;background:#000;color:#fff;font-family:sans-serif;overflow:hidden}
+    #player {width:100%;height:100vh;background:#000;object-fit:contain}
+    #overlayList {
+      position:fixed;top:0;left:0;width:300px;height:100%;
+      background:rgba(20,20,20,0.95);overflow-y:auto;
+      transform:translateX(-100%);transition:0.3s;z-index:1000;padding:10px;
+    }
+    #overlayList.show {transform:translateX(0)}
+    .channel {padding:8px;cursor:pointer;display:flex;align-items:center;gap:8px}
+    .channel:hover,.channel.active {background:#333}
+    .channel img {width:30px;height:30px;object-fit:contain}
+    #controls {
+      position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+      display:flex;gap:20px;opacity:0;transition:0.3s;z-index:900;
+      align-items:center;
+    }
+    #controls.show {opacity:1}
+    .btn {
+      background:rgba(0,0,0,0.6);padding:10px 15px;border-radius:8px;cursor:pointer;
+      user-select:none;
+    }
+    #toast {
+      position:absolute;bottom:60px;left:20px;background:rgba(0,0,0,0.7);
+      padding:10px 15px;border-radius:8px;display:none;align-items:center;gap:10px;
+      animation:fadein 0.5s;
+    }
+    #toast img {width:40px;height:40px;object-fit:contain}
+    @keyframes fadein {from{opacity:0}to{opacity:1}}
+    #volSlider {
+      width:0;overflow:hidden;transition:width 0.3s;background:#222;
+      border-radius:8px;padding:5px;
+    }
+    #volSlider input {width:100px}
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
 </head>
 <body>
-  <div class="player-wrap" id="wrap">
-    <video id="video" playsinline></video>
-    <div class="ui" id="ui">
-      <div class="topbar"><div class="chip" id="title">—</div></div>
-      <div class="mid">
-        <div class="round" id="prev" title="Previous">⟨</div>
-        <div class="round" id="next" title="Next">⟩</div>
-      </div>
-      <div class="bot">
-        <div class="counter" id="counter"></div>
-        <div class="vol" id="vol">
-          <span class="vol-btn" id="muteBtn">🔊</span>
-          <input type="range" id="volRange" min="0" max="1" step="0.01" value="1" />
-        </div>
-      </div>
-    </div>
-    <div class="hamburger" id="toggle" title="Channels">☰</div>
-    <aside class="chan-overlay" id="overlay">
-      <input id="search" class="search" placeholder="Search channels..." />
-      <div id="channels" class="list"></div>
-    </aside>
-    <div class="toast" id="toast">
-      <img class="tlogo" id="toastLogo" alt="" />
-      <div id="toastText">Now Playing</div>
-    </div>
-  </div>
+
+<video id="player" controls autoplay></video>
+
+<div id="overlayList"></div>
+
+<div id="controls">
+  <div class="btn" id="prevBtn">⏮ Prev</div>
+  <div class="btn" id="nextBtn">Next ⏭</div>
+  <div class="btn" id="volBtn">🔊</div>
+  <div id="volSlider"><input type="range" min="0" max="1" step="0.05" id="volume"></div>
+</div>
+
+<div id="toast"><img id="toastLogo"><span id="toastText"></span></div>
 
 <script>
-const PLAYLIST = "https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u";
-const video = document.getElementById('video');
-const ui = document.getElementById('ui');
-const titleChip = document.getElementById('title');
-const counter = document.getElementById('counter');
-const prevBtn = document.getElementById('prev');
-const nextBtn = document.getElementById('next');
-const volRange = document.getElementById('volRange');
-const muteBtn = document.getElementById('muteBtn');
-const overlay = document.getElementById('overlay');
-const toggleBtn = document.getElementById('toggle');
-const channelsEl = document.getElementById('channels');
-const searchEl = document.getElementById('search');
-const toast = document.getElementById('toast');
-const toastLogo = document.getElementById('toastLogo');
-const toastText = document.getElementById('toastText');
+const player=document.getElementById('player');
+const overlay=document.getElementById('overlayList');
+const toast=document.getElementById('toast');
+const toastLogo=document.getElementById('toastLogo');
+const toastText=document.getElementById('toastText');
+const volume=document.getElementById('volume');
+const volSlider=document.getElementById('volSlider');
+const volBtn=document.getElementById('volBtn');
+let channels=[],currentIndex=0,hideTimeout;
 
-let channels = [], currentIndex = 0, hls = null, uiTimer=null, toastTimer=null;
-
-// Fullscreen helper
-function enterFullscreen(){ document.getElementById('wrap').requestFullscreen?.(); }
-
-// Load playlist
-async function loadPlaylist(){
-  const res = await fetch(PLAYLIST);
-  const text = await res.text();
-  channels = parseM3U(text);
-  renderChannels(channels);
-  selectChannel(0);
+// Parse M3U file
+async function loadM3U(){
+  let res=await fetch("https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u");
+  let text=await res.text();
+  let lines=text.split("\n");let tempName="",tempLogo="";
+  lines.forEach(line=>{
+    if(line.startsWith("#EXTINF")){
+      let name=line.match(/,(.*)$/)?.[1]?.trim()||"Channel";
+      let logo=line.match(/tvg-logo="(.*?)"/)?.[1]||"";
+      tempName=name;tempLogo=logo;
+    } else if(line.trim() && !line.startsWith("#")){
+      channels.push({name:tempName,url:line.trim(),logo:tempLogo});
+    }
+  });
+  renderChannels();playChannel(0);
 }
-function parseM3U(txt){
-  const lines = txt.split(/\\r?\\n/);
-  const out=[]; let meta={name:'',logo:''};
-  for(const raw of lines){
-    const line=raw.trim(); if(!line) continue;
-    if(line.startsWith('#EXTINF')){
-      const n=/(?:tvg-name=\"([^\"]+)\")/.exec(line); const l=/(?:tvg-logo=\"([^\"]+)\")/.exec(line);
-      const after=/(?:,(.*)$)/.exec(line);
-      meta.name=(n&&n[1])||(after&&after[1].trim())||'Channel'; meta.logo=l?l[1]:'';
-    } else if(!line.startsWith('#')){ out.push({name:meta.name,url:line,logo:meta.logo}); meta={name:'',logo:''}; }
-  }
-  return out;
-}
-function renderChannels(list){
-  channelsEl.innerHTML='';
-  list.forEach((ch,i)=>{
-    const div=document.createElement('div'); div.className='item';
-    div.innerHTML=`<img class=\"logo\" src=\"${ch.logo||''}\" onerror=\"this.style.visibility='hidden'\"> <div>${ch.name}</div>`;
-    div.onclick=()=>{ selectChannel(i); closeOverlay(); };
-    channelsEl.appendChild(div);
+
+// Render channel list
+function renderChannels(){
+  overlay.innerHTML=channels.map((c,i)=>`
+    <div class="channel" data-idx="${i}">
+      ${c.logo?`<img src="${c.logo}">`:""} <span>${c.name}</span>
+    </div>`).join("");
+  overlay.querySelectorAll(".channel").forEach(ch=>{
+    ch.onclick=()=>{
+      playChannel(parseInt(ch.dataset.idx));
+      toggleOverlay(false);
+    }
   });
 }
-function selectChannel(i){
-  if(i<0||i>=channels.length) return; currentIndex=i;
-  const ch=channels[i]; playStream(ch.url); showTitle(ch.name); showToast(ch.name,ch.logo);
-  updateCounter();
+
+// Play channel
+function playChannel(i){
+  if(i<0||i>=channels.length)return;
+  currentIndex=i;
+  let ch=channels[i];
+  player.src=ch.url;player.play();
+  showToast(ch);
+  overlay.querySelectorAll(".channel").forEach(el=>el.classList.remove("active"));
+  let active=overlay.querySelector(`.channel[data-idx="${i}"]`);
+  if(active)active.classList.add("active");
 }
-function playStream(url){
-  if(hls){hls.destroy(); hls=null;}
-  if(video.canPlayType('application/vnd.apple.mpegurl')){ video.src=url; video.play(); }
-  else if(Hls.isSupported()){ hls=new Hls(); hls.loadSource(url); hls.attachMedia(video); hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play()); }
+
+// Toast display
+function showToast(ch){
+  toast.style.display="flex";
+  toastText.textContent=ch.name;
+  toastLogo.style.display=ch.logo?"block":"none";
+  if(ch.logo)toastLogo.src=ch.logo;
+  setTimeout(()=>toast.style.display="none",3000);
 }
-function showTitle(n){ titleChip.textContent=n; flashUI(); }
-function updateCounter(){ counter.textContent=`Channel ${currentIndex+1}/${channels.length}`; }
 
-function flashUI(){ ui.classList.add('show'); clearTimeout(uiTimer); uiTimer=setTimeout(()=>ui.classList.remove('show'),3000); }
-['mousemove','click','touchstart','keydown'].forEach(ev=>document.addEventListener(ev,flashUI,{passive:true}));
+// Controls auto-hide
+function showControls(){
+  document.getElementById("controls").classList.add("show");
+  clearTimeout(hideTimeout);
+  hideTimeout=setTimeout(()=>document.getElementById("controls").classList.remove("show"),3000);
+}
+document.body.addEventListener("mousemove",showControls);
+document.body.addEventListener("click",showControls);
 
-// Volume
-function setVolume(v){ video.volume=Math.max(0,Math.min(1,v)); volRange.value=video.volume; muteBtn.textContent=video.volume===0?'🔇':'🔊'; flashUI(); }
-volRange.oninput=()=>setVolume(parseFloat(volRange.value)); muteBtn.onclick=()=>{video.muted=!video.muted; muteBtn.textContent=video.muted?'🔇':'🔊';};
+// Overlay toggle
+function toggleOverlay(force){
+  if(force===false)overlay.classList.remove("show");
+  else overlay.classList.toggle("show");
+}
 
-// Next/Prev
-prevBtn.onclick=()=>selectChannel((currentIndex-1+channels.length)%channels.length);
-nextBtn.onclick=()=>selectChannel((currentIndex+1)%channels.length);
+// Buttons
+document.getElementById("nextBtn").onclick=()=>playChannel((currentIndex+1)%channels.length);
+document.getElementById("prevBtn").onclick=()=>playChannel((currentIndex-1+channels.length)%channels.length);
+volBtn.onclick=()=>volSlider.style.width=volSlider.style.width?"0":"120px";
+volume.oninput=()=>player.volume=volume.value;
 
-// Overlay
-toggleBtn.onclick=()=>overlay.classList.toggle('active');
-function closeOverlay(){ overlay.classList.remove('active'); }
+// Remote key handling
+document.addEventListener("keydown",e=>{
+  switch(e.key){
+    case "ArrowUp":playChannel((currentIndex-1+channels.length)%channels.length);break;
+    case "ArrowDown":playChannel((currentIndex+1)%channels.length);break;
+    case "ArrowLeft":player.volume=Math.max(0,player.volume-0.1);volume.value=player.volume;break;
+    case "ArrowRight":player.volume=Math.min(1,player.volume+0.1);volume.value=player.volume;break;
+    case "Enter":toggleOverlay();break;
+    case "Backspace":case "Escape":toggleOverlay(false);break;
+  }
+  showControls();
+});
 
-// Toast
-function showToast(name,logo){ toastText.textContent=name; if(logo){toastLogo.src=logo;toastLogo.style.visibility='visible';}else{toastLogo.style.visibility='hidden';} toast.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>toast.classList.remove('show'),3000); }
-
-// Keyboard
-document.addEventListener('keydown',e=>{const k=e.key.toLowerCase(); if(k==='f')enterFullscreen(); if(k==='n')nextBtn.click(); if(k==='p')prevBtn.click();});
-
-// Auto fullscreen
-video.addEventListener('play', enterFullscreen);
-
-// Init
-loadPlaylist();
+loadM3U();
 </script>
 </body>
 </html>
