@@ -5,85 +5,226 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart TV Live Player</title>
   <style>
-    :root{
-      --bg:#000; --fg:#fff; --glass:rgba(0,0,0,.7);
-      --blue:#2d7cff; --card:rgba(20,20,20,.95); --muted:#aaa;
+    :root {
+      --bg: #000;
+      --fg: #fff;
+      --glass: rgba(0,0,0,.7);
+      --blue: #2d7cff;
+      --card: rgba(20,20,20,.95);
+      --muted: #aaa;
     }
-    body { margin:0; background:var(--bg); color:var(--fg); font-family:system-ui,Segoe UI,Arial,sans-serif; overflow:hidden; }
-    #player { width:100%; height:100vh; position:relative; background:#000; }
-    video { width:100%; height:100%; background:#000; object-fit:contain; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: system-ui, Segoe UI, Arial, sans-serif;
+      overflow: hidden;
+    }
+    #player {
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      background: #000;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      object-fit: contain;
+    }
 
     /* Controls (auto-hide) */
     #controls {
-      position:absolute; left:50%; bottom:24px; transform:translateX(-50%);
-      display:flex; align-items:center; gap:10px;
-      background:var(--glass); padding:8px 10px; border-radius:12px;
-      opacity:0; transition:opacity .25s; z-index:900; backdrop-filter:blur(4px) saturate(120%);
+      position: absolute;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--glass);
+      padding: 8px 10px;
+      border-radius: 12px;
+      opacity: 0;
+      transition: opacity .25s;
+      z-index: 900;
+      backdrop-filter: blur(4px) saturate(120%);
     }
-    #controls.show { opacity:1; }
+    #controls.show { opacity: 1; }
     .btn {
-      display:flex; align-items:center; gap:6px;
-      background:transparent; border:1px solid rgba(255,255,255,.2);
-      color:#fff; padding:8px 10px; border-radius:10px; cursor:pointer; font-size:14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.2);
+      color: #fff;
+      padding: 8px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
     }
-    .btn:active { transform:translateY(1px); }
-    #volume { -webkit-appearance:none; width:110px; height:6px; border-radius:4px; background:#444; }
-    #volume::-webkit-slider-thumb{ -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:#fff; }
-    .spacer{ width:8px; height:1px; opacity:.2; background:#fff; }
+    .btn:active { transform: translateY(1px); }
+    #volume {
+      -webkit-appearance: none;
+      width: 110px;
+      height: 6px;
+      border-radius: 4px;
+      background: #444;
+    }
+    #volume::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #fff;
+    }
+    .spacer {
+      width: 8px;
+      height: 1px;
+      opacity: .2;
+      background: #fff;
+    }
 
     /* Channel overlay */
-    #channelOverlay{
-      position:fixed; top:0; left:0; bottom:0; width:300px; max-width:88%;
-      background:var(--card); overflow-y:auto; transform:translateX(-100%);
-      transition:transform .3s ease; z-index:1000; box-shadow:2px 0 18px rgba(0,0,0,.35);
+    #channelOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 300px;
+      max-width: 88%;
+      background: var(--card);
+      overflow-y: auto;
+      transform: translateX(-100%);
+      transition: transform .3s ease;
+      z-index: 1000;
+      box-shadow: 2px 0 18px rgba(0,0,0,.35);
     }
-    #channelOverlay.show{ transform:translateX(0); }
-    #channelOverlay header{ position:sticky; top:0; background:var(--card); padding:12px; font-weight:600; border-bottom:1px solid rgba(255,255,255,.08); }
-    #channelOverlay ul{ list-style:none; margin:0; padding:0; }
-    #channelOverlay li{
-      padding:12px; display:flex; align-items:center; gap:10px; border-bottom:1px solid rgba(255,255,255,.06); cursor:pointer;
+    #channelOverlay.show { transform: translateX(0); }
+    #channelOverlay header {
+      position: sticky;
+      top: 0;
+      background: var(--card);
+      padding: 12px;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255,255,255,.08);
     }
-    #channelOverlay li img{ width:36px; height:36px; object-fit:contain; }
-    #channelOverlay li span{ flex:1; }
-    #channelOverlay li.active{ background:rgba(255,255,255,.06); }
-    #channelOverlay li.highlight{ background:var(--blue); color:#fff; }
+    #channelOverlay ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    #channelOverlay li {
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      cursor: pointer;
+    }
+    #channelOverlay li img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+    }
+    #channelOverlay li span { flex: 1; }
+    #channelOverlay li.active { background: rgba(255,255,255,.06); }
+    #channelOverlay li.highlight { background: var(--blue); color: #fff; }
 
     /* Toast */
-    #toast{
-      position:fixed; left:20px; bottom:20px; display:flex; align-items:center; gap:10px;
-      background:var(--glass); padding:10px 14px; border-radius:10px; opacity:0; transition:opacity .35s; z-index:1100; backdrop-filter:blur(4px);
+    #toast {
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--glass);
+      padding: 10px 14px;
+      border-radius: 10px;
+      opacity: 0;
+      transition: opacity .35s;
+      z-index: 1100;
+      backdrop-filter: blur(4px);
     }
-    #toast.show{ opacity:1; }
-    #toast img{ width:28px; height:28px; object-fit:contain; }
+    #toast.show { opacity: 1; }
+    #toast img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
 
     /* Buffering + Error */
-    #buffering, #error{
-      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:950; text-align:center;
+    #buffering, #error {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      z-index: 950;
+      text-align: center;
     }
-    #buffering{ color:#fff; font-size:18px; display:none; }
-    #buffering.show{ display:block; }
-    #error{ background:rgba(255,0,0,.85); padding:18px 20px; border-radius:10px; display:none; max-width:80vw; }
-    #error.show{ display:block; }
+    #buffering {
+      color: #fff;
+      font-size: 18px;
+      display: none;
+    }
+    #buffering.show { display: block; }
+    #error {
+      background: rgba(255,0,0,.85);
+      padding: 18px 20px;
+      border-radius: 10px;
+      display: none;
+      max-width: 80vw;
+    }
+    #error.show { display: block; }
 
     /* Quality menu (YouTube-style) */
-    #qualityMenu{
-      position:absolute; right:20px; bottom:78px; /* floats above controls */
-      background:var(--card); border:1px solid rgba(255,255,255,.08);
-      border-radius:12px; overflow:hidden; display:none; z-index:1005;
-      min-width:160px; box-shadow:0 12px 24px rgba(0,0,0,.35);
+    #qualityMenu {
+      position: absolute;
+      right: 20px;
+      bottom: 78px;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      overflow: hidden;
+      display: none;
+      z-index: 1005;
+      min-width: 160px;
+      box-shadow: 0 12px 24px rgba(0,0,0,.35);
     }
-    #qualityMenu.show{ display:block; }
-    #qualityMenu .qitem{
-      padding:10px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;
-      border-bottom:1px solid rgba(255,255,255,.06);
+    #qualityMenu.show { display: block; }
+    #qualityMenu .qitem {
+      padding: 10px 14px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,.06);
     }
-    #qualityMenu .qitem:last-child{ border-bottom:none; }
-    #qualityMenu .qitem:hover{ background:rgba(255,255,255,.06); }
-    #qualityMenu .qitem.active{ color:#fff; background:rgba(45,124,255,.25); }
+    #qualityMenu .qitem:last-child { border-bottom: none; }
+    #qualityMenu .qitem:hover { background: rgba(255,255,255,.06); }
+    #qualityMenu .qitem.active { color: #fff; background: rgba(45,124,255,.25); }
 
-    @media (max-width:720px){
-      #controls{ bottom:16px; }
-      #qualityMenu{ right:12px; bottom:72px; }
+    /* Spinner for buffering */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    #buffering::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #fff;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @media (max-width: 720px) {
+      #controls { bottom: 16px; }
+      #qualityMenu { right: 12px; bottom: 72px; }
     }
   </style>
   <!-- HLS.js -->
@@ -102,7 +243,7 @@
       <div class="spacer"></div>
       <button class="btn" id="channelBtn" aria-label="Channels">📺 Channels</button>
       <button class="btn" id="qualityBtn" aria-label="Quality">⚙️ Quality</button>
-      <button class="btn" id="fsBtn" aria-label="Fullscreen">⤢ Fullscreen</button>
+      <button class="btn" id="fsBtn" aria-label="Toggle Fullscreen">⤢ Fullscreen</button>
     </div>
 
     <!-- Buffering & Error -->
@@ -162,260 +303,345 @@
     let overlayOpen = false;
     let hideControlsTimeout = null;
     let hls = null;
-    let qualityLevels = [];       // [{height, bitrate, name}]
-    let selectedQuality = 'auto'; // 'auto' or level index
+    let qualityLevels = [];
+    let selectedQuality = 'auto';
 
     // ===== Utils =====
-    const debounce = (fn, delay)=>{ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), delay); }; };
-    const sanitize = (s)=>{ const d=document.createElement("div"); d.textContent=s; return d.innerHTML; };
-    const clearHls = ()=>{ try{ if(hls){ hls.destroy(); hls=null; } }catch{} };
-    const showError = (msg)=>{ DOM.error.textContent = msg; DOM.error.classList.add("show"); setTimeout(()=>DOM.error.classList.remove("show"), 5000); };
+    const debounce = (fn, delay) => {
+      let t;
+      return (...a) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn(...a), delay);
+      };
+    };
+    const sanitize = (s) => {
+      const d = document.createElement("div");
+      d.textContent = s;
+      return d.innerHTML.replace(/[<>"'&]/g, '');
+    };
+    const clearHls = () => {
+      try {
+        if (hls) {
+          hls.destroy();
+          hls = null;
+        }
+      } catch {}
+    };
+    const showError = (msg) => {
+      DOM.error.textContent = msg;
+      DOM.error.classList.add("show");
+      setTimeout(() => DOM.error.classList.remove("show"), 5000);
+    };
+    const isValidUrl = (url) => {
+      try {
+        new URL(url);
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
+    // ===== Fullscreen Handling =====
+    const toggleFullscreen = () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+        DOM.fsBtn.textContent = '⤢ Fullscreen';
+        DOM.fsBtn.setAttribute('aria-label', 'Enter Fullscreen');
+      } else {
+        const requestFs = DOM.video.requestFullscreen ||
+                          DOM.video.webkitRequestFullscreen ||
+                          DOM.video.mozRequestFullScreen ||
+                          DOM.video.msRequestFullscreen;
+        if (requestFs) {
+          requestFs.call(DOM.video);
+          DOM.fsBtn.textContent = '⤡ Exit Fullscreen';
+          DOM.fsBtn.setAttribute('aria-label', 'Exit Fullscreen');
+        }
+      }
+    };
 
     // ===== Playlist =====
-    async function loadM3U(){
-      try{
-        const res = await fetch(CONFIG.m3uUrl, { cache:"no-cache" });
-        if(!res.ok) throw new Error(`Failed to fetch M3U: ${res.status}`);
+    async function loadM3U() {
+      try {
+        const res = await fetch(CONFIG.m3uUrl, { cache: "no-cache" });
+        if (!res.ok) throw new Error(`Failed to fetch M3U: ${res.status}`);
         const text = await res.text();
         parseM3U(text);
-      }catch(e){ showError(`Error loading playlist: ${e.message}`); }
+      } catch (e) {
+        showError(`Error loading playlist: ${e.message}`);
+      }
     }
 
-    function parseM3U(data){
-      const lines = data.split(/\r?\n/).map(l=>l.trim());
+    function parseM3U(data) {
+      const lines = data.split(/\r?\n/).map(l => l.trim());
       channels = [];
       let current = {};
-      for(const line of lines){
-        if(!line) continue;
-        if(line.startsWith("#EXTINF")){
+      for (const line of lines) {
+        if (!line) continue;
+        if (line.startsWith("#EXTINF")) {
           const name = (line.match(/,(.*)$/) || [,'Unnamed'])[1];
           const logo = (line.match(/tvg-logo="([^"]*)"/i) || [,''])[1];
-          current = { name: sanitize(name), logo: sanitize(logo), url:null };
-        }else if(!line.startsWith("#")){
+          current = { name: sanitize(name), logo: logo ? sanitize(logo) : null, url: null };
+        } else if (!line.startsWith("#") && isValidUrl(line)) {
           current.url = line;
-          if(current.name && current.url) channels.push(current);
+          if (current.name && current.url) channels.push(current);
           current = {};
         }
       }
-      if(!channels.length){ showError("No valid channels found in playlist"); return; }
+      if (!channels.length) {
+        showError("No valid channels found in playlist");
+        return;
+      }
       renderChannelList();
       playChannel(0);
     }
 
     // ===== Channels UI =====
-    function renderChannelList(){
+    function renderChannelList() {
       DOM.channelList.innerHTML = "";
-      channels.forEach((ch, idx)=>{
+      channels.forEach((ch, idx) => {
         const li = document.createElement("li");
-        li.setAttribute("role","menuitem");
-        li.setAttribute("tabindex", idx===currentIndex ? "0" : "-1");
-        if(ch.logo){
-          const img=document.createElement("img");
-          img.src=ch.logo; img.alt=`${ch.name} logo`; img.loading="lazy";
+        li.setAttribute("role", "menuitem");
+        li.setAttribute("tabindex", idx === currentIndex ? "0" : "-1");
+        if (ch.logo) {
+          const img = document.createElement("img");
+          img.src = ch.logo;
+          img.alt = `${ch.name} logo`;
+          img.loading = "lazy";
           li.appendChild(img);
         }
-        const span=document.createElement("span"); span.textContent=ch.name; li.appendChild(span);
-        li.addEventListener("click", ()=>{ playChannel(idx); closeOverlay(); });
+        const span = document.createElement("span");
+        span.textContent = ch.name;
+        li.appendChild(span);
+        li.addEventListener("click", () => {
+          playChannel(idx);
+          closeOverlay();
+        });
         DOM.channelList.appendChild(li);
       });
-      updateHighlight(); updateActiveChannel();
+      updateHighlight();
+      updateActiveChannel();
     }
-    function updateActiveChannel(){
-      [...DOM.channelList.children].forEach((li,i)=>{
-        li.classList.toggle("active", i===currentIndex);
-        li.setAttribute("tabindex", i===currentIndex ? "0" : "-1");
+
+    function updateActiveChannel() {
+      [...DOM.channelList.children].forEach((li, i) => {
+        li.classList.toggle("active", i === currentIndex);
+        li.setAttribute("tabindex", i === currentIndex ? "0" : "-1");
       });
     }
-    function openOverlay(){
+
+    function openOverlay() {
       overlayOpen = true;
       DOM.channelOverlay.classList.add("show");
       highlightIndex = currentIndex;
       updateHighlight();
       DOM.channelList.children[highlightIndex]?.focus();
     }
-    function closeOverlay(){
+
+    function closeOverlay() {
       overlayOpen = false;
       DOM.channelOverlay.classList.remove("show");
       DOM.video.focus();
     }
-    function toggleOverlay(){ overlayOpen ? closeOverlay() : openOverlay(); }
-    function updateHighlight(){
-      [...DOM.channelList.children].forEach((li,i)=> li.classList.toggle("highlight", i===highlightIndex));
-      DOM.channelList.children[highlightIndex]?.scrollIntoView({ block:"nearest" });
+
+    function toggleOverlay() {
+      overlayOpen ? closeOverlay() : openOverlay();
+    }
+
+    function updateHighlight() {
+      [...DOM.channelList.children].forEach((li, i) => li.classList.toggle("highlight", i === highlightIndex));
+      DOM.channelList.children[highlightIndex]?.scrollIntoView({ block: "nearest" });
     }
 
     // ===== HLS Playback + Quality =====
-    async function playChannel(index){
-      if(!channels.length) return;
+    async function playChannel(index) {
+      if (!channels.length) return;
       index = ((index % channels.length) + channels.length) % channels.length;
       currentIndex = index;
       const ch = channels[index];
 
-      try{
+      try {
         DOM.buffering.classList.add("show");
         DOM.error.classList.remove("show");
-        qualityLevels = []; selectedQuality = 'auto';
-        renderQualityMenu(); // reset UI
+        qualityLevels = [];
+        selectedQuality = 'auto';
+        renderQualityMenu();
 
         clearHls();
-        if(DOM.video.canPlayType('application/vnd.apple.mpegurl')){
-          // Native HLS (Safari) – we cannot enumerate variants reliably; keep Auto only
+        if (DOM.video.canPlayType('application/vnd.apple.mpegurl')) {
           DOM.video.src = ch.url;
-        }else if(window.Hls && Hls.isSupported()){
-          hls = new Hls({ enableWorker:true, lowLatencyMode:true, liveDurationInfinity:true });
-          hls.on(Hls.Events.ERROR, (_, data)=>{ if(data?.fatal){ showError(`Stream error: ${data.details || 'fatal'}`); }});
-          hls.on(Hls.Events.MANIFEST_PARSED, (_, data)=>{
-            // Build quality list
-            qualityLevels = (hls.levels || []).map((lvl, i)=>({
-              index:i,
+        } else if (window.Hls && Hls.isSupported()) {
+          hls = new Hls({ enableWorker: true, lowLatencyMode: true, liveDurationInfinity: true });
+          hls.on(Hls.Events.ERROR, (_, data) => {
+            if (data.fatal) {
+              const msg = data.type === Hls.ErrorTypes.NETWORK_ERROR
+                ? "Network error: Check your connection"
+                : data.type === Hls.ErrorTypes.MEDIA_ERROR
+                ? "Media error: Stream may be corrupted"
+                : `Stream error: ${data.details || 'unknown'}`;
+              showError(msg);
+            }
+          });
+          hls.on(Hls.Events.MANIFEST_PARSED, (_, data) => {
+            qualityLevels = (hls.levels || []).map((lvl, i) => ({
+              index: i,
               bitrate: lvl.bitrate,
-              height:  lvl.height || 0,
-              name:    lvl.name || (lvl.height ? `${lvl.height}p` : `${Math.round((lvl.bitrate||0)/1000)} kbps`)
-            }))
-            // Highest first like YouTube
-            qualityLevels.sort((a,b)=> (b.height||b.bitrate) - (a.height||a.bitrate));
+              height: lvl.height || 0,
+              name: lvl.name || (lvl.height ? `${lvl.height}p` : `${Math.round((lvl.bitrate || 0) / 1000)} kbps`)
+            }));
+            qualityLevels.sort((a, b) => (b.height || b.bitrate) - (a.height || a.bitrate));
             renderQualityMenu();
           });
-          hls.on(Hls.Events.LEVEL_SWITCHED, (_, data)=>{
-            // Mark active quality in menu
-            const active = data.level; // -1 when auto selecting?
-            // If hls.autoLevelEnabled && active>=0, we still show the resolution
-            highlightQualityItem(active);
+          hls.on(Hls.Events.LEVEL_SWITCHED, (_, data) => {
+            highlightQualityItem(data.level);
           });
           hls.loadSource(ch.url);
           hls.attachMedia(DOM.video);
-        }else{
-          DOM.video.src = ch.url; // fallback
+        } else {
+          showError("HLS not supported. Falling back to direct playback.");
+          DOM.video.src = ch.url;
         }
 
-        await DOM.video.play().catch(()=>{ /* ignore autoplay policy errors */});
+        await DOM.video.play().catch(() => {});
         showToast(ch);
         updateActiveChannel();
-      }catch(e){
+      } catch (e) {
         showError(`Failed to play channel: ${e.message}`);
-      }finally{
+      } finally {
         DOM.buffering.classList.remove("show");
       }
     }
 
-    function humanResName(q){
-      if(q==='auto') return 'Auto';
-      return q.height ? `${q.height}p` : (q.bitrate ? `${Math.round(q.bitrate/1000)} kbps` : 'Level');
+    function humanResName(q) {
+      if (q === 'auto') return 'Auto';
+      return q.height ? `${q.height}p` : (q.bitrate ? `${Math.round(q.bitrate / 1000)} kbps` : 'Unknown');
     }
 
-    function renderQualityMenu(){
+    function renderQualityMenu() {
       const items = [];
-      // Auto item
-      items.push(`<div class="qitem ${selectedQuality==='auto' ? 'active':''}" data-q="auto"><span>Auto</span><span></span></div>`);
-      // Levels
-      qualityLevels.forEach(q=>{
-        items.push(`<div class="qitem" data-q="${q.index}"><span>${humanResName(q)}</span><span></span></div>`);
+      items.push(`<div class="qitem ${selectedQuality === 'auto' ? 'active' : ''}" data-q="auto" role="menuitem" aria-checked="${selectedQuality === 'auto'}"><span>Auto</span><span></span></div>`);
+      qualityLevels.forEach(q => {
+        items.push(`<div class="qitem" data-q="${q.index}" role="menuitem" aria-checked="${selectedQuality === q.index}"><span>${humanResName(q)}</span><span></span></div>`);
       });
       DOM.qualityMenu.innerHTML = items.join("");
-      // Attach listeners
-      [...DOM.qualityMenu.querySelectorAll('.qitem')].forEach(el=>{
-        el.onclick = ()=>{
+      [...DOM.qualityMenu.querySelectorAll('.qitem')].forEach(el => {
+        el.onclick = () => {
           const val = el.getAttribute('data-q');
           setQuality(val === 'auto' ? 'auto' : Number(val));
           toggleQualityMenu(false);
         };
       });
-      highlightQualityItem(selectedQuality==='auto' ? -1 : selectedQuality);
+      highlightQualityItem(selectedQuality === 'auto' ? -1 : selectedQuality);
     }
 
-    function highlightQualityItem(levelIndex){
-      // If auto is on, consider -1 as active
-      const isAuto = (selectedQuality==='auto') || (hls && hls.autoLevelEnabled && levelIndex===-1);
-      [...DOM.qualityMenu.querySelectorAll('.qitem')].forEach(el=> el.classList.remove('active'));
-      if(isAuto) {
+    function highlightQualityItem(levelIndex) {
+      const isAuto = (selectedQuality === 'auto') || (hls && hls.autoLevelEnabled && levelIndex === -1);
+      [...DOM.qualityMenu.querySelectorAll('.qitem')].forEach(el => {
+        el.classList.remove('active');
+        el.setAttribute('aria-checked', 'false');
+      });
+      if (isAuto) {
         const autoItem = DOM.qualityMenu.querySelector('.qitem[data-q="auto"]');
-        autoItem && autoItem.classList.add('active');
-      } else {
+        if (autoItem) {
+          autoItem.classList.add('active');
+          autoItem.setAttribute('aria-checked', 'true');
+        }
+      } else if (levelIndex >= 0) {
         const item = DOM.qualityMenu.querySelector(`.qitem[data-q="${levelIndex}"]`);
-        item && item.classList.add('active');
+        if (item) {
+          item.classList.add('active');
+          item.setAttribute('aria-checked', 'true');
+        }
       }
     }
 
-    function setQuality(q){
+    function setQuality(q) {
       selectedQuality = q;
-      if(!hls){
-        // Native HLS – cannot force level; keep Auto
+      if (!hls) {
         selectedQuality = 'auto';
         showError("Quality selection not supported on this browser (native HLS).");
         renderQualityMenu();
         return;
       }
-      if(q==='auto'){
-        hls.currentLevel = -1;   // let ABR pick
+      if (q === 'auto') {
+        hls.currentLevel = -1;
         hls.autoLevelEnabled = true;
         highlightQualityItem(-1);
-      }else{
+      } else {
         hls.autoLevelEnabled = false;
-        // Find the level index in original hls.levels that matches our sorted list
-        // We stored 'index' from original levels in qualityLevels, so q is already correct index.
         hls.currentLevel = q;
         highlightQualityItem(q);
       }
     }
 
-    function toggleQualityMenu(force){
-      const show = (typeof force==='boolean') ? force : !DOM.qualityMenu.classList.contains('show');
+    function toggleQualityMenu(force) {
+      const show = (typeof force === 'boolean') ? force : !DOM.qualityMenu.classList.contains('show');
       DOM.qualityMenu.classList.toggle('show', show);
     }
 
     // ===== Toast =====
-    function showToast(ch){
+    function showToast(ch) {
       DOM.toastText.textContent = ch.name;
-      if(ch.logo){ DOM.toastLogo.src = ch.logo; DOM.toastLogo.style.display='block'; }
-      else { DOM.toastLogo.style.display='none'; }
+      if (ch.logo) {
+        DOM.toastLogo.src = ch.logo;
+        DOM.toastLogo.style.display = 'block';
+      } else {
+        DOM.toastLogo.style.display = 'none';
+      }
       DOM.toast.classList.add("show");
-      setTimeout(()=> DOM.toast.classList.remove("show"), CONFIG.toastDuration);
+      setTimeout(() => DOM.toast.classList.remove("show"), CONFIG.toastDuration);
     }
 
     // ===== Controls visibility =====
-    const showControls = debounce(()=>{
+    const showControls = debounce(() => {
       DOM.controls.classList.add("show");
       clearTimeout(hideControlsTimeout);
-      hideControlsTimeout = setTimeout(()=> DOM.controls.classList.remove("show"), CONFIG.controlsHideDelay);
+      hideControlsTimeout = setTimeout(() => DOM.controls.classList.remove("show"), CONFIG.controlsHideDelay);
     }, CONFIG.debounceDelay);
 
     // ===== Listeners =====
-    function setupEventListeners(){
+    function setupEventListeners() {
       // Buttons
-      DOM.prevBtn.onclick = ()=> playChannel(currentIndex - 1);
-      DOM.nextBtn.onclick = ()=> playChannel(currentIndex + 1);
-      DOM.channelBtn.onclick = ()=> toggleOverlay();
-      DOM.qualityBtn.onclick = (e)=> { toggleQualityMenu(); e.stopPropagation(); };
-      DOM.fsBtn.onclick = ()=> { if(document.fullscreenElement) document.exitFullscreen(); else DOM.video.requestFullscreen?.(); };
+      DOM.prevBtn.onclick = () => playChannel(currentIndex - 1);
+      DOM.nextBtn.onclick = () => playChannel(currentIndex + 1);
+      DOM.channelBtn.onclick = () => toggleOverlay();
+      DOM.qualityBtn.onclick = (e) => {
+        toggleQualityMenu();
+        e.stopPropagation();
+      };
+      DOM.fsBtn.onclick = toggleFullscreen;
 
       // Volume
-      DOM.volume.addEventListener("input", ()=>{
+      DOM.volume.addEventListener("input", () => {
         DOM.video.volume = Number(DOM.volume.value);
         localStorage.setItem("volume", DOM.volume.value);
       });
 
       // Video events
-      DOM.video.addEventListener("waiting", ()=> DOM.buffering.classList.add("show"));
-      DOM.video.addEventListener("playing", ()=> DOM.buffering.classList.remove("show"));
-      DOM.video.addEventListener("error", ()=> showError("Error playing channel"));
+      DOM.video.addEventListener("waiting", () => DOM.buffering.classList.add("show"));
+      DOM.video.addEventListener("playing", () => DOM.buffering.classList.remove("show"));
+      DOM.video.addEventListener("error", () => showError("Error playing channel"));
 
-      // Global interactions show controls
-      document.addEventListener("mousemove", showControls, {passive:true});
-      document.addEventListener("touchstart", showControls, {passive:true});
-      document.addEventListener("keydown", showControls);
+      // Global interactions
+      const interactionEvents = [
+        { type: "mousemove", handler: showControls, options: { passive: true } },
+        { type: "touchstart", handler: showControls, options: { passive: true } },
+        { type: "keydown", handler: showControls, options: {} }
+      ];
+      interactionEvents.forEach(event => document.addEventListener(event.type, event.handler, event.options));
 
       // Click outside to close quality menu
-      document.addEventListener("click", (e)=>{
-        if(!DOM.qualityMenu.contains(e.target) && e.target !== DOM.qualityBtn){
+      document.addEventListener("click", (e) => {
+        if (!DOM.qualityMenu.contains(e.target) && e.target !== DOM.qualityBtn) {
           toggleQualityMenu(false);
         }
       });
 
       // Keyboard / TV remote
-      document.addEventListener("keydown", (e)=>{
-        switch(e.key){
+      document.addEventListener("keydown", (e) => {
+        switch (e.key) {
           case "ArrowUp":
-            if(overlayOpen){
+            if (overlayOpen) {
               highlightIndex = (highlightIndex - 1 + channels.length) % channels.length;
               updateHighlight();
               DOM.channelList.children[highlightIndex]?.focus();
@@ -424,7 +650,7 @@
             }
             break;
           case "ArrowDown":
-            if(overlayOpen){
+            if (overlayOpen) {
               highlightIndex = (highlightIndex + 1) % channels.length;
               updateHighlight();
               DOM.channelList.children[highlightIndex]?.focus();
@@ -434,12 +660,19 @@
             break;
           case "Enter":
           case "OK":
-            if(overlayOpen){ playChannel(highlightIndex); closeOverlay(); }
-            else { openOverlay(); }
+            if (overlayOpen) {
+              playChannel(highlightIndex);
+              closeOverlay();
+            } else {
+              openOverlay();
+            }
             break;
           case "Escape":
           case "Backspace":
-            if(overlayOpen) closeOverlay();
+            if (overlayOpen) {
+              closeOverlay();
+              e.preventDefault();
+            }
             toggleQualityMenu(false);
             break;
           case "ArrowLeft":
@@ -452,36 +685,62 @@
             DOM.volume.value = DOM.video.volume;
             localStorage.setItem("volume", DOM.volume.value);
             break;
-          case "f": case "F":
-            if(document.fullscreenElement) document.exitFullscreen(); else DOM.video.requestFullscreen?.();
+          case "f":
+          case "F":
+            toggleFullscreen();
             break;
-          case "m": case "M":
+          case "m":
+          case "M":
             DOM.video.muted = !DOM.video.muted;
             break;
-          // Quick toggles
-          case "c": case "C": toggleOverlay(); break;
-          case "q": case "Q": toggleQualityMenu(); break;
+          case "c":
+          case "C":
+            toggleOverlay();
+            break;
+          case "q":
+          case "Q":
+            toggleQualityMenu();
+            break;
         }
       });
 
       // Touch swipe channel zap
-      let sx=0, sy=0;
-      DOM.player.addEventListener("touchstart",(e)=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
-      DOM.player.addEventListener("touchend",(e)=>{
-        const dx=e.changedTouches[0].clientX - sx;
-        const dy=e.changedTouches[0].clientY - sy;
-        if(Math.abs(dx)>Math.abs(dy) && Math.abs(dx)>50){
-          if(dx>0) playChannel(currentIndex - 1); else playChannel(currentIndex + 1);
+      let sx = 0, sy = 0;
+      const touchStart = (e) => {
+        sx = e.touches[0].clientX;
+        sy = e.touches[0].clientY;
+      };
+      const touchEnd = (e) => {
+        const dx = e.changedTouches[0].clientX - sx;
+        const dy = e.changedTouches[0].clientY - sy;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+          if (dx > 0) playChannel(currentIndex - 1);
+          else playChannel(currentIndex + 1);
         }
-      },{passive:true});
+      };
+      DOM.player.addEventListener("touchstart", touchStart, { passive: true });
+      DOM.player.addEventListener("touchend", touchEnd, { passive: true });
+
+      // Cleanup function
+      return () => {
+        interactionEvents.forEach(event => document.removeEventListener(event.type, event.handler, event.options));
+        DOM.player.removeEventListener("touchstart", touchStart);
+        DOM.player.removeEventListener("touchend", touchEnd);
+        clearHls();
+      };
     }
 
     // ===== Init =====
-    function init(){
+    function init() {
       const savedVol = localStorage.getItem("volume");
-      if(savedVol !== null){ DOM.video.volume = Number(savedVol); DOM.volume.value = savedVol; }
-      setupEventListeners();
+      if (savedVol !== null) {
+        DOM.video.volume = Number(savedVol);
+        DOM.volume.value = savedVol;
+      }
+      const cleanup = setupEventListeners();
       loadM3U();
+      // Cleanup on page unload
+      window.addEventListener("unload", cleanup);
     }
     init();
   </script>
