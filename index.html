@@ -1,157 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Smart TV IPTV Player</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart IPTV Web Player</title>
   <style>
-    body {margin:0;background:#000;color:#fff;font-family:sans-serif;overflow:hidden}
-    #player {width:100%;height:100vh;background:#000;object-fit:contain}
-    #overlayList {
-      position:fixed;top:0;left:0;width:300px;height:100%;
-      background:rgba(20,20,20,0.95);overflow-y:auto;
-      transform:translateX(-100%);transition:0.3s;z-index:1000;padding:10px;
+    body {
+      margin:0;
+      background:#000;
+      color:#fff;
+      font-family: Arial, sans-serif;
+      overflow:hidden;
     }
-    #overlayList.show {transform:translateX(0)}
-    .channel {padding:8px;cursor:pointer;display:flex;align-items:center;gap:8px}
-    .channel:hover,.channel.active {background:#333}
-    .channel img {width:30px;height:30px;object-fit:contain}
-    #controls {
-      position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
-      display:flex;gap:20px;opacity:0;transition:0.3s;z-index:900;
+    #player-container {
+      position:relative;
+      width:100vw;
+      height:100vh;
+      background:#000;
+    }
+    video {
+      width:100%;
+      height:100%;
+      background:#000;
+    }
+    /* Overlay channel list */
+    #channel-list {
+      position:fixed;
+      top:0;
+      left:0;
+      width:300px;
+      height:100%;
+      background:rgba(20,20,20,0.95);
+      overflow-y:auto;
+      transform:translateX(-100%);
+      transition:transform 0.3s;
+      z-index:20;
+      padding:10px;
+    }
+    #channel-list.show {
+      transform:translateX(0);
+    }
+    #channel-list input {
+      width:90%;
+      padding:5px;
+      margin:10px auto;
+      display:block;
+      border:none;
+      border-radius:5px;
+    }
+    .channel-item {
+      padding:8px;
+      cursor:pointer;
+      border-bottom:1px solid #444;
+      display:flex;
       align-items:center;
+      gap:8px;
     }
-    #controls.show {opacity:1}
+    .channel-item img {
+      width:30px;
+      height:30px;
+      object-fit:contain;
+    }
+    .channel-item:hover, .channel-item.active {
+      background:#444;
+    }
+    /* Controls */
+    #controls {
+      position:absolute;
+      bottom:10px;
+      left:0;
+      right:0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      opacity:0;
+      transition:opacity 0.3s;
+      z-index:10;
+      gap:20px;
+    }
+    #controls.show {
+      opacity:1;
+    }
     .btn {
-      background:rgba(0,0,0,0.6);padding:10px 15px;border-radius:8px;cursor:pointer;
-      user-select:none;
+      background:rgba(0,0,0,0.6);
+      border:none;
+      color:#fff;
+      font-size:18px;
+      padding:8px 12px;
+      border-radius:6px;
+      cursor:pointer;
     }
-    #toast {
-      position:absolute;bottom:60px;left:20px;background:rgba(0,0,0,0.7);
-      padding:10px 15px;border-radius:8px;display:none;align-items:center;gap:10px;
-      animation:fadein 0.5s;
+    /* Channel title */
+    #channel-title {
+      position:absolute;
+      top:10px;
+      left:50%;
+      transform:translateX(-50%);
+      background:rgba(0,0,0,0.6);
+      padding:6px 14px;
+      border-radius:6px;
+      font-size:16px;
+      opacity:0;
+      transition:opacity 0.5s;
+      z-index:10;
     }
-    #toast img {width:40px;height:40px;object-fit:contain}
-    @keyframes fadein {from{opacity:0}to{opacity:1}}
-    #volSlider {
-      width:0;overflow:hidden;transition:width 0.3s;background:#222;
-      border-radius:8px;padding:5px;
+    #channel-title.show {
+      opacity:1;
     }
-    #volSlider input {width:100px}
+    /* Now Playing Toast */
+    #now-playing {
+      position:fixed;
+      bottom:20px;
+      left:20px;
+      background:rgba(0,0,0,0.8);
+      padding:8px 12px;
+      border-radius:6px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      opacity:0;
+      transition:opacity 0.5s;
+      z-index:30;
+    }
+    #now-playing.show {
+      opacity:1;
+    }
+    #now-playing img {
+      width:40px;
+      height:40px;
+      object-fit:contain;
+    }
+    /* Volume */
+    #volume {
+      position:absolute;
+      right:20px;
+      bottom:60px;
+      display:flex;
+      align-items:center;
+      gap:5px;
+      background:rgba(0,0,0,0.6);
+      padding:6px;
+      border-radius:6px;
+      opacity:0;
+      transition:opacity 0.3s;
+      z-index:10;
+    }
+    #volume.show {opacity:1;}
+    #volume input {width:80px;}
   </style>
 </head>
 <body>
+  <div id="player-container">
+    <video id="video" controls autoplay muted></video>
+    <div id="controls">
+      <button class="btn" id="prevBtn">⏮ Prev</button>
+      <button class="btn" id="nextBtn">Next ⏭</button>
+    </div>
+    <div id="channel-title"></div>
+    <div id="volume">
+      🔊 <input type="range" id="volumeSlider" min="0" max="1" step="0.05">
+    </div>
+  </div>
 
-<video id="player" controls autoplay muted></video>
+  <div id="channel-list">
+    <input type="text" id="search" placeholder="Search channel...">
+    <div id="channels"></div>
+  </div>
 
-<div id="overlayList"></div>
+  <div id="now-playing"></div>
 
-<div id="controls">
-  <div class="btn" id="prevBtn">⏮ Prev</div>
-  <div class="btn" id="nextBtn">Next ⏭</div>
-  <div class="btn" id="volBtn">🔊</div>
-  <div id="volSlider"><input type="range" min="0" max="1" step="0.05" id="volume"></div>
-</div>
+  <script>
+    const video = document.getElementById('video');
+    const controls = document.getElementById('controls');
+    const channelTitle = document.getElementById('channel-title');
+    const nowPlaying = document.getElementById('now-playing');
+    const volumeBox = document.getElementById('volume');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const channelList = document.getElementById('channel-list');
+    const channelsDiv = document.getElementById('channels');
+    const search = document.getElementById('search');
 
-<div id="toast"><img id="toastLogo"><span id="toastText"></span></div>
+    let channels = [];
+    let currentIndex = 0;
+    let hideControlsTimeout;
 
-<script>
-const player=document.getElementById('player');
-const overlay=document.getElementById('overlayList');
-const toast=document.getElementById('toast');
-const toastLogo=document.getElementById('toastLogo');
-const toastText=document.getElementById('toastText');
-const volume=document.getElementById('volume');
-const volSlider=document.getElementById('volSlider');
-const volBtn=document.getElementById('volBtn');
-let channels=[],currentIndex=0,hideTimeout;
-
-// Parse M3U file
-async function loadM3U(){
-  let res=await fetch("https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u");
-  let text=await res.text();
-  let lines=text.split("\n");let tempName="",tempLogo="";
-  lines.forEach(line=>{
-    if(line.startsWith("#EXTINF")){
-      let name=line.match(/,(.*)$/)?.[1]?.trim()||"Channel";
-      let logo=line.match(/tvg-logo="(.*?)"/)?.[1]||"";
-      tempName=name;tempLogo=logo;
-    } else if(line.trim() && !line.startsWith("#")){
-      channels.push({name:tempName,url:line.trim(),logo:tempLogo});
+    async function loadPlaylist() {
+      const res = await fetch("https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u");
+      const text = await res.text();
+      parseM3U(text);
     }
-  });
-  renderChannels();playChannel(0);
-}
 
-// Render channel list
-function renderChannels(){
-  overlay.innerHTML=channels.map((c,i)=>`
-    <div class="channel" data-idx="${i}">
-      ${c.logo?`<img src="${c.logo}">`:""} <span>${c.name}</span>
-    </div>`).join("");
-  overlay.querySelectorAll(".channel").forEach(ch=>{
-    ch.onclick=()=>{
-      playChannel(parseInt(ch.dataset.idx));
-      toggleOverlay(false);
+    function parseM3U(data) {
+      const lines = data.split("\n");
+      let temp = {};
+      for (let line of lines) {
+        if (line.startsWith("#EXTINF")) {
+          const nameMatch = line.match(/tvg-name="([^"]+)"/);
+          const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+          const name = nameMatch ? nameMatch[1] : line.split(",").pop().trim();
+          temp = {name, logo: logoMatch ? logoMatch[1] : ""};
+        } else if (line.startsWith("http")) {
+          temp.url = line.trim();
+          channels.push(temp);
+        }
+      }
+      renderChannels();
+      if (channels.length > 0) playChannel(0);
     }
-  });
-}
 
-// Play channel
-function playChannel(i){
-  if(i<0||i>=channels.length)return;
-  currentIndex=i;
-  let ch=channels[i];
-  player.src=ch.url;player.play();
-  showToast(ch);
-  overlay.querySelectorAll(".channel").forEach(el=>el.classList.remove("active"));
-  let active=overlay.querySelector(`.channel[data-idx="${i}"]`);
-  if(active)active.classList.add("active");
-}
+    function renderChannels() {
+      channelsDiv.innerHTML = "";
+      channels.forEach((c,i)=>{
+        const div = document.createElement("div");
+        div.className = "channel-item";
+        div.innerHTML = (c.logo? `<img src="${c.logo}">` : "") + c.name;
+        div.onclick = ()=> {
+          playChannel(i);
+          toggleChannelList(false);
+        };
+        channelsDiv.appendChild(div);
+      });
+    }
 
-// Toast display
-function showToast(ch){
-  toast.style.display="flex";
-  toastText.textContent=ch.name;
-  toastLogo.style.display=ch.logo?"block":"none";
-  if(ch.logo)toastLogo.src=ch.logo;
-  setTimeout(()=>toast.style.display="none",3000);
-}
+    function playChannel(i) {
+      currentIndex = (i + channels.length) % channels.length;
+      video.src = channels[currentIndex].url;
+      showChannelInfo(channels[currentIndex]);
+      highlightActive();
+    }
 
-// Controls auto-hide
-function showControls(){
-  document.getElementById("controls").classList.add("show");
-  clearTimeout(hideTimeout);
-  hideTimeout=setTimeout(()=>document.getElementById("controls").classList.remove("show"),3000);
-}
-document.body.addEventListener("mousemove",showControls);
-document.body.addEventListener("click",showControls);
+    function highlightActive() {
+      document.querySelectorAll(".channel-item").forEach((el,idx)=>{
+        el.classList.toggle("active", idx===currentIndex);
+      });
+    }
 
-// Overlay toggle
-function toggleOverlay(force){
-  if(force===false)overlay.classList.remove("show");
-  else overlay.classList.toggle("show");
-}
+    function showChannelInfo(channel) {
+      channelTitle.textContent = channel.name;
+      channelTitle.classList.add("show");
+      setTimeout(()=> channelTitle.classList.remove("show"),3000);
 
-// Buttons
-document.getElementById("nextBtn").onclick=()=>playChannel((currentIndex+1)%channels.length);
-document.getElementById("prevBtn").onclick=()=>playChannel((currentIndex-1+channels.length)%channels.length);
-volBtn.onclick=()=>volSlider.style.width=volSlider.style.width?"0":"120px";
-volume.oninput=()=>player.volume=volume.value;
+      nowPlaying.innerHTML = (channel.logo? `<img src="${channel.logo}">`:"") + 
+        `<span>Now Playing: ${channel.name}</span>`;
+      nowPlaying.classList.add("show");
+      setTimeout(()=> nowPlaying.classList.remove("show"),3000);
 
-// Remote key handling
-document.addEventListener("keydown",e=>{
-  switch(e.key){
-    case "ArrowUp":playChannel((currentIndex-1+channels.length)%channels.length);break;
-    case "ArrowDown":playChannel((currentIndex+1)%channels.length);break;
-    case "ArrowLeft":player.volume=Math.max(0,player.volume-0.1);volume.value=player.volume;break;
-    case "ArrowRight":player.volume=Math.min(1,player.volume+0.1);volume.value=player.volume;break;
-    case "Enter":toggleOverlay();break;
-    case "Backspace":case "Escape":toggleOverlay(false);break;
-  }
-  showControls();
-});
+      localStorage.setItem("lastChannel", currentIndex);
+    }
 
-loadM3U();
-</script>
+    // Controls auto-hide
+    function showControls() {
+      controls.classList.add("show");
+      volumeBox.classList.add("show");
+      clearTimeout(hideControlsTimeout);
+      hideControlsTimeout = setTimeout(()=>{
+        controls.classList.remove("show");
+        volumeBox.classList.remove("show");
+      },3000);
+    }
+    document.addEventListener("mousemove", showControls);
+    document.addEventListener("keydown", showControls);
+
+    // Buttons
+    document.getElementById("nextBtn").onclick=()=>playChannel(currentIndex+1);
+    document.getElementById("prevBtn").onclick=()=>playChannel(currentIndex-1);
+
+    // Volume
+    volumeSlider.oninput = ()=> video.volume = volumeSlider.value;
+    video.volume=0.7; volumeSlider.value=0.7;
+
+    // Search filter
+    search.oninput=()=>{
+      const term = search.value.toLowerCase();
+      [...channelsDiv.children].forEach(c=>{
+        c.style.display = c.textContent.toLowerCase().includes(term)? "flex":"none";
+      });
+    };
+
+    // Channel list toggle
+    function toggleChannelList(show) {
+      channelList.classList.toggle("show", show);
+    }
+
+    // Keyboard & TV remote controls
+    document.addEventListener("keydown", (e)=>{
+      switch(e.key){
+        case "ArrowUp": playChannel(currentIndex-1); break;
+        case "ArrowDown": playChannel(currentIndex+1); break;
+        case "ArrowLeft": video.volume=Math.max(0,video.volume-0.1); volumeSlider.value=video.volume; break;
+        case "ArrowRight": video.volume=Math.min(1,video.volume+0.1); volumeSlider.value=video.volume; break;
+        case "Enter": toggleChannelList(!channelList.classList.contains("show")); break;
+        case "Backspace": toggleChannelList(false); break;
+        case "n": case "N": playChannel(currentIndex+1); break;
+        case "p": case "P": playChannel(currentIndex-1); break;
+        case "m": case "M": video.muted=!video.muted; break;
+        case "f": case "F": if(video.requestFullscreen) video.requestFullscreen(); break;
+      }
+    });
+
+    // Restore last channel
+    window.onload=()=>{
+      loadPlaylist().then(()=>{
+        const last = localStorage.getItem("lastChannel");
+        if(last) playChannel(parseInt(last));
+      });
+    };
+  </script>
 </body>
 </html>
