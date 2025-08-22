@@ -2,9 +2,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Live Stream Player — Advanced</title>
+  <title>Live Stream Player — Advanced+</title>
   <style>
-    :root{--bg:#0b1020;--fg:#e7ecff;--muted:#9aa3b2;--card:#121936;--acc:#4da3ff}
+    :root{--bg:#0b1020;--fg:#e7ecff;--muted:#9aa3b2;--card:#121936;--acc:#4da3ff;--glass:rgba(0,0,0,.55)}
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Roboto,Ubuntu,sans-serif;display:flex;align-items:center;justify-content:center}/* Player layout */
@@ -12,39 +12,52 @@
 video{width:100%;height:78vh;max-height:78vh;background:#000;border-radius:14px;display:block}
 .error{margin-top:8px;color:#ffb4b4;text-align:center;min-height:1.2em}
 
-/* Channel overlay (left) */
+/* Overlay root */
 .overlay{position:absolute;inset:0;pointer-events:none}
-.chan-overlay{position:absolute;top:0;left:0;bottom:0;width:300px;max-width:85%;background:rgba(18,25,54,.96);border-radius:0 12px 12px 0;transform:translateX(-100%);transition:.28s ease;z-index:30;display:flex;flex-direction:column;gap:10px;padding:12px;pointer-events:auto}
-.chan-overlay.active{transform:translateX(0)}
-.search{padding:8px 10px;border-radius:8px;border:1px solid #2a355e;background:#0e1533;color:var(--fg);outline:none}
-.list{overflow:auto;border-radius:8px}
-.item{padding:10px 12px;background:#1b2447;border-bottom:1px solid #2a355e;cursor:pointer}
-.item:hover{background:#2c386d}
-.item.active{background:var(--acc);color:#001028;font-weight:600}
 
-/* Toggle button to open channel list */
-.hamburger{position:absolute;top:50%;left:10px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:var(--acc);color:#001028;display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer;z-index:32}
-
-/* On-video UI that auto-hides */
+/* Auto-hide UI elements */
 .ui{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;opacity:0;transition:opacity .25s;pointer-events:none;z-index:25}
-.ui.show{opacity:1;pointer-events:none}
+.ui.show{opacity:1}
 .ui .topbar{display:flex;justify-content:center;margin-top:12px}
-.chip{background:rgba(0,0,0,.55);color:#fff;padding:6px 14px;border-radius:999px;font-size:14px;backdrop-filter:saturate(120%) blur(2px)}
+.chip{background:var(--glass);color:#fff;padding:6px 14px;border-radius:999px;font-size:14px;backdrop-filter:saturate(120%) blur(2px)}
 .ui .mid{display:flex;justify-content:space-between;align-items:center;padding:0 56px}
-.round{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;user-select:none}
-.round[hidden]{display:none}
+.round{width:44px;height:44px;border-radius:50%;background:var(--glass);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;user-select:none;pointer-events:auto}
 .ui .bot{display:flex;justify-content:space-between;align-items:center;padding:10px}
 .counter{font-size:12px;color:var(--muted)}
+
+/* Volume mini control */
+.vol{display:flex;align-items:center;gap:8px;background:var(--glass);padding:6px 10px;border-radius:999px;pointer-events:auto}
+.vol input[type="range"]{width:0;transition:width .25s;accent-color:var(--acc)}
+.ui.show .vol input[type="range"], .vol:hover input[type="range"]{width:120px}
+.vol-btn{cursor:pointer}
 
 /* Spinner */
 .spinner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;animation:spin 1s linear infinite;z-index:10;display:none}
 @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
 
+/* Hamburger toggle */
+.hamburger{position:absolute;top:50%;left:10px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:var(--acc);color:#001028;display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer;z-index:32;pointer-events:auto}
+
+/* Channel list overlay */
+.chan-overlay{position:absolute;top:0;left:0;bottom:0;width:320px;max-width:85%;background:rgba(18,25,54,.96);border-radius:0 12px 12px 0;transform:translateX(-100%);transition:.28s ease;z-index:30;display:flex;flex-direction:column;gap:10px;padding:12px;pointer-events:auto}
+.chan-overlay.active{transform:translateX(0)}
+.search{padding:8px 10px;border-radius:8px;border:1px solid #2a355e;background:#0e1533;color:var(--fg);outline:none}
+.list{overflow:auto;border-radius:8px}
+.item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#1b2447;border-bottom:1px solid #2a355e;cursor:pointer}
+.item:hover{background:#2c386d}
+.item.active{background:var(--acc);color:#001028;font-weight:600}
+.logo{width:28px;height:28px;border-radius:6px;object-fit:contain;background:#000}
+
+/* Now Playing toast */
+.toast{position:absolute;left:14px;bottom:14px;background:var(--glass);border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(10px);transition:.25s;z-index:26;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast .tlogo{width:26px;height:26px;border-radius:6px;object-fit:contain;background:#000}
+
 @media (max-width:700px){
   video{height:70vh}
   .ui .mid{padding:0 24px}
   .hamburger{left:6px}
-  .chan-overlay{width:84%}
+  .chan-overlay{width:88%}
 }
 
   </style>
@@ -53,17 +66,24 @@ video{width:100%;height:78vh;max-height:78vh;background:#000;border-radius:14px;
 <body>
   <div class="player-wrap" id="wrap">
     <video id="video" playsinline controls></video>
-    <div class="spinner" id="spinner"></div>
-    <div class="overlay">
-      <!-- Auto-hide UI overlay (appears on interaction) -->
-      <div class="ui" id="ui">
-        <div class="topbar"><div class="chip" id="title">—</div></div>
-        <div class="mid">
-          <div class="round" id="prev" title="Previous">⟨</div>
-          <div class="round" id="next" title="Next">⟩</div>
-        </div>
-        <div class="bot"><div class="counter" id="counter"></div><div class="counter">Tips: N/P keys switch channels</div></div>
-      </div><!-- Hamburger toggle for channel list -->
+    <div class="spinner" id="spinner"></div><div class="overlay">
+  <!-- Auto-hide UI overlay (appears on interaction) -->
+  <div class="ui" id="ui">
+    <div class="topbar"><div class="chip" id="title">—</div></div>
+    <div class="mid">
+      <div class="round" id="prev" title="Previous" aria-label="Previous channel">⟨</div>
+      <div class="round" id="next" title="Next" aria-label="Next channel">⟩</div>
+    </div>
+    <div class="bot">
+      <div class="counter" id="counter"></div>
+      <div class="vol" id="vol">
+        <span class="vol-btn" id="muteBtn">🔊</span>
+        <input type="range" id="volRange" min="0" max="1" step="0.01" value="1" aria-label="Volume" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Hamburger toggle for channel list -->
   <div class="hamburger" id="toggle" title="Channels">☰</div>
 
   <!-- Channel list overlay -->
@@ -71,7 +91,14 @@ video{width:100%;height:78vh;max-height:78vh;background:#000;border-radius:14px;
     <input id="search" class="search" placeholder="Search channels..." />
     <div id="channels" class="list"></div>
   </aside>
+
+  <!-- Now Playing toast -->
+  <div class="toast" id="toast">
+    <img class="tlogo" id="toastLogo" alt="" />
+    <div id="toastText">Now Playing</div>
+  </div>
 </div>
+
 <div class="error" id="error"></div>
 
   </div>  <script>
@@ -84,18 +111,26 @@ video{width:100%;height:78vh;max-height:78vh;background:#000;border-radius:14px;
     const counter = document.getElementById('counter');
     const prevBtn = document.getElementById('prev');
     const nextBtn = document.getElementById('next');
+    const volWrap = document.getElementById('vol');
+    const volRange = document.getElementById('volRange');
+    const muteBtn = document.getElementById('muteBtn');
 
     const overlay = document.getElementById('overlay');
     const toggleBtn = document.getElementById('toggle');
     const channelsEl = document.getElementById('channels');
     const searchEl = document.getElementById('search');
 
-    let channels = [];
+    const toast = document.getElementById('toast');
+    const toastLogo = document.getElementById('toastLogo');
+    const toastText = document.getElementById('toastText');
+
+    let channels = []; // {name, url, logo}
     let currentIndex = 0;
     let hls = null;
     let uiTimer = null;
+    let toastTimer = null;
 
-    // ---- Fetch & parse M3U (robust) ----
+    // ---- Fetch & parse M3U (with tvg-logo support) ----
     async function loadPlaylist(){
       try{
         const res = await fetch(PLAYLIST);
@@ -111,34 +146,37 @@ video{width:100%;height:78vh;max-height:78vh;background:#000;border-radius:14px;
 
     function parseM3U(txt){
       const lines = txt.split(/\r?\n/);
-      const out = []; let name = '';
+      const out = []; let meta = {name:'', logo:''};
       for(const raw of lines){
         const line = raw.trim(); if(!line) continue;
         if(line.startsWith('#EXTINF')){
-          // Prefer tvg-name, fallback to text after comma
-          const tvg = /tvg-name="([^"]+)"/.exec(line);
+          const tvgName = /tvg-name="([^"]+)"/i.exec(line);
+          const tvgLogo = /tvg-logo="([^"]+)"/i.exec(line);
           const after = /,(.*)$/.exec(line);
-          name = (tvg && tvg[1]) || (after && after[1].trim()) || 'Channel';
+          meta.name = (tvgName && tvgName[1]) || (after && after[1].trim()) || 'Channel';
+          meta.logo = tvgLogo ? tvgLogo[1] : '';
         } else if(!line.startsWith('#')){
-          out.push({ name, url: line }); name = '';
+          out.push({ name: meta.name, url: line, logo: meta.logo });
+          meta = {name:'', logo:''};
         }
       }
       return out;
     }
 
-    // ---- Render list with stable indexing ----
+    // ---- Render list with logos ----
     function renderChannels(list){
       channelsEl.innerHTML = '';
       list.forEach((ch)=>{
         const div = document.createElement('div');
         div.className = 'item';
-        div.textContent = ch.name;
-        div.dataset.url = ch.url; // keep reference to full index via URL
-        div.onclick = () => {
-          const idx = channels.findIndex(c=>c.url===ch.url);
-          selectChannel(idx);
-          closeOverlay();
-        };
+        const img = document.createElement('img');
+        img.className = 'logo';
+        img.alt = '';
+        if(ch.logo) img.src = ch.logo; else img.style.visibility = 'hidden';
+        const name = document.createElement('div'); name.textContent = ch.name;
+        div.appendChild(img); div.appendChild(name);
+        div.dataset.url = ch.url;
+        div.onclick = () => { selectChannel(channels.findIndex(c=>c.url===ch.url)); closeOverlay(); };
         channelsEl.appendChild(div);
       });
       updateCounter();
@@ -158,6 +196,7 @@ video{width:100%;height:78vh;max-height:78vh;background:#000;border-radius:14px;
       localStorage.setItem('last_channel_url', ch.url);
       playStream(ch.url);
       showTitle(ch.name);
+      showToast(ch.name, ch.logo);
       updateListActive();
       updateCounter();
     }
@@ -188,7 +227,6 @@ video{width:100%;height:78vh;max-height:78vh;background:#000;border-radius:14px;
     function showSpinner(v){ spinner.style.display = v ? 'block' : 'none'; }
     function setError(msg){ errorBox.textContent = (msg && msg.message) ? msg.message : msg; }
     function clearError(){ errorBox.textContent = ''; }
-
     function updateCounter(){ counter.textContent = channels.length ? `Channel ${currentIndex+1} / ${channels.length}` : ''; }
 
     // Auto-hide UI: show on interaction for 3s
@@ -202,15 +240,38 @@ video{width:100%;height:78vh;max-height:78vh;background:#000;border-radius:14px;
       document.addEventListener(ev, flashUI, {passive:true});
     });
 
-    // Next/Prev buttons (only visible when UI shown)
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e)=>{
+      const k = e.key.toLowerCase();
+      if(k==='n') selectChannel((currentIndex+1)%channels.length);
+      if(k==='p') selectChannel((currentIndex-1+channels.length)%channels.length);
+      if(k==='f'){ toggleFullscreen(); }
+      if(k==='m'){ toggleMute(); }
+      if(e.key==='ArrowUp'){ setVolume(video.volume + 0.05); }
+      if(e.key==='ArrowDown'){ setVolume(video.volume - 0.05); }
+    });
+
+    // Next/Prev buttons (visible only with UI since they sit inside .ui)
     prevBtn.addEventListener('click', (e)=>{ e.stopPropagation(); selectChannel((currentIndex-1+channels.length)%channels.length); });
     nextBtn.addEventListener('click', (e)=>{ e.stopPropagation(); selectChannel((currentIndex+1)%channels.length); });
 
-    // Keyboard shortcuts
-    document.addEventListener('keydown', (e)=>{
-      if(e.key.toLowerCase()==='n') selectChannel((currentIndex+1)%channels.length);
-      if(e.key.toLowerCase()==='p') selectChannel((currentIndex-1+channels.length)%channels.length);
-    });
+    // Volume control
+    function setVolume(v){
+      const nv = Math.max(0, Math.min(1, v));
+      video.volume = nv; volRange.value = nv;
+      if(nv===0){ video.muted=true; muteBtn.textContent='🔇'; } else { video.muted=false; muteBtn.textContent='🔊'; }
+      flashUI();
+    }
+    volRange.addEventListener('input', ()=> setVolume(parseFloat(volRange.value)) );
+    muteBtn.addEventListener('click', toggleMute);
+    function toggleMute(){ video.muted = !video.muted; muteBtn.textContent = video.muted ? '🔇' : '🔊'; }
+
+    // Fullscreen helper
+    function toggleFullscreen(){
+      const el = document.fullscreenElement ? document : document.documentElement;
+      if(document.fullscreenElement){ el.exitFullscreen?.(); }
+      else { document.getElementById('wrap').requestFullscreen?.(); }
+    }
 
     // Channel overlay toggle & search
     toggleBtn.onclick = ()=> overlay.classList.toggle('active');
@@ -219,12 +280,14 @@ video{width:100%;height:78vh;max-height:78vh;background:#000;border-radius:14px;
     searchEl.addEventListener('input', ()=>{
       const q = searchEl.value.toLowerCase();
       const filtered = channels.filter(c=> (c.name||'').toLowerCase().includes(q));
-      // Render filtered but keep references to full list via data-url
       channelsEl.innerHTML = '';
       filtered.forEach(ch=>{
         const div = document.createElement('div');
         div.className='item';
-        div.textContent=ch.name;
+        const img = document.createElement('img'); img.className='logo'; img.alt='';
+        if(ch.logo) img.src = ch.logo; else img.style.visibility='hidden';
+        const name = document.createElement('div'); name.textContent=ch.name;
+        div.appendChild(img); div.appendChild(name);
         div.dataset.url = ch.url;
         div.onclick=()=>{ selectChannel(channels.findIndex(c=>c.url===ch.url)); closeOverlay(); };
         channelsEl.appendChild(div);
@@ -232,10 +295,21 @@ video{width:100%;height:78vh;max-height:78vh;background:#000;border-radius:14px;
       updateListActive();
     });
 
-    // Sync UI visibility with native control showing/hiding: approximate via events
-    video.addEventListener('play', flashUI);
-    video.addEventListener('pause', flashUI);
+    // Toast: Now Playing
+    function showToast(name, logo){
+      toastText.textContent = name || 'Now Playing';
+      if(logo){ toastLogo.src = logo; toastLogo.style.visibility='visible'; }
+      else { toastLogo.removeAttribute('src'); toastLogo.style.visibility='hidden'; }
+      toast.classList.add('show');
+      if(toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=> toast.classList.remove('show'), 3000);
+    }
 
+    // Sync UI when native controls used
+    video.addEventListener('play', ()=>{ flashUI(); });
+    video.addEventListener('pause', ()=>{ flashUI(); });
+
+    // Init
     loadPlaylist();
   </script></body>
 </html>
