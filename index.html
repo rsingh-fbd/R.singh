@@ -3,95 +3,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Live Stream Player — Advanced+</title>
+  <title>Live Stream Player — Fullscreen Mode</title>
   <style>
-    :root{--bg:#0b1020;--fg:#e7ecff;--muted:#9aa3b2;--card:#121936;--acc:#4da3ff;--glass:rgba(0,0,0,.55)}
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Roboto,Ubuntu,sans-serif;display:flex;align-items:center;justify-content:center}
-    .player-wrap{position:relative;width:100%;max-width:1100px}
-    video{width:100%;height:78vh;max-height:78vh;background:#000;border-radius:14px;display:block}
-    .error{margin-top:8px;color:#ffb4b4;text-align:center;min-height:1.2em}
+    html,body { margin:0; height:100%; background:#000; overflow:hidden; }
+    body { display:flex; align-items:center; justify-content:center; }
+    .player-wrap { position:relative; width:100%; height:100%; background:#000; }
+    video { width:100%; height:100%; object-fit:contain; background:#000; }
 
-    .overlay{position:absolute;inset:0;pointer-events:none}
+    /* Overlay UI */
     .ui{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;opacity:0;transition:opacity .25s;pointer-events:none;z-index:25}
-    .ui.show{opacity:1}
+    .ui.show{opacity:1;pointer-events:auto}
     .ui .topbar{display:flex;justify-content:center;margin-top:12px}
-    .chip{background:var(--glass);color:#fff;padding:6px 14px;border-radius:999px;font-size:14px;backdrop-filter:saturate(120%) blur(2px)}
+    .chip{background:rgba(0,0,0,.55);color:#fff;padding:6px 14px;border-radius:999px;font-size:14px;backdrop-filter:saturate(120%) blur(2px)}
     .ui .mid{display:flex;justify-content:space-between;align-items:center;padding:0 56px}
-    .round{width:44px;height:44px;border-radius:50%;background:var(--glass);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;user-select:none;pointer-events:auto}
+    .round{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;user-select:none}
     .ui .bot{display:flex;justify-content:space-between;align-items:center;padding:10px}
-    .counter{font-size:12px;color:var(--muted)}
+    .counter{font-size:12px;color:#aaa}
 
-    .vol{display:flex;align-items:center;gap:8px;background:var(--glass);padding:6px 10px;border-radius:999px;pointer-events:auto}
-    .vol input[type="range"]{width:0;transition:width .25s;accent-color:var(--acc)}
+    .vol{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.55);padding:6px 10px;border-radius:999px}
+    .vol input[type="range"]{width:0;transition:width .25s;accent-color:#4da3ff}
     .ui.show .vol input[type="range"], .vol:hover input[type="range"]{width:120px}
     .vol-btn{cursor:pointer}
 
-    .spinner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;animation:spin 1s linear infinite;z-index:10;display:none}
-    @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+    .hamburger{position:absolute;top:50%;left:10px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:#4da3ff;color:#001028;display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer;z-index:32}
 
-    .hamburger{position:absolute;top:50%;left:10px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:var(--acc);color:#001028;display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer;z-index:32;pointer-events:auto}
-
-    .chan-overlay{position:absolute;top:0;left:0;bottom:0;width:320px;max-width:85%;background:rgba(18,25,54,.96);border-radius:0 12px 12px 0;transform:translateX(-100%);transition:.28s ease;z-index:30;display:flex;flex-direction:column;gap:10px;padding:12px;pointer-events:auto}
+    .chan-overlay{position:absolute;top:0;left:0;bottom:0;width:320px;max-width:85%;background:rgba(18,25,54,.96);border-radius:0 12px 12px 0;transform:translateX(-100%);transition:.28s ease;z-index:30;display:flex;flex-direction:column;gap:10px;padding:12px}
     .chan-overlay.active{transform:translateX(0)}
-    .search{padding:8px 10px;border-radius:8px;border:1px solid #2a355e;background:#0e1533;color:var(--fg);outline:none}
-    .list{overflow:auto;border-radius:8px}
+    .search{padding:8px 10px;border-radius:8px;border:1px solid #2a355e;background:#0e1533;color:#fff;outline:none}
+    .list{overflow:auto;flex:1}
     .item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#1b2447;border-bottom:1px solid #2a355e;cursor:pointer}
     .item:hover{background:#2c386d}
-    .item.active{background:var(--acc);color:#001028;font-weight:600}
+    .item.active{background:#4da3ff;color:#001028;font-weight:600}
     .logo{width:28px;height:28px;border-radius:6px;object-fit:contain;background:#000}
 
-    .toast{position:absolute;left:14px;bottom:14px;background:var(--glass);border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(10px);transition:.25s;z-index:26;pointer-events:none}
+    .toast{position:absolute;left:14px;bottom:14px;background:rgba(0,0,0,.55);border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(10px);transition:.25s;z-index:26}
     .toast.show{opacity:1;transform:translateY(0)}
     .toast .tlogo{width:26px;height:26px;border-radius:6px;object-fit:contain;background:#000}
-
-    @media (max-width:700px){
-      video{height:70vh}
-      .ui .mid{padding:0 24px}
-      .hamburger{left:6px}
-      .chan-overlay{width:88%}
-    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
 </head>
 <body>
   <div class="player-wrap" id="wrap">
-    <video id="video" playsinline controls></video>
-    <div class="spinner" id="spinner"></div>
-    <div class="overlay">
-      <div class="ui" id="ui">
-        <div class="topbar"><div class="chip" id="title">—</div></div>
-        <div class="mid">
-          <div class="round" id="prev" title="Previous">⟨</div>
-          <div class="round" id="next" title="Next">⟩</div>
-        </div>
-        <div class="bot">
-          <div class="counter" id="counter"></div>
-          <div class="vol" id="vol">
-            <span class="vol-btn" id="muteBtn">🔊</span>
-            <input type="range" id="volRange" min="0" max="1" step="0.01" value="1" />
-          </div>
-        </div>
+    <video id="video" playsinline></video>
+    <div class="ui" id="ui">
+      <div class="topbar"><div class="chip" id="title">—</div></div>
+      <div class="mid">
+        <div class="round" id="prev" title="Previous">⟨</div>
+        <div class="round" id="next" title="Next">⟩</div>
       </div>
-      <div class="hamburger" id="toggle" title="Channels">☰</div>
-      <aside class="chan-overlay" id="overlay">
-        <input id="search" class="search" placeholder="Search channels..." />
-        <div id="channels" class="list"></div>
-      </aside>
-      <div class="toast" id="toast">
-        <img class="tlogo" id="toastLogo" alt="" />
-        <div id="toastText">Now Playing</div>
+      <div class="bot">
+        <div class="counter" id="counter"></div>
+        <div class="vol" id="vol">
+          <span class="vol-btn" id="muteBtn">🔊</span>
+          <input type="range" id="volRange" min="0" max="1" step="0.01" value="1" />
+        </div>
       </div>
     </div>
-    <div class="error" id="error"></div>
+    <div class="hamburger" id="toggle" title="Channels">☰</div>
+    <aside class="chan-overlay" id="overlay">
+      <input id="search" class="search" placeholder="Search channels..." />
+      <div id="channels" class="list"></div>
+    </aside>
+    <div class="toast" id="toast">
+      <img class="tlogo" id="toastLogo" alt="" />
+      <div id="toastText">Now Playing</div>
+    </div>
   </div>
 
 <script>
 const PLAYLIST = "https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u";
 const video = document.getElementById('video');
-const spinner = document.getElementById('spinner');
-const errorBox = document.getElementById('error');
 const ui = document.getElementById('ui');
 const titleChip = document.getElementById('title');
 const counter = document.getElementById('counter');
@@ -107,168 +88,77 @@ const toast = document.getElementById('toast');
 const toastLogo = document.getElementById('toastLogo');
 const toastText = document.getElementById('toastText');
 
-let channels = [];
-let currentIndex = 0;
-let hls = null;
-let uiTimer = null;
-let toastTimer = null;
+let channels = [], currentIndex = 0, hls = null, uiTimer=null, toastTimer=null;
 
-// Fetch & parse M3U
+// Fullscreen helper
+function enterFullscreen(){ document.getElementById('wrap').requestFullscreen?.(); }
+
+// Load playlist
 async function loadPlaylist(){
-  try{
-    const res = await fetch(PLAYLIST);
-    const text = await res.text();
-    channels = parseM3U(text);
-    renderChannels(channels);
-    const lastUrl = localStorage.getItem('last_channel_url');
-    const idx = lastUrl ? channels.findIndex(c=>c.url===lastUrl) : 0;
-    selectChannel(Math.max(0, idx));
-  }catch(e){ setError('Failed to load playlist: '+e); }
+  const res = await fetch(PLAYLIST);
+  const text = await res.text();
+  channels = parseM3U(text);
+  renderChannels(channels);
+  selectChannel(0);
 }
 function parseM3U(txt){
-  const lines = txt.split(/\r?\n/);
-  const out = []; let meta = {name:'', logo:''};
+  const lines = txt.split(/\\r?\\n/);
+  const out=[]; let meta={name:'',logo:''};
   for(const raw of lines){
-    const line = raw.trim(); if(!line) continue;
+    const line=raw.trim(); if(!line) continue;
     if(line.startsWith('#EXTINF')){
-      const tvgName = /tvg-name="([^"]+)"/i.exec(line);
-      const tvgLogo = /tvg-logo="([^"]+)"/i.exec(line);
-      const after = /,(.*)$/.exec(line);
-      meta.name = (tvgName && tvgName[1]) || (after && after[1].trim()) || 'Channel';
-      meta.logo = tvgLogo ? tvgLogo[1] : '';
-    } else if(!line.startsWith('#')){
-      out.push({ name: meta.name, url: line, logo: meta.logo });
-      meta = {name:'', logo:''};
-    }
+      const n=/(?:tvg-name=\"([^\"]+)\")/.exec(line); const l=/(?:tvg-logo=\"([^\"]+)\")/.exec(line);
+      const after=/(?:,(.*)$)/.exec(line);
+      meta.name=(n&&n[1])||(after&&after[1].trim())||'Channel'; meta.logo=l?l[1]:'';
+    } else if(!line.startsWith('#')){ out.push({name:meta.name,url:line,logo:meta.logo}); meta={name:'',logo:''}; }
   }
   return out;
 }
 function renderChannels(list){
-  channelsEl.innerHTML = '';
-  list.forEach((ch)=>{
-    const div = document.createElement('div');
-    div.className = 'item';
-    const img = document.createElement('img');
-    img.className = 'logo';
-    if(ch.logo) img.src = ch.logo; else img.style.visibility = 'hidden';
-    const name = document.createElement('div'); name.textContent = ch.name;
-    div.appendChild(img); div.appendChild(name);
-    div.dataset.url = ch.url;
-    div.onclick = () => { selectChannel(channels.findIndex(c=>c.url===ch.url)); closeOverlay(); };
+  channelsEl.innerHTML='';
+  list.forEach((ch,i)=>{
+    const div=document.createElement('div'); div.className='item';
+    div.innerHTML=`<img class=\"logo\" src=\"${ch.logo||''}\" onerror=\"this.style.visibility='hidden'\"> <div>${ch.name}</div>`;
+    div.onclick=()=>{ selectChannel(i); closeOverlay(); };
     channelsEl.appendChild(div);
-  });
-  updateCounter();
-}
-function updateListActive(){
-  document.querySelectorAll('.item').forEach(el=>{
-    el.classList.toggle('active', el.dataset.url === channels[currentIndex]?.url);
   });
 }
 function selectChannel(i){
-  if(i<0 || i>=channels.length) return;
-  currentIndex = i;
-  const ch = channels[i];
-  localStorage.setItem('last_channel_url', ch.url);
-  playStream(ch.url);
-  showTitle(ch.name);
-  showToast(ch.name, ch.logo);
-  updateListActive();
+  if(i<0||i>=channels.length) return; currentIndex=i;
+  const ch=channels[i]; playStream(ch.url); showTitle(ch.name); showToast(ch.name,ch.logo);
   updateCounter();
 }
 function playStream(url){
-  clearError(); showSpinner(true);
-  try{ if(hls){ hls.destroy(); hls=null; } }catch{}
-  if(video.canPlayType('application/vnd.apple.mpegurl')){
-    video.src = url;
-    video.play().catch(setError).finally(()=>showSpinner(false));
-    return;
-  }
-  if(Hls.isSupported()){
-    hls = new Hls({ enableWorker:true, lowLatencyMode:true, liveDurationInfinity:true });
-    hls.on(Hls.Events.ERROR, (_, data)=>{ if(data?.fatal){ setError('Stream error: '+data.details); } });
-    hls.loadSource(url);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ video.play().catch(setError).finally(()=>showSpinner(false)); });
-    return;
-  }
-  setError('HLS not supported in this browser.'); showSpinner(false);
+  if(hls){hls.destroy(); hls=null;}
+  if(video.canPlayType('application/vnd.apple.mpegurl')){ video.src=url; video.play(); }
+  else if(Hls.isSupported()){ hls=new Hls(); hls.loadSource(url); hls.attachMedia(video); hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play()); }
 }
-function showTitle(name){ titleChip.textContent = name || '—'; flashUI(); }
-function showSpinner(v){ spinner.style.display = v ? 'block' : 'none'; }
-function setError(msg){ errorBox.textContent = (msg && msg.message) ? msg.message : msg; }
-function clearError(){ errorBox.textContent = ''; }
-function updateCounter(){ counter.textContent = channels.length ? `Channel ${currentIndex+1} / ${channels.length}` : ''; }
+function showTitle(n){ titleChip.textContent=n; flashUI(); }
+function updateCounter(){ counter.textContent=`Channel ${currentIndex+1}/${channels.length}`; }
 
-function flashUI(){
-  ui.classList.add('show');
-  if(uiTimer) clearTimeout(uiTimer);
-  uiTimer = setTimeout(()=> ui.classList.remove('show'), 3000);
-}
-['mousemove','click','touchstart','keydown'].forEach(ev=>{
-  document.addEventListener(ev, flashUI, {passive:true});
-});
+function flashUI(){ ui.classList.add('show'); clearTimeout(uiTimer); uiTimer=setTimeout(()=>ui.classList.remove('show'),3000); }
+['mousemove','click','touchstart','keydown'].forEach(ev=>document.addEventListener(ev,flashUI,{passive:true}));
 
-// Volume control
-function setVolume(v){
-  const nv = Math.max(0, Math.min(1, v));
-  video.volume = nv; volRange.value = nv;
-  if(nv===0){ video.muted=true; muteBtn.textContent='🔇'; } else { video.muted=false; muteBtn.textContent='🔊'; }
-  flashUI();
-}
-volRange.addEventListener('input', ()=> setVolume(parseFloat(volRange.value)) );
-muteBtn.addEventListener('click', toggleMute);
-function toggleMute(){ video.muted = !video.muted; muteBtn.textContent = video.muted ? '🔇' : '🔊'; }
+// Volume
+function setVolume(v){ video.volume=Math.max(0,Math.min(1,v)); volRange.value=video.volume; muteBtn.textContent=video.volume===0?'🔇':'🔊'; flashUI(); }
+volRange.oninput=()=>setVolume(parseFloat(volRange.value)); muteBtn.onclick=()=>{video.muted=!video.muted; muteBtn.textContent=video.muted?'🔇':'🔊';};
 
-function toggleFullscreen(){
-  const el = document.fullscreenElement ? document : document.documentElement;
-  if(document.fullscreenElement){ el.exitFullscreen?.(); }
-  else { document.getElementById('wrap').requestFullscreen?.(); }
-}
+// Next/Prev
+prevBtn.onclick=()=>selectChannel((currentIndex-1+channels.length)%channels.length);
+nextBtn.onclick=()=>selectChannel((currentIndex+1)%channels.length);
 
-toggleBtn.onclick = ()=> overlay.classList.toggle('active');
+// Overlay
+toggleBtn.onclick=()=>overlay.classList.toggle('active');
 function closeOverlay(){ overlay.classList.remove('active'); }
 
 // Toast
-function showToast(name, logo){
-  toastText.textContent = name || 'Now Playing';
-  if(logo){ toastLogo.src = logo; toastLogo.style.visibility='visible'; }
-  else { toastLogo.removeAttribute('src'); toastLogo.style.visibility='hidden'; }
-  toast.classList.add('show');
-  if(toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=> toast.classList.remove('show'), 3000);
-}
+function showToast(name,logo){ toastText.textContent=name; if(logo){toastLogo.src=logo;toastLogo.style.visibility='visible';}else{toastLogo.style.visibility='hidden';} toast.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>toast.classList.remove('show'),3000); }
 
-// Remote key handling
-document.addEventListener('keydown', (e)=>{
-  const k = e.key.toLowerCase();
+// Keyboard
+document.addEventListener('keydown',e=>{const k=e.key.toLowerCase(); if(k==='f')enterFullscreen(); if(k==='n')nextBtn.click(); if(k==='p')prevBtn.click();});
 
-  if(e.key === 'ArrowUp'){ setVolume(video.volume + 0.05); e.preventDefault(); }
-  if(e.key === 'ArrowDown'){ setVolume(video.volume - 0.05); e.preventDefault(); }
-  if(e.key === 'ArrowRight' || k==='n'){ selectChannel((currentIndex+1)%channels.length); e.preventDefault(); }
-  if(e.key === 'ArrowLeft' || k==='p'){ selectChannel((currentIndex-1+channels.length)%channels.length); e.preventDefault(); }
-  if(e.key === 'Enter' || e.key === ' '){ video.paused ? video.play() : video.pause(); e.preventDefault(); }
-  if(k==='f'){ toggleFullscreen(); e.preventDefault(); }
-  if(k==='m'){ toggleMute(); e.preventDefault(); }
-  if(e.key === 'Menu' || e.key === 'SoftLeft'){ overlay.classList.toggle('active'); if(overlay.classList.contains('active')){ focusFirstChannel(); } e.preventDefault(); }
-  if(e.key === 'Backspace' || e.key === 'Escape'){ if(overlay.classList.contains('active')){ closeOverlay(); e.preventDefault(); } }
-
-  if(overlay.classList.contains('active')){
-    const items = document.querySelectorAll('.item');
-    let idx = Array.from(items).findIndex(el=>el.classList.contains('active'));
-    if(e.key === 'ArrowDown'){ idx = (idx+1) % items.length; setActiveListItem(items, idx); e.preventDefault(); }
-    if(e.key === 'ArrowUp'){ idx = (idx-1+items.length) % items.length; setActiveListItem(items, idx); e.preventDefault(); }
-    if(e.key === 'Enter'){ items[idx].click(); e.preventDefault(); }
-  }
-});
-
-function focusFirstChannel(){
-  const items = document.querySelectorAll('.item');
-  if(items.length>0){ setActiveListItem(items,0); }
-}
-function setActiveListItem(items, idx){
-  items.forEach((el,i)=> el.classList.toggle('active', i===idx));
-  items[idx].scrollIntoView({ block:'nearest', behavior:'smooth' });
-}
+// Auto fullscreen
+video.addEventListener('play', enterFullscreen);
 
 // Init
 loadPlaylist();
