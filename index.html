@@ -1,194 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart TV Live Player</title>
   <style>
-    body {
-      margin: 0;
-      background: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-    }
-    #player {
-      width: 100%;
-      height: 100vh;
-      background: #000;
-      position: relative;
-    }
-    video {
-      width: 100%;
-      height: 100%;
-      background: #000;
-      object-fit: contain;
-    }
+    body { margin:0; background:#000; color:#fff; font-family:Arial,sans-serif; overflow:hidden; }
+    #player { width:100%; height:100vh; background:#000; position:relative; }
+    video { width:100%; height:100%; background:#000; object-fit:contain; }
 
     /* Overlay channel list */
     #channelOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      width: 280px;
-      background: rgba(20, 20, 20, 0.95);
-      overflow-y: auto;
-      transform: translateX(-100%);
-      transition: transform 0.3s ease;
-      z-index: 1000;
+      position:fixed; top:0; left:0; bottom:0; width:280px;
+      background:rgba(20,20,20,0.95); overflow-y:auto;
+      transform:translateX(-100%); transition:transform .3s ease; z-index:1000;
     }
-    #channelOverlay.show {
-      transform: translateX(0);
-    }
-    #channelOverlay ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
+    #channelOverlay.show { transform:translateX(0); }
+    #channelOverlay ul { list-style:none; margin:0; padding:0; }
     #channelOverlay li {
-      padding: 12px;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid #333;
-      cursor: pointer;
-      transition: background 0.2s;
+      padding:12px; display:flex; align-items:center;
+      border-bottom:1px solid #333; cursor:pointer; transition:background .2s;
     }
-    #channelOverlay li img {
-      width: 36px;
-      height: 36px;
-      margin-right: 10px;
-      object-fit: contain;
-      loading: lazy;
-    }
-    #channelOverlay li span {
-      flex: 1;
-    }
-    #channelOverlay li.active,
-    #channelOverlay li.highlight {
-      background: #0066ff;
-      color: #fff;
-    }
+    #channelOverlay li img { width:36px; height:36px; margin-right:10px; object-fit:contain; }
+    #channelOverlay li span { flex:1; }
+    #channelOverlay li.active, #channelOverlay li.highlight { background:#0066ff; color:#fff; }
 
     /* Now Playing toast */
     #toast {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 10px 16px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      opacity: 0;
-      transition: opacity 0.5s;
-      z-index: 1100;
+      position:fixed; bottom:20px; left:20px;
+      background:rgba(0,0,0,0.8); padding:10px 16px; border-radius:6px;
+      display:flex; align-items:center; opacity:0; transition:opacity .5s; z-index:1100;
     }
-    #toast.show {
-      opacity: 1;
-    }
-    #toast img {
-      width: 28px;
-      height: 28px;
-      margin-right: 8px;
-      loading: lazy;
-    }
+    #toast.show { opacity:1; }
+    #toast img { width:28px; height:28px; margin-right:8px; }
 
     /* Controls */
     #controls {
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      opacity: 0;
-      transition: opacity 0.3s;
-      z-index: 900;
+      position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+      display:flex; align-items:center; gap:12px; opacity:0; transition:opacity .3s; z-index:900;
     }
-    #controls.show {
-      opacity: 1;
-    }
+    #controls.show { opacity:1; }
     #controls button {
-      background: rgba(0, 0, 0, 0.6);
-      border: none;
-      color: #fff;
-      padding: 10px 14px;
-      margin: 0 6px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.2s;
+      background:rgba(0,0,0,0.6); border:none; color:#fff;
+      padding:10px 14px; border-radius:6px; cursor:pointer; font-size:14px;
     }
-    #controls button:hover {
-      background: rgba(0, 0, 0, 0.8);
-    }
-    #volume {
-      -webkit-appearance: none;
-      width: 100px;
-      height: 6px;
-      border-radius: 4px;
-      background: #444;
-      margin-left: 10px;
-    }
-    #volume::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #fff;
-      cursor: pointer;
-    }
+    #controls button:hover { background:rgba(0,0,0,0.8); }
+    #volume { -webkit-appearance:none; width:100px; height:6px; border-radius:4px; background:#444; }
+    #volume::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:#fff; cursor:pointer; }
 
-    /* Buffering Indicator */
-    #buffering {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #fff;
-      font-size: 18px;
-      display: none;
-      z-index: 950;
-    }
-    #buffering.show {
-      display: block;
-    }
-
-    /* Error Message */
-    #error {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(255, 0, 0, 0.8);
-      padding: 20px;
-      border-radius: 8px;
-      display: none;
-      z-index: 1000;
-      text-align: center;
-    }
-    #error.show {
-      display: block;
-    }
+    /* Buffering & error */
+    #buffering, #error { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:950; }
+    #buffering { color:#fff; font-size:18px; display:none; }
+    #buffering.show { display:block; }
+    #error { background:rgba(255,0,0,0.8); padding:20px; border-radius:8px; display:none; text-align:center; z-index:1000; }
+    #error.show { display:block; }
   </style>
+  <!-- HLS.js for non-native HLS playback -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
 </head>
 <body>
   <div id="player">
     <video id="video" autoplay playsinline></video>
+
     <div id="controls" role="region" aria-label="Player controls">
       <button id="prevBtn" aria-label="Previous Channel">⏮ Prev</button>
       <button id="nextBtn" aria-label="Next Channel">Next ⏭</button>
-      <input
-        type="range"
-        id="volume"
-        min="0"
-        max="1"
-        step="0.05"
-        value="1"
-        aria-label="Volume control"
-      >
+      <input type="range" id="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume control">
     </div>
+
     <div id="buffering">Buffering...</div>
     <div id="error" role="alert"></div>
   </div>
@@ -200,12 +79,12 @@
 
   <!-- Now Playing Toast -->
   <div id="toast" role="status" aria-live="polite">
-    <img id="toastLogo" alt="Channel logo">
+    <img id="toastLogo" alt="Channel logo" loading="lazy">
     <span id="toastText"></span>
   </div>
 
   <script>
-    // Configuration
+    // Config
     const CONFIG = {
       m3uUrl: "https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u",
       toastDuration: 3000,
@@ -213,8 +92,9 @@
       debounceDelay: 200,
     };
 
-    // DOM Elements
+    // DOM
     const DOM = {
+      player: document.getElementById("player"),            // ✅ added (fix)
       video: document.getElementById("video"),
       channelOverlay: document.getElementById("channelOverlay"),
       channelList: document.getElementById("channelList"),
@@ -234,25 +114,15 @@
     let currentIndex = 0;
     let highlightIndex = 0;
     let overlayOpen = false;
-    let hideControlsTimeout;
+    let hideControlsTimeout = null;
+    let hls = null;
 
-    // Utility: Debounce function
-    const debounce = (func, delay) => {
-      let timeout;
-      return (...args) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func(...args), delay);
-      };
-    };
+    // Utils
+    const debounce = (fn, delay) => { let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), delay); }; };
+    const sanitize = (s) => { const d=document.createElement("div"); d.textContent=s; return d.innerHTML; };
+    const clearHls = () => { try { if (hls) { hls.destroy(); hls = null; } } catch {} };
 
-    // Utility: Sanitize string
-    const sanitize = (str) => {
-      const div = document.createElement("div");
-      div.textContent = str;
-      return div.innerHTML;
-    };
-
-    // Load M3U Playlist
+    // Load M3U
     async function loadM3U() {
       try {
         const res = await fetch(CONFIG.m3uUrl, { cache: "no-cache" });
@@ -267,27 +137,26 @@
     // Parse M3U
     function parseM3U(data) {
       try {
-        const lines = data.split("\n").map(line => line.trim());
+        const lines = data.split(/\r?\n/).map(l => l.trim());
         let current = {};
         channels = [];
-        lines.forEach(line => {
+        for (const line of lines) {
+          if (!line) continue;
           if (line.startsWith("#EXTINF")) {
             const nameMatch = line.match(/,(.*)$/);
-            const logoMatch = line.match(/tvg-logo="([^"]*)"/);
+            const logoMatch = line.match(/tvg-logo="([^"]*)"/i);
             current = {
               name: nameMatch ? sanitize(nameMatch[1]) : "Unnamed",
               logo: logoMatch ? sanitize(logoMatch[1]) : null,
               url: null,
             };
-          } else if (line && !line.startsWith("#")) {
+          } else if (!line.startsWith("#")) {
             current.url = line;
-            channels.push(current);
+            if (current.name && current.url) channels.push(current);
             current = {};
           }
-        });
-        if (channels.length === 0) {
-          throw new Error("No valid channels found in playlist");
         }
+        if (!channels.length) throw new Error("No valid channels found in playlist");
         renderChannelList();
         playChannel(0);
       } catch (err) {
@@ -312,36 +181,50 @@
         const span = document.createElement("span");
         span.textContent = ch.name;
         li.appendChild(span);
-        li.addEventListener("click", () => {
-          playChannel(idx);
-          closeOverlay();
-        });
+
+        li.addEventListener("click", () => { playChannel(idx); closeOverlay(); });
         DOM.channelList.appendChild(li);
       });
       updateHighlight();
+      updateActiveChannel();
     }
 
-    // Play Channel
+    // Play Channel with HLS fallback
     async function playChannel(index) {
-      if (channels.length === 0) return;
+      if (!channels.length) return;
       index = ((index % channels.length) + channels.length) % channels.length;
       currentIndex = index;
       const ch = channels[index];
+
       try {
         DOM.buffering.classList.add("show");
         DOM.error.classList.remove("show");
-        DOM.video.src = ch.url;
-        await DOM.video.play();
+
+        clearHls();
+        if (DOM.video.canPlayType('application/vnd.apple.mpegurl')) {
+          DOM.video.src = ch.url;
+        } else if (window.Hls && Hls.isSupported()) {
+          hls = new Hls({ enableWorker:true, lowLatencyMode:true, liveDurationInfinity:true });
+          hls.on(Hls.Events.ERROR, (_, data) => {
+            if (data?.fatal) showError(`Stream error: ${data.details || 'fatal'}`);
+          });
+          hls.loadSource(ch.url);
+          hls.attachMedia(DOM.video);
+        } else {
+          // Fallback: let browser try anyway
+          DOM.video.src = ch.url;
+        }
+
+        await DOM.video.play().catch(()=>{}); // allow autoplay differences
         showToast(ch);
         updateActiveChannel();
-        DOM.buffering.classList.remove("show");
       } catch (err) {
-        DOM.buffering.classList.remove("show");
         showError(`Failed to play channel: ${err.message}`);
+      } finally {
+        DOM.buffering.classList.remove("show");
       }
     }
 
-    // Update Active Channel
     function updateActiveChannel() {
       [...DOM.channelList.children].forEach((li, i) => {
         li.classList.toggle("active", i === currentIndex);
@@ -349,27 +232,23 @@
       });
     }
 
-    // Show Toast
+    // Toast
     function showToast(ch) {
       DOM.toastText.textContent = ch.name;
-      if (ch.logo) {
-        DOM.toastLogo.src = ch.logo;
-        DOM.toastLogo.style.display = "block";
-      } else {
-        DOM.toastLogo.style.display = "none";
-      }
+      if (ch.logo) { DOM.toastLogo.src = ch.logo; DOM.toastLogo.style.display = "block"; }
+      else { DOM.toastLogo.style.display = "none"; }
       DOM.toast.classList.add("show");
       setTimeout(() => DOM.toast.classList.remove("show"), CONFIG.toastDuration);
     }
 
-    // Show Error
+    // Error
     function showError(message) {
       DOM.error.textContent = message;
       DOM.error.classList.add("show");
       setTimeout(() => DOM.error.classList.remove("show"), 5000);
     }
 
-    // Overlay Controls
+    // Overlay
     function openOverlay() {
       overlayOpen = true;
       DOM.channelOverlay.classList.add("show");
@@ -377,57 +256,47 @@
       updateHighlight();
       DOM.channelList.children[highlightIndex]?.focus();
     }
-
     function closeOverlay() {
       overlayOpen = false;
       DOM.channelOverlay.classList.remove("show");
       DOM.video.focus();
     }
-
-    function toggleOverlay() {
-      overlayOpen ? closeOverlay() : openOverlay();
-    }
+    function toggleOverlay() { overlayOpen ? closeOverlay() : openOverlay(); }
 
     function updateHighlight() {
-      [...DOM.channelList.children].forEach((li, i) => {
-        li.classList.toggle("highlight", i === highlightIndex);
-      });
+      [...DOM.channelList.children].forEach((li, i) => li.classList.toggle("highlight", i === highlightIndex));
     }
 
-    // Controls Auto-Hide
+    // Controls auto-hide
     const showControls = debounce(() => {
       DOM.controls.classList.add("show");
       clearTimeout(hideControlsTimeout);
-      hideControlsTimeout = setTimeout(
-        () => DOM.controls.classList.remove("show"),
-        CONFIG.controlsHideDelay
-      );
+      hideControlsTimeout = setTimeout(() => DOM.controls.classList.remove("show"), CONFIG.controlsHideDelay);
     }, CONFIG.debounceDelay);
 
-    // Event Listeners
+    // Listeners
     function setupEventListeners() {
-      // Volume Control
+      // Volume
       DOM.volume.addEventListener("input", () => {
-        DOM.video.volume = DOM.volume.value;
+        DOM.video.volume = Number(DOM.volume.value);
         localStorage.setItem("volume", DOM.volume.value);
       });
 
-      // Next/Prev Buttons
+      // Buttons
       DOM.nextBtn.addEventListener("click", () => playChannel(currentIndex + 1));
       DOM.prevBtn.addEventListener("click", () => playChannel(currentIndex - 1));
 
-      // Video Events
+      // Video events
       DOM.video.addEventListener("waiting", () => DOM.buffering.classList.add("show"));
       DOM.video.addEventListener("playing", () => DOM.buffering.classList.remove("show"));
-      DOM.video.addEventListener("error", () =>
-        showError("Error playing channel")
-      );
+      DOM.video.addEventListener("error", () => showError("Error playing channel"));
 
-      // Mouse and Touch Events
+      // Show controls on interaction
       document.addEventListener("mousemove", showControls);
       document.addEventListener("touchstart", showControls);
+      document.addEventListener("keydown", showControls);
 
-      // Keyboard Events
+      // Keyboard / TV remote
       document.addEventListener("keydown", (e) => {
         switch (e.key) {
           case "ArrowUp":
@@ -450,16 +319,12 @@
             break;
           case "Enter":
           case "OK":
-            if (overlayOpen) {
-              playChannel(highlightIndex);
-              closeOverlay();
-            } else {
-              openOverlay();
-            }
+            if (overlayOpen) { playChannel(highlightIndex); closeOverlay(); }
+            else { openOverlay(); }
             break;
           case "Escape":
           case "Backspace":
-            closeOverlay();
+            if (overlayOpen) closeOverlay();
             break;
           case "ArrowLeft":
             DOM.video.volume = Math.max(0, DOM.video.volume - 0.05);
@@ -471,55 +336,38 @@
             DOM.volume.value = DOM.video.volume;
             localStorage.setItem("volume", DOM.volume.value);
             break;
-          case "f":
-          case "F":
-            if (document.fullscreenElement) {
-              document.exitFullscreen();
-            } else {
-              DOM.video.requestFullscreen();
-            }
+          case "f": case "F":
+            if (document.fullscreenElement) document.exitFullscreen();
+            else DOM.video.requestFullscreen?.();
             break;
-          case "m":
-          case "M":
+          case "m": case "M":
             DOM.video.muted = !DOM.video.muted;
             break;
         }
       });
 
-      // Touch Swipe for Mobile
-      let touchStartX = 0;
-      let touchStartY = 0;
+      // Touch swipe (mobile)
+      let touchStartX = 0, touchStartY = 0;
       DOM.player.addEventListener("touchstart", (e) => {
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
       });
       DOM.player.addEventListener("touchend", (e) => {
-        const touchEndX = e.changedTouches[0].clientX;
-        const touchEndY = e.changedTouches[0].clientY;
-        const deltaX = touchEndX - touchStartX;
-        const deltaY = touchEndY - touchStartY;
-        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-          if (deltaX > 0) {
-            playChannel(currentIndex - 1); // Swipe right
-          } else {
-            playChannel(currentIndex + 1); // Swipe left
-          }
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        const dy = e.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+          if (dx > 0) playChannel(currentIndex - 1); else playChannel(currentIndex + 1);
         }
       });
     }
 
-    // Initialize
+    // Init
     function init() {
-      // Restore volume from localStorage
-      const savedVolume = localStorage.getItem("volume");
-      if (savedVolume !== null) {
-        DOM.video.volume = savedVolume;
-        DOM.volume.value = savedVolume;
-      }
+      const savedVol = localStorage.getItem("volume");
+      if (savedVol !== null) { DOM.video.volume = Number(savedVol); DOM.volume.value = savedVol; }
       setupEventListeners();
       loadM3U();
     }
-
     init();
   </script>
 </body>
