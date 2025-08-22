@@ -1,134 +1,241 @@
 <!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live Stream Player</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Stream Player — Advanced</title>
   <style>
-    body { background:#000; margin:0; overflow:hidden; }
-    #playerContainer { position:relative; width:100vw; height:100vh; background:#000; display:flex; align-items:center; justify-content:center; }
-    video { width:100%; height:100%; object-fit:contain; background:#000; }
-    #channelListOverlay {
-      position:fixed; top:0; left:0; width:300px; height:100%;
-      background:rgba(20,20,20,0.95);
-      color:#fff; overflow-y:auto; transform:translateX(-100%);
-      transition:transform 0.3s ease-in-out; z-index:1000; padding-top:60px;
-    }
-    #channelListOverlay.show { transform:translateX(0); }
-    #channelListOverlay ul { list-style:none; padding:0; margin:0; }
-    #channelListOverlay li { padding:10px 15px; cursor:pointer; border-bottom:1px solid #333; }
-    #channelListOverlay li:hover { background:#444; }
-    #toggleChannelList { position:fixed; top:50%; left:0; transform:translateY(-50%); background:#222; color:#fff; padding:8px; cursor:pointer; z-index:1100; border-radius:0 5px 5px 0; }
-    #channelSearch { position:absolute; top:10px; left:10px; width:80%; z-index:1101; }
-    #channelNameOverlay {
-      position:absolute; top:20px; left:50%; transform:translateX(-50%);
-      background:rgba(0,0,0,0.6); color:#fff; padding:6px 15px;
-      border-radius:5px; font-size:1.2rem; display:none;
-    }
-    .control-btn {
-      position:absolute; top:50%; transform:translateY(-50%);
-      background:rgba(0,0,0,0.5); color:#fff; border:none; font-size:2rem;
-      padding:8px 12px; cursor:pointer; z-index:900;
-    }
-    #prevBtn { left:15px; }
-    #nextBtn { right:15px; }
+    :root{--bg:#0b1020;--fg:#e7ecff;--muted:#9aa3b2;--card:#121936;--acc:#4da3ff}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Roboto,Ubuntu,sans-serif;display:flex;align-items:center;justify-content:center}/* Player layout */
+.player-wrap{position:relative;width:100%;max-width:1100px}
+video{width:100%;height:78vh;max-height:78vh;background:#000;border-radius:14px;display:block}
+.error{margin-top:8px;color:#ffb4b4;text-align:center;min-height:1.2em}
+
+/* Channel overlay (left) */
+.overlay{position:absolute;inset:0;pointer-events:none}
+.chan-overlay{position:absolute;top:0;left:0;bottom:0;width:300px;max-width:85%;background:rgba(18,25,54,.96);border-radius:0 12px 12px 0;transform:translateX(-100%);transition:.28s ease;z-index:30;display:flex;flex-direction:column;gap:10px;padding:12px;pointer-events:auto}
+.chan-overlay.active{transform:translateX(0)}
+.search{padding:8px 10px;border-radius:8px;border:1px solid #2a355e;background:#0e1533;color:var(--fg);outline:none}
+.list{overflow:auto;border-radius:8px}
+.item{padding:10px 12px;background:#1b2447;border-bottom:1px solid #2a355e;cursor:pointer}
+.item:hover{background:#2c386d}
+.item.active{background:var(--acc);color:#001028;font-weight:600}
+
+/* Toggle button to open channel list */
+.hamburger{position:absolute;top:50%;left:10px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:var(--acc);color:#001028;display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer;z-index:32}
+
+/* On-video UI that auto-hides */
+.ui{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;opacity:0;transition:opacity .25s;pointer-events:none;z-index:25}
+.ui.show{opacity:1;pointer-events:none}
+.ui .topbar{display:flex;justify-content:center;margin-top:12px}
+.chip{background:rgba(0,0,0,.55);color:#fff;padding:6px 14px;border-radius:999px;font-size:14px;backdrop-filter:saturate(120%) blur(2px)}
+.ui .mid{display:flex;justify-content:space-between;align-items:center;padding:0 56px}
+.round{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;user-select:none}
+.round[hidden]{display:none}
+.ui .bot{display:flex;justify-content:space-between;align-items:center;padding:10px}
+.counter{font-size:12px;color:var(--muted)}
+
+/* Spinner */
+.spinner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;animation:spin 1s linear infinite;z-index:10;display:none}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+@media (max-width:700px){
+  video{height:70vh}
+  .ui .mid{padding:0 24px}
+  .hamburger{left:6px}
+  .chan-overlay{width:84%}
+}
+
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
 </head>
 <body>
-  <div id="playerContainer">
-    <video id="videoPlayer" controls autoplay></video>
-    <div id="channelNameOverlay"></div>
-    <button id="prevBtn" class="control-btn">⏮</button>
-    <button id="nextBtn" class="control-btn">⏭</button>
-  </div>  <div id="toggleChannelList">☰</div>
-  <div id="channelListOverlay">
-    <input type="text" id="channelSearch" class="form-control" placeholder="Search channel...">
-    <ul id="channelList"></ul>
-  </div>  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>  <script>
-    const m3uUrl = "https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u";
-    const video = document.getElementById('videoPlayer');
-    const channelList = document.getElementById('channelList');
-    const channelOverlay = document.getElementById('channelListOverlay');
-    const toggleBtn = document.getElementById('toggleChannelList');
-    const channelNameOverlay = document.getElementById('channelNameOverlay');
-    const searchInput = document.getElementById('channelSearch');
-    let channels = [], currentIndex = 0;
+  <div class="player-wrap" id="wrap">
+    <video id="video" playsinline controls></video>
+    <div class="spinner" id="spinner"></div>
+    <div class="overlay">
+      <!-- Auto-hide UI overlay (appears on interaction) -->
+      <div class="ui" id="ui">
+        <div class="topbar"><div class="chip" id="title">—</div></div>
+        <div class="mid">
+          <div class="round" id="prev" title="Previous">⟨</div>
+          <div class="round" id="next" title="Next">⟩</div>
+        </div>
+        <div class="bot"><div class="counter" id="counter"></div><div class="counter">Tips: N/P keys switch channels</div></div>
+      </div><!-- Hamburger toggle for channel list -->
+  <div class="hamburger" id="toggle" title="Channels">☰</div>
 
-    async function loadM3U(){
-      const res = await fetch(m3uUrl);
-      const text = await res.text();
-      parseM3U(text);
+  <!-- Channel list overlay -->
+  <aside class="chan-overlay" id="overlay">
+    <input id="search" class="search" placeholder="Search channels..." />
+    <div id="channels" class="list"></div>
+  </aside>
+</div>
+<div class="error" id="error"></div>
+
+  </div>  <script>
+    const PLAYLIST = "https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u";
+    const video = document.getElementById('video');
+    const spinner = document.getElementById('spinner');
+    const errorBox = document.getElementById('error');
+    const ui = document.getElementById('ui');
+    const titleChip = document.getElementById('title');
+    const counter = document.getElementById('counter');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+
+    const overlay = document.getElementById('overlay');
+    const toggleBtn = document.getElementById('toggle');
+    const channelsEl = document.getElementById('channels');
+    const searchEl = document.getElementById('search');
+
+    let channels = [];
+    let currentIndex = 0;
+    let hls = null;
+    let uiTimer = null;
+
+    // ---- Fetch & parse M3U (robust) ----
+    async function loadPlaylist(){
+      try{
+        const res = await fetch(PLAYLIST);
+        const text = await res.text();
+        channels = parseM3U(text);
+        renderChannels(channels);
+        // Restore last channel if available
+        const lastUrl = localStorage.getItem('last_channel_url');
+        const idx = lastUrl ? channels.findIndex(c=>c.url===lastUrl) : 0;
+        selectChannel(Math.max(0, idx));
+      }catch(e){ setError('Failed to load playlist: '+e); }
     }
 
-    function parseM3U(data){
-      const lines = data.split(/\r?\n/);
-      let name="";
-      for(let line of lines){
-        if(line.startsWith("#EXTINF")){
-          const match = line.match(/,(.*)$/);
-          if(match) name = match[1].trim();
-        } else if(line && !line.startsWith("#")){
-          channels.push({name, url:line});
+    function parseM3U(txt){
+      const lines = txt.split(/\r?\n/);
+      const out = []; let name = '';
+      for(const raw of lines){
+        const line = raw.trim(); if(!line) continue;
+        if(line.startsWith('#EXTINF')){
+          // Prefer tvg-name, fallback to text after comma
+          const tvg = /tvg-name="([^"]+)"/.exec(line);
+          const after = /,(.*)$/.exec(line);
+          name = (tvg && tvg[1]) || (after && after[1].trim()) || 'Channel';
+        } else if(!line.startsWith('#')){
+          out.push({ name, url: line }); name = '';
         }
       }
-      renderChannelList(channels);
-      if(channels.length>0) playChannel(0);
+      return out;
     }
 
-    function renderChannelList(list){
-      channelList.innerHTML = "";
-      list.forEach((ch, i) => {
-        const li = document.createElement('li');
-        li.textContent = ch.name || `Channel ${i+1}`;
-        li.onclick = () => { playChannel(i); closeOverlay(); };
-        channelList.appendChild(li);
+    // ---- Render list with stable indexing ----
+    function renderChannels(list){
+      channelsEl.innerHTML = '';
+      list.forEach((ch)=>{
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.textContent = ch.name;
+        div.dataset.url = ch.url; // keep reference to full index via URL
+        div.onclick = () => {
+          const idx = channels.findIndex(c=>c.url===ch.url);
+          selectChannel(idx);
+          closeOverlay();
+        };
+        channelsEl.appendChild(div);
+      });
+      updateCounter();
+    }
+
+    function updateListActive(){
+      document.querySelectorAll('.item').forEach(el=>{
+        el.classList.toggle('active', el.dataset.url === channels[currentIndex]?.url);
       });
     }
 
-    function playChannel(index){
-      currentIndex = index;
-      const ch = channels[index];
-      if(!ch) return;
+    // ---- Playback ----
+    function selectChannel(i){
+      if(i<0 || i>=channels.length) return;
+      currentIndex = i;
+      const ch = channels[i];
+      localStorage.setItem('last_channel_url', ch.url);
+      playStream(ch.url);
+      showTitle(ch.name);
+      updateListActive();
+      updateCounter();
+    }
 
-      if(Hls.isSupported()){
-        const hls = new Hls();
-        hls.loadSource(ch.url);
-        hls.attachMedia(video);
-      } else if(video.canPlayType('application/vnd.apple.mpegurl')){
-        video.src = ch.url;
+    function playStream(url){
+      clearError(); showSpinner(true);
+      try{ if(hls){ hls.destroy(); hls=null; } }catch{}
+
+      const nativeHLS = video.canPlayType('application/vnd.apple.mpegurl');
+      if(nativeHLS){
+        video.src = url;
+        video.play().catch(setError).finally(()=>showSpinner(false));
+        return;
       }
-      showChannelName(ch.name);
+      if(Hls.isSupported()){
+        hls = new Hls({ enableWorker:true, lowLatencyMode:true, liveDurationInfinity:true });
+        hls.on(Hls.Events.ERROR, (_, data)=>{ if(data?.fatal){ setError('Stream error: '+data.details); } });
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ video.play().catch(setError).finally(()=>showSpinner(false)); });
+        return;
+      }
+      setError('HLS not supported in this browser.'); showSpinner(false);
     }
 
-    function showChannelName(name){
-      channelNameOverlay.textContent = name;
-      channelNameOverlay.style.display = 'block';
-      setTimeout(()=>channelNameOverlay.style.display='none', 4000);
+    // ---- UI helpers ----
+    function showTitle(name){ titleChip.textContent = name || '—'; flashUI(); }
+    function showSpinner(v){ spinner.style.display = v ? 'block' : 'none'; }
+    function setError(msg){ errorBox.textContent = (msg && msg.message) ? msg.message : msg; }
+    function clearError(){ errorBox.textContent = ''; }
+
+    function updateCounter(){ counter.textContent = channels.length ? `Channel ${currentIndex+1} / ${channels.length}` : ''; }
+
+    // Auto-hide UI: show on interaction for 3s
+    function flashUI(){
+      ui.classList.add('show');
+      if(uiTimer) clearTimeout(uiTimer);
+      uiTimer = setTimeout(()=> ui.classList.remove('show'), 3000);
     }
 
-    function closeOverlay(){
-      channelOverlay.classList.remove('show');
-    }
-
-    toggleBtn.onclick = ()=>{
-      channelOverlay.classList.toggle('show');
-    };
-
-    document.getElementById('prevBtn').onclick = ()=>{
-      let idx = (currentIndex - 1 + channels.length) % channels.length;
-      playChannel(idx);
-    };
-    document.getElementById('nextBtn').onclick = ()=>{
-      let idx = (currentIndex + 1) % channels.length;
-      playChannel(idx);
-    };
-
-    searchInput.addEventListener('input', ()=>{
-      const q = searchInput.value.toLowerCase();
-      const filtered = channels.filter(c=>c.name.toLowerCase().includes(q));
-      renderChannelList(filtered);
+    ['mousemove','click','touchstart','keydown'].forEach(ev=>{
+      document.addEventListener(ev, flashUI, {passive:true});
     });
 
-    loadM3U();
+    // Next/Prev buttons (only visible when UI shown)
+    prevBtn.addEventListener('click', (e)=>{ e.stopPropagation(); selectChannel((currentIndex-1+channels.length)%channels.length); });
+    nextBtn.addEventListener('click', (e)=>{ e.stopPropagation(); selectChannel((currentIndex+1)%channels.length); });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e)=>{
+      if(e.key.toLowerCase()==='n') selectChannel((currentIndex+1)%channels.length);
+      if(e.key.toLowerCase()==='p') selectChannel((currentIndex-1+channels.length)%channels.length);
+    });
+
+    // Channel overlay toggle & search
+    toggleBtn.onclick = ()=> overlay.classList.toggle('active');
+    function closeOverlay(){ overlay.classList.remove('active'); }
+
+    searchEl.addEventListener('input', ()=>{
+      const q = searchEl.value.toLowerCase();
+      const filtered = channels.filter(c=> (c.name||'').toLowerCase().includes(q));
+      // Render filtered but keep references to full list via data-url
+      channelsEl.innerHTML = '';
+      filtered.forEach(ch=>{
+        const div = document.createElement('div');
+        div.className='item';
+        div.textContent=ch.name;
+        div.dataset.url = ch.url;
+        div.onclick=()=>{ selectChannel(channels.findIndex(c=>c.url===ch.url)); closeOverlay(); };
+        channelsEl.appendChild(div);
+      });
+      updateListActive();
+    });
+
+    // Sync UI visibility with native control showing/hiding: approximate via events
+    video.addEventListener('play', flashUI);
+    video.addEventListener('pause', flashUI);
+
+    loadPlaylist();
   </script></body>
 </html>
