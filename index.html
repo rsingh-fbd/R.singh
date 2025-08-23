@@ -220,8 +220,8 @@
   <div id="player">
     <video id="video" autoplay playsinline></video>
     <div id="controls" role="region" aria-label="Player controls">
-      <button class="btn" id="prevBtn" aria-label="Previous Channel">⏮</button>
-      <button class="btn" id="nextBtn" aria-label="Next Channel">⏭</button>
+      <button class="btn" id="prevBtn" aria-label="Previous Channel">⏮ Prev</button>
+      <button class="btn" id="nextBtn" aria-label="Next Channel">Next ⏭</button>
       <div class="spacer"></div>
       <span>🔊</span><input type="range" id="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume">
       <div class="spacer"></div>
@@ -664,12 +664,12 @@
           case "ArrowLeft":
             DOM.video.volume = Math.max(0, DOM.video.volume - 0.05);
             DOM.volume.value = DOM.video.volume;
-            localStorage.setItem("volume", DOM.video.volume);
+            localStorage.setItem("volume", DOM.volume.value);
             break;
           case "ArrowRight":
             DOM.video.volume = Math.min(1, DOM.video.volume + 0.05);
             DOM.volume.value = DOM.video.volume;
-            localStorage.setItem("volume", DOM.video.volume);
+            localStorage.setItem("volume", DOM.volume.value);
             break;
           case "f":
           case "F":
