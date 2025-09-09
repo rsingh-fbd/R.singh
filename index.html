@@ -277,7 +277,21 @@
       const showControls=debounce(()=>{ DOM.controls.classList.add("show"); clearTimeout(hideControlsTimeout);
         hideControlsTimeout=setTimeout(()=>DOM.controls.classList.remove("show"),CONFIG.controlsHideDelay); },CONFIG.debounceDelay);
 
-      // === Listeners ===
+      // === Keyboard & Touch ===
+      function handleKeys(e){
+        if(overlayOpen){
+          if(e.key==="ArrowUp"){ highlightIndex=(highlightIndex-1+channels.length)%channels.length; updateHighlight(); DOM.channelList.children[highlightIndex]?.scrollIntoView({block:"nearest"}); }
+          else if(e.key==="ArrowDown"){ highlightIndex=(highlightIndex+1)%channels.length; updateHighlight(); DOM.channelList.children[highlightIndex]?.scrollIntoView({block:"nearest"}); }
+          else if(e.key==="Enter"){ playChannel(highlightIndex); closeOverlay(); }
+          else if(e.key==="Escape"){ closeOverlay(); }
+          e.preventDefault();
+        } else {
+          if(e.key==="ArrowLeft") playChannel(currentIndex-1);
+          else if(e.key==="ArrowRight") playChannel(currentIndex+1);
+          else if(e.key==="c") toggleOverlay();
+        }
+      }
+
       function setupEvents(){
         DOM.prevBtn.onclick=()=>playChannel(currentIndex-1);
         DOM.nextBtn.onclick=()=>playChannel(currentIndex+1);
@@ -287,9 +301,35 @@
         document.addEventListener("click",(e)=>{ if(!DOM.qualityMenu.contains(e.target)&&e.target!==DOM.qualityBtn) toggleQualityMenu(false); });
         DOM.volume.oninput=()=>{ DOM.video.volume=+DOM.volume.value; save("volume",DOM.volume.value); };
         DOM.video.onwaiting=()=>DOM.buffering.classList.add("show"); DOM.video.onplaying=()=>DOM.buffering.classList.remove("show");
-        DOM.video.onerror=()=>showError("Error playing channel");
-        ["mousemove","touchstart","keydown"].forEach(ev=>document.addEventListener(ev,showControls,{passive:true}));
+        
+DOM.video.onerror=()=>showError("Error playing channel");
+
+        ["mousemove","touchstart","keydown"].forEach(ev=>
+          document.addEventListener(ev,showControls,{passive:true})
+        );
         document.addEventListener("keydown",handleKeys);
-        let sx=0,sy=0; DOM.player.addEventListener("touchstart",e=>{sx=e.touches[0].clientX; sy=e.touches[0].clientY;},{passive:true});
-        DOM.player.addEventListener("touchend",e=>{const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
-          if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>50){ dx>0?playChannel(currentIndex-1):playChannel(currentIndex+1);} },{
+
+        // Touch swipe for next/prev channel
+        let sx=0,sy=0;
+        DOM.player.addEventListener("touchstart",e=>{
+          sx=e.touches[0].clientX; sy=e.touches[0].clientY;
+        },{passive:true});
+        DOM.player.addEventListener("touchend",e=>{
+          const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+          if(Math.abs(dx)>Math.abs(dy) && Math.abs(dx)>50){
+            dx>0? playChannel(currentIndex-1): playChannel(currentIndex+1);
+          }
+        },{passive:true});
+      }
+
+      // === Init ===
+      window.addEventListener("load",()=>{
+        setupEvents();
+        loadM3U();
+        const v=load("volume"); if(v) DOM.video.volume=DOM.volume.value=v;
+        showControls(); // show initially
+      });
+    })();
+  </script>
+</body>
+</html>
