@@ -2,352 +2,268 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Perfect TV Pro</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
 <style>
-  :root{--bg:#000;--accent:#00ff9d;--text:#fff;--muted:#aaa}
-  *{margin:0;padding:0;box-sizing:border-box}
-  html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',Roboto,Arial,sans-serif;overflow:hidden}
-  video{width:100%;height:100%;object-fit:contain;background:#000;position:fixed;top:0;left:0;z-index:1}
+:root{
+  --bg:#000;
+  --accent:#00ff9d;
+  --text:#fff;
+  --muted:#ccc;
+}
 
-  /* Top Center Channel Name */
-  .now-playing{
-    position:fixed;top:5px;left:50%;transform:translateX(-50%);
-    background:rgba(0,0,0,0.85);padding:14px 40px;border-radius:50px;
-    font-size:22px;font-weight:600;z-index:10;opacity:0;transition:all .5s;
-    white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;
-  }
-  .now-playing.show{opacity:1}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:#000;font-family:Arial;color:white;overflow:hidden}
+video{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:contain;background:#000;z-index:1}
 
-  /* Menu Button */
-  .menu-btn{
-    position:fixed;top:5px;left:30px;padding:12px 20px;
-    background:rgba(0,0,0,0.7);border:2px solid var(--accent);border-radius:50px;
-    font-size:18px;z-index:15;opacity:0;transition:all .4s;cursor:pointer
-  }
-  .menu-btn.show{opacity:1}
+/* Now Playing */
+.now-playing{
+  position:fixed;top:10px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,0.75);padding:14px 40px;border-radius:50px;
+  font-size:22px;font-weight:600;z-index:20;opacity:0;transition:.4s;
+}
+.now-playing.show{opacity:1}
 
-  /* Quality Button */
-  .quality-btn{
-    position:fixed;bottom:10px;right:30px;padding:12px 20px;
-    background:rgba(0,0,0,0.7);border:2px solid var(--accent);border-radius:50px;
-    font-size:16px;z-index:15;opacity:0;transition:all .4s;cursor:pointer
-  }
-  .quality-btn.show{opacity:1}
+/* Menu buttons */
+.menu-btn,.favorite-btn,.quality-btn{
+  position:fixed;top:10px;padding:12px 20px;border-radius:50px;
+  background:rgba(0,0,0,0.7);border:2px solid var(--accent);
+  font-size:18px;z-index:20;opacity:0;transition:.4s;cursor:pointer
+}
+.menu-btn{left:20px}
+.favorite-btn{left:140px}
+.quality-btn{right:20px}
+.menu-btn.show,.favorite-btn.show,.quality-btn.show{opacity:1}
 
-  /* Quality Menu (Vertical, DPAD Navigable) */
-  .quality-menu{
-    position:fixed;bottom:10px;right:30px;width:180px;
-    background:rgba(20,20,40,0.98);backdrop-filter:blur(20px);
-    border:2px solid var(--accent);border-radius:16px;
-    padding:12px 0;z-index:20;opacity:0;transform:scale(0.9);
-    transition:all .3s;pointer-events:none
-  }
-  .quality-menu.show{opacity:1;transform:scale(1);pointer-events:all}
-  .q-item{
-    padding:14px 20px;font-size:18px;cursor:pointer;transition:.2s
-  }
-  .q-item:focus{background:var(--accent);color:#000;outline:none}
-  .q-item.active{font-weight:bold}
+/* Sidebar */
+.sidebar{
+  position:fixed;top:0;left:-380px;width:340px;height:100%;
+  background:rgba(10,10,20,0.97);backdrop-filter:blur(10px);
+  z-index:30;padding:16px;transition:left .35s ease;
+  display:flex;flex-direction:column;gap:12px
+}
+.sidebar.visible{left:0}
 
-  /* Bottom Controls */
-  .controls{
-    position:fixed;bottom:10px;left:50%;transform:translateX(-50%);
-    background:rgba(0,0,0,0.8);padding:12px 30px;border-radius:50px;
-    display:flex;gap:20px;z-index:10;opacity:0;transition:opacity .5s
-  }
-  .controls.show{opacity:1}
-  .btn{
-    padding:12px 24px;background:rgba(255,255,255,0.15);
-    border:none;border-radius:50px;font-size:18px;color:white;cursor:pointer
-  }
+.search{
+  padding:14px;border-radius:14px;font-size:18px;
+  background:rgba(255,255,255,0.15);color:#fff;border:none;outline:none;
+}
+.tabs{display:flex;gap:6px}
+.tab{
+  flex:1;padding:10px;border-radius:10px;text-align:center;
+  background:#222;color:white;cursor:pointer;font-weight:600;
+}
+.tab.active{background:var(--accent);color:#000}
 
-  /* Sidebar */
-  .sidebar{
-    position:fixed;top:0;left:-480px;width:240px;height:100%;
-    background:rgba(10,10,30,0.98);backdrop-filter:blur(20px);
-    transition:left .4s cubic-bezier(0.2,0.8,0.2,1);z-index:20;
-    padding:20px;display:flex;flex-direction:column;gap:16px
-  }
-  .sidebar.visible{left:0}
-  .search{padding:16px;border-radius:16px;background:rgba(255,255,255,0.12);border:none;color:white;font-size:18px;outline:none}
-  .channel-list{flex:1;overflow-y:auto}
-  .channel{padding:16px 20px;border-radius:16px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:4px 0;transition:.2s;cursor:pointer}
-  .channel:focus{background:var(--accent);color:#000;transform:scale(1.02)}
-  .channel.active{background:var(--accent);color:#000;font-weight:bold}
-  .channel-title{flex:1;font-size:18px}
+.channel-list{flex:1;overflow-y:auto}
+.channel{
+  padding:14px 18px;border-radius:12px;margin:5px 0;
+  background:#111;display:flex;justify-content:space-between;
+  cursor:pointer;transition:.2s;
+}
+.channel:focus{background:var(--accent);color:#000;outline:none}
+.channel.active{background:var(--accent);color:#000}
+.star{font-size:20px}
+
+.controls{
+  position:fixed;bottom:15px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,0.75);padding:12px 30px;border-radius:50px;
+  display:flex;gap:18px;opacity:0;transition:.4s;z-index:20;
+}
+.controls.show{opacity:1}
+.btn{padding:12px 22px;background:#222;border-radius:30px;color:white;font-size:18px}
+
+/* Quality Menu */
+.quality-menu{
+  position:fixed;bottom:70px;right:20px;width:180px;
+  background:rgba(10,10,30,0.97);border:2px solid var(--accent);
+  border-radius:12px;z-index:40;padding:10px 0;
+  opacity:0;transform:scale(.9);pointer-events:none;transition:.25s;
+}
+.quality-menu.show{opacity:1;transform:scale(1);pointer-events:auto}
+.q-item{
+  padding:12px 20px;font-size:18px;cursor:pointer;
+}
+.q-item:focus{background:var(--accent);color:#000;outline:none}
+.q-item.active{background:var(--accent);color:#000;font-weight:bold}
 </style>
 </head>
-<body>
 
-<video id="video" playsinline webkit-playsinline></video>
+<body>
+<video id="video" playsinline></video>
 
 <div id="nowPlaying" class="now-playing">Loading...</div>
+
 <button id="menuBtn" class="menu-btn">Menu</button>
+<button id="favBtn" class="favorite-btn">★ Fav</button>
 <button id="qualityBtn" class="quality-btn">Quality</button>
 
 <div id="controls" class="controls">
-  <button class="btn" id="prev">Previous</button>
+  <button class="btn" id="prev">Prev</button>
   <button class="btn" id="play">Play</button>
   <button class="btn" id="next">Next</button>
 </div>
 
-<!-- Quality Menu -->
-<div id="qualityMenu" class="quality-menu"></div>
-
+<!-- Sidebar -->
 <aside id="sidebar" class="sidebar">
-  <input type="text" id="search" class="search" placeholder="Search channels..." autocomplete="off">
-  <div id="list" class="channel-list" tabindex="-1"></div>
+  <div class="tabs">
+    <div class="tab active" id="tabAll">All</div>
+    <div class="tab" id="tabFav">Favorites</div>
+  </div>
+
+  <input type="text" id="search" class="search" placeholder="Search...">
+
+  <div id="list" class="channel-list"></div>
 </aside>
 
+<!-- Quality Menu -->
+<div id="qualityMenu" class="quality-menu"></div>
 <script>
-// ============== STATE ==============
-const video = document.getElementById('video');
-const nowPlaying = document.getElementById('nowPlaying');
-const menuBtn = document.getElementById('menuBtn');
-const qualityBtn = document.getElementById('qualityBtn');
-const qualityMenu = document.getElementById('qualityMenu');
-const controls = document.getElementById('controls');
-const sidebar = document.getElementById('sidebar');
-const list = document.getElementById('list');
-const search = document.getElementById('search');
+const video=document.getElementById("video");
+const nowPlaying=document.getElementById("nowPlaying");
+const menuBtn=document.getElementById("menuBtn");
+const favBtn=document.getElementById("favBtn");
+const qualityBtn=document.getElementById("qualityBtn");
+const qualityMenu=document.getElementById("qualityMenu");
+const controls=document.getElementById("controls");
+const sidebar=document.getElementById("sidebar");
+const list=document.getElementById("list");
+const search=document.getElementById("search");
 
-let channels = [], filtered = [], current = -1;
-let hls = null;
-let hideTimer = null;
-let isSidebarOpen = false;
-let isQualityOpen = false;
-let backPressCount = 0;
+let channels=[],filtered=[],favorites=[];
+let current=-1,isSidebarOpen=false,isQualityOpen=false;
+let hls=null,hideTimer=null;
 
-// ============== LOAD & RESUME LAST CHANNEL ==============
-const lastChannel = localStorage.getItem('lastChannel');
+// Load favorites
+favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
 
-fetch('https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u?t=' + Date.now())
-  .then(r => r.ok ? r.text() : Promise.reject())
-  .then(text => {
-    const lines = text.split(/\r?\n/);
-    for (let i = 0; i < lines.length; i++) {
-      if (lines[i].startsWith('#EXTINF')) {
-        const title = lines[i].split(',').slice(1).join(',').trim();
-        const url = lines[i + 1]?.trim();
-        if (url && !url.startsWith('#')) channels.push({title, url});
-      }
+// Load playlist
+fetch("https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u?t="+Date.now())
+.then(r=>r.text()).then(txt=>{
+  let lines=txt.split(/\r?\n/);
+  for(let i=0;i<lines.length;i++){
+    if(lines[i].startsWith("#EXTINF")){
+      let title=lines[i].split(",")[1].trim();
+      let url=lines[i+1];
+      if(url && !url.startsWith("#")) channels.push({title,url});
     }
-    filtered = channels.slice();
-    renderChannels();
+  }
+  filtered=[...channels];
+  renderList();
+  let last = localStorage.getItem("lastChannel");
+  let idx = channels.findIndex(c=>c.title===last);
+  playChannel(idx>=0?idx:0);
+});
 
-    const idx = lastChannel ? channels.findIndex(c => c.title === lastChannel) : 0;
-    playChannel(idx >= 0 ? idx : 0);
-  })
-  .catch(() => nowPlaying.textContent = "No Internet");
-
-// ============== RENDER CHANNELS ==============
-function renderChannels() {
-  list.innerHTML = '';
-  filtered.forEach((ch, i) => {
-    const div = document.createElement('div');
-    div.className = 'channel';
-    div.tabIndex = 0;
-    div.dataset.idx = i;
-    div.innerHTML = `<span class="channel-title">${ch.title}</span>`;
-    div.onclick = () => { playChannel(i); hideSidebar(); };
-    div.onkeydown = e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        playChannel(i);
-        hideSidebar();
-      }
-    };
-    if (i === current) div.classList.add('active');
+// Render list
+function renderList(){
+  list.innerHTML="";
+  filtered.forEach((ch,i)=>{
+    let div=document.createElement("div");
+    div.className="channel";
+    div.tabIndex=0;
+    div.innerHTML=`<span>${ch.title}</span><span class='star'>${favorites.includes(ch.title)?"★":"☆"}</span>`;
+    div.onclick=()=>{ playChannel(i); hideSidebar(); };
+    div.onkeydown=e=>{ if(e.key==="Enter"){ playChannel(i); hideSidebar(); } };
     list.appendChild(div);
   });
 }
 
-// ============== PLAY CHANNEL ==============
-function playChannel(idx) {
-  if (idx < 0 || idx >= filtered.length || idx === current) return;
-  current = idx;
-  const ch = filtered[idx];
-  nowPlaying.textContent = ch.title;
-  localStorage.setItem('lastChannel', ch.title);
-  showUI();
+// Play channel
+function playChannel(idx){
+  if(idx<0||idx>=filtered.length) return;
+  current=idx;
+  let ch=filtered[idx];
+  nowPlaying.textContent=ch.title;
+  localStorage.setItem("lastChannel",ch.title);
 
-  document.querySelectorAll('.channel').forEach((el, i) => el.classList.toggle('active', i === idx));
+  if(hls){hls.destroy();hls=null;}
+  if(Hls.isSupported() && ch.url.includes(".m3u8")){
+    hls=new Hls();
+    hls.loadSource(ch.url); hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+  } else { video.src=ch.url; video.play(); }
 
-  if (hls) { hls.destroy(); hls = null; }
-  qualityMenu.innerHTML = '';
-
-  if (Hls.isSupported() && ch.url.includes('.m3u8')) {
-    hls = new Hls({enableWorker:true});
-    hls.loadSource(ch.url);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      video.play().catch(() => {});
-      buildQualityMenu();
-    });
-  } else {
-    video.src = ch.url;
-    video.play().catch(() => {});
-  }
-
-  hideAfterDelay();
-}
-
-// ============== QUALITY MENU ==============
-function buildQualityMenu() {
-  qualityMenu.innerHTML = '';
-  const levels = [{name: 'Auto', level: -1}, ...hls.levels.map((l,i) => ({name: l.height + 'p', level: i}))];
-
-  levels.forEach((lvl, i) => {
-    const item = document.createElement('div');
-    item.className = 'q-item';
-    item.tabIndex = 0;
-    item.textContent = lvl.name;
-    if (hls.currentLevel === lvl.level) item.classList.add('active');
-    item.onclick = item.onkeydown = e => {
-      if (e.type === 'click' || e.key === 'Enter') {
-        hls.currentLevel = lvl.level;
-        qualityMenu.querySelectorAll('.q-item').forEach(el => el.classList.remove('active'));
-        item.classList.add('active');
-        hideQualityMenu();
-      }
-    };
-    qualityMenu.appendChild(item);
-  });
-
-  // Auto focus first item when opened
-  if (isQualityOpen) setTimeout(() => qualityMenu.firstChild?.focus(), 100);
-}
-
-function showQualityMenu() {
-  if (!hls) return;
-  isQualityOpen = true;
-  qualityMenu.classList.add('show');
-  buildQualityMenu();
   showUI();
 }
-function hideQualityMenu() {
-  isQualityOpen = false;
-  qualityMenu.classList.remove('show');
-  hideAfterDelay();
-}
 
-// ============== UI CONTROL ==============
-function showUI() {
-  nowPlaying.classList.add('show');
-  menuBtn.classList.add('show');
-  qualityBtn.classList.add('show');
-  controls.classList.add('show');
+// UI auto hide
+function showUI(){
+  menuBtn.classList.add("show");
+  favBtn.classList.add("show");
+  qualityBtn.classList.add("show");
+  controls.classList.add("show");
+  nowPlaying.classList.add("show");
   clearTimeout(hideTimer);
-}
-function hideAfterDelay() {
-  clearTimeout(hideTimer);
-  hideTimer = setTimeout(() => {
-    if (!isSidebarOpen && !isQualityOpen) {
-      nowPlaying.classList.remove('show');
-      menuBtn.classList.remove('show');
-      qualityBtn.classList.remove('show');
-      controls.classList.remove('show');
+  hideTimer=setTimeout(()=>{
+    if(!isSidebarOpen&&!isQualityOpen){
+      menuBtn.classList.remove("show");
+      favBtn.classList.remove("show");
+      qualityBtn.classList.remove("show");
+      controls.classList.remove("show");
+      nowPlaying.classList.remove("show");
     }
-  }, 4000);
+  },4000);
 }
 
-// ============== KEY HANDLER ==============
-let backTimer;
-document.addEventListener('keydown', e => {
-  showUI();
-  hideAfterDelay();
+// Sidebar
+function showSidebar(){ sidebar.classList.add("visible"); isSidebarOpen=true; }
+function hideSidebar(){ sidebar.classList.remove("visible"); isSidebarOpen=false; showUI(); }
 
-  if (e.key === 'Backspace' || e.key === 'Escape') {
-    e.preventDefault();
-    if (isQualityOpen) { hideQualityMenu(); return; }
-    if (isSidebarOpen) { hideSidebar(); return; }
-    if (backPressCount === 0) {
-      backPressCount = 1;
-      nowPlaying.textContent = "Press Back again to Exit";
-      nowPlaying.classList.add('show');
-      clearTimeout(backTimer);
-      backTimer = setTimeout(() => { backPressCount = 0; hideAfterDelay(); }, 2000);
-    } else {
-      if (window.Android) window.Android.exitApp();
-      else window.close();
-    }
-    return;
-  }
-
-  if (e.key === 'm' || e.key === 'M') {
-    e.preventDefault();
-    isSidebarOpen ? hideSidebar() : showSidebar();
-    return;
-  }
-
-  // Quality menu navigation
-  if (isQualityOpen) {
-    const focused = document.activeElement;
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      const next = focused.nextElementSibling || qualityMenu.firstChild;
-      next?.focus();
-    }
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      const prev = focused.previousElementSibling || qualityMenu.lastChild;
-      prev?.focus();
-    }
-    return;
-  }
-
-  // Sidebar navigation
-  if (isSidebarOpen) {
-    const focused = document.activeElement;
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      const next = focused.nextElementSibling || list.firstElementChild;
-      next?.focus();
-    }
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      const prev = focused.previousElementSibling || list.lastElementChild;
-      prev?.focus();
-    }
-  }
-
-  if (e.key === ' ') {
-    e.preventDefault();
-    video.paused ? video.play() : video.pause();
-  }
-});
-
-// ============== BUTTONS ==============
-menuBtn.onclick = () => isSidebarOpen ? hideSidebar() : showSidebar();
-qualityBtn.onclick = () => isQualityOpen ? hideQualityMenu() : showQualityMenu();
-
-document.getElementById('prev').onclick = () => playChannel((current - 1 + filtered.length) % filtered.length);
-document.getElementById('next').onclick = () => playChannel((current + 1) % filtered.length);
-document.getElementById('play').onclick = () => video.paused ? video.play() : video.pause();
-
-// ============== SIDEBAR ==============
-function showSidebar() {
-  sidebar.classList.add('visible');
-  isSidebarOpen = true;
-  search.focus();
-}
-function hideSidebar() {
-  sidebar.classList.remove('visible');
-  isSidebarOpen = false;
-  hideAfterDelay();
-}
-
-// ============== SEARCH ==============
-search.oninput = () => {
-  const q = search.value.toLowerCase();
-  filtered = channels.filter(c => c.title.toLowerCase().includes(q));
-  renderChannels();
+// Search
+search.oninput=()=>{
+  let q=search.value.toLowerCase();
+  filtered=channels.filter(c=>c.title.toLowerCase().includes(q));
+  renderList();
 };
 
-// Prevent context menu
-window.addEventListener('contextmenu', e => e.preventDefault());
+// Favorites Toggle
+favBtn.onclick=()=>{
+  let title = filtered[current].title;
+  if(favorites.includes(title))
+    favorites=favorites.filter(x=>x!==title);
+  else favorites.push(title);
+
+  localStorage.setItem("favorites",JSON.stringify(favorites));
+  renderList();
+};
+
+// Tabs
+document.getElementById("tabAll").onclick=()=>{
+  filtered=[...channels];
+  document.getElementById("tabAll").classList.add("active");
+  document.getElementById("tabFav").classList.remove("active");
+  renderList();
+};
+
+document.getElementById("tabFav").onclick=()=>{
+  filtered=channels.filter(c=>favorites.includes(c.title));
+  document.getElementById("tabFav").classList.add("active");
+  document.getElementById("tabAll").classList.remove("active");
+  renderList();
+};
+
+// Buttons
+menuBtn.onclick=()=>isSidebarOpen?hideSidebar():showSidebar();
+document.getElementById("next").onclick=()=>playChannel((current+1)%filtered.length);
+document.getElementById("prev").onclick=()=>playChannel((current-1+filtered.length)%filtered.length);
+document.getElementById("play").onclick=()=>video.paused?video.play():video.pause();
+
+// DPAD Navigation
+document.addEventListener("keydown",e=>{
+  showUI();
+  if(e.key==="ArrowRight"){ playChannel((current+1)%filtered.length); }
+  if(e.key==="ArrowLeft"){ playChannel((current-1+filtered.length)%filtered.length); }
+
+  if(e.key==="Backspace"){
+    if(isSidebarOpen){ hideSidebar(); return; }
+    if(isQualityOpen){ hideQualityMenu(); return; }
+    window.Android?.exitApp();
+  }
+});
 </script>
+
 </body>
 </html>
