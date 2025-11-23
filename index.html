@@ -14,7 +14,7 @@
   /* Top Center Channel Name */
   .now-playing{
     position:fixed;top:30px;left:50%;transform:translateX(-50%);
-    background:rgba(0,0,0,0.8);padding:14px 40px;border-radius:50px;
+    background:rgba(0,0,0,0.85);padding:14px 40px;border-radius:50px;
     font-size:22px;font-weight:600;z-index:10;opacity:0;transition:all .5s;
     white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;
   }
@@ -28,33 +28,32 @@
   }
   .menu-btn.show{opacity:1}
 
-  /* Sidebar */
-  .sidebar{
-    position:fixed;top:0;left:-480px;width:480px;height:100%;
-    background:rgba(10,10,30,0.98);backdrop-filter:blur(20px);
-    transition:left .4s cubic-bezier(0.2,0.8,0.2,1);z-index:20;
-    padding:20px;display:flex;flex-direction:column;gap:16px
+  /* Quality Button */
+  .quality-btn{
+    position:fixed;bottom:30px;right:30px;padding:12px 20px;
+    background:rgba(0,0,0,0.7);border:2px solid var(--accent);border-radius:50px;
+    font-size:16px;z-index:15;opacity:0;transition:all .4s;cursor:pointer
   }
-  .sidebar.visible{left:0}
+  .quality-btn.show{opacity:1}
 
-  .search{
-    padding:16px;border-radius:16px;background:rgba(255,255,255,0.12);
-    border:none;color:white;font-size:18px;outline:none
+  /* Quality Menu (Vertical, DPAD Navigable) */
+  .quality-menu{
+    position:fixed;bottom:110px;right:30px;width:180px;
+    background:rgba(20,20,40,0.98);backdrop-filter:blur(20px);
+    border:2px solid var(--accent);border-radius:16px;
+    padding:12px 0;z-index:20;opacity:0;transform:scale(0.9);
+    transition:all .3s;pointer-events:none
   }
-  .channel-list{flex:1;overflow-y:auto}
-  .channel{
-    padding:16px 20px;border-radius:16px;display:flex;
-    align-items:center;justify-content:space-between;gap:16px;
-    margin:4px 0;transition:.2s;cursor:pointer
+  .quality-menu.show{opacity:1;transform:scale(1);pointer-events:all}
+  .q-item{
+    padding:14px 20px;font-size:18px;cursor:pointer;transition:.2s
   }
-  .channel:focus{background:var(--accent);color:#000;transform:scale(1.02)}
-  .channel.active{background:var(--accent);color:#000;font-weight:bold}
-  .channel-title{flex:1;font-size:18px}
-  .fav{font-size:24px}
+  .q-item:focus{background:var(--accent);color:#000;outline:none}
+  .q-item.active{font-weight:bold}
 
-  /* Bottom Controls - Perfect Size */
+  /* Bottom Controls */
   .controls{
-    position:fixed;bottom:10px;left:50%;transform:translateX(-50%);
+    position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
     background:rgba(0,0,0,0.8);padding:12px 30px;border-radius:50px;
     display:flex;gap:20px;z-index:10;opacity:0;transition:opacity .5s
   }
@@ -64,18 +63,20 @@
     border:none;border-radius:50px;font-size:18px;color:white;cursor:pointer
   }
 
-  /* Quality Selector */
-  .quality{
-    position:fixed;bottom:10px;right:30px;display:flex;gap:10px;
-    background:rgba(0,0,0,0.8);padding:10px 16px;border-radius:20px;
-    opacity:0;transition:opacity .5s;z-index:10
+  /* Sidebar */
+  .sidebar{
+    position:fixed;top:0;left:-480px;width:480px;height:100%;
+    background:rgba(10,10,30,0.98);backdrop-filter:blur(20px);
+    transition:left .4s cubic-bezier(0.2,0.8,0.2,1);z-index:20;
+    padding:20px;display:flex;flex-direction:column;gap:16px
   }
-  .quality.show{opacity:1}
-  .qbtn{
-    padding:8px 14px;background:rgba(255,255,255,0.2);border-radius:10px;
-    font-size:14px;cursor:pointer;min-width:50px;text-align:center
-  }
-  .qbtn.active{background:var(--accent);color:#000;font-weight:bold}
+  .sidebar.visible{left:0}
+  .search{padding:16px;border-radius:16px;background:rgba(255,255,255,0.12);border:none;color:white;font-size:18px;outline:none}
+  .channel-list{flex:1;overflow-y:auto}
+  .channel{padding:16px 20px;border-radius:16px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:4px 0;transition:.2s;cursor:pointer}
+  .channel:focus{background:var(--accent);color:#000;transform:scale(1.02)}
+  .channel.active{background:var(--accent);color:#000;font-weight:bold}
+  .channel-title{flex:1;font-size:18px}
 </style>
 </head>
 <body>
@@ -84,6 +85,7 @@
 
 <div id="nowPlaying" class="now-playing">Loading...</div>
 <button id="menuBtn" class="menu-btn">Menu</button>
+<button id="qualityBtn" class="quality-btn">Quality</button>
 
 <div id="controls" class="controls">
   <button class="btn" id="prev">Previous</button>
@@ -91,7 +93,8 @@
   <button class="btn" id="next">Next</button>
 </div>
 
-<div id="quality" class="quality"></div>
+<!-- Quality Menu -->
+<div id="qualityMenu" class="quality-menu"></div>
 
 <aside id="sidebar" class="sidebar">
   <input type="text" id="search" class="search" placeholder="Search channels..." autocomplete="off">
@@ -103,24 +106,25 @@
 const video = document.getElementById('video');
 const nowPlaying = document.getElementById('nowPlaying');
 const menuBtn = document.getElementById('menuBtn');
+const qualityBtn = document.getElementById('qualityBtn');
+const qualityMenu = document.getElementById('qualityMenu');
+const controls = document.getElementById('controls');
 const sidebar = document.getElementById('sidebar');
 const list = document.getElementById('list');
 const search = document.getElementById('search');
-const controls = document.getElementById('controls');
-const qualityDiv = document.getElementById('quality');
 
 let channels = [], filtered = [], current = -1;
 let hls = null;
 let hideTimer = null;
 let isSidebarOpen = false;
+let isQualityOpen = false;
 let backPressCount = 0;
 
-// Load last played channel
+// ============== LOAD & RESUME LAST CHANNEL ==============
 const lastChannel = localStorage.getItem('lastChannel');
 
-// ============== LOAD PLAYLIST ==============
 fetch('https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u?t=' + Date.now())
-  .then(r => r.ok ? r.text() : Promise.reject('Failed'))
+  .then(r => r.ok ? r.text() : Promise.reject())
   .then(text => {
     const lines = text.split(/\r?\n/);
     for (let i = 0; i < lines.length; i++) {
@@ -133,11 +137,10 @@ fetch('https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u?t=
     filtered = channels.slice();
     renderChannels();
 
-    // Play last channel or first
     const idx = lastChannel ? channels.findIndex(c => c.title === lastChannel) : 0;
     playChannel(idx >= 0 ? idx : 0);
   })
-  .catch(() => nowPlaying.textContent = "No Internet / Playlist Error");
+  .catch(() => nowPlaying.textContent = "No Internet");
 
 // ============== RENDER CHANNELS ==============
 function renderChannels() {
@@ -163,19 +166,17 @@ function renderChannels() {
 
 // ============== PLAY CHANNEL ==============
 function playChannel(idx) {
-  if (idx < 0 || idx >= filtered.length) return;
+  if (idx < 0 || idx >= filtered.length || idx === current) return;
   current = idx;
   const ch = filtered[idx];
   nowPlaying.textContent = ch.title;
-  localStorage.setItem('lastChannel', ch.title); // Remember
+  localStorage.setItem('lastChannel', ch.title);
   showUI();
 
-  // Update active
   document.querySelectorAll('.channel').forEach((el, i) => el.classList.toggle('active', i === idx));
 
-  // Cleanup & play
   if (hls) { hls.destroy(); hls = null; }
-  qualityDiv.innerHTML = '';
+  qualityMenu.innerHTML = '';
 
   if (Hls.isSupported() && ch.url.includes('.m3u8')) {
     hls = new Hls({enableWorker:true});
@@ -183,7 +184,7 @@ function playChannel(idx) {
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
       video.play().catch(() => {});
-      setupQuality();
+      buildQualityMenu();
     });
   } else {
     video.src = ch.url;
@@ -193,84 +194,109 @@ function playChannel(idx) {
   hideAfterDelay();
 }
 
-// ============== QUALITY ==============
-function setupQuality() {
-  qualityDiv.innerHTML = '<div class="qbtn active">Auto</div>';
-  hls.levels.forEach((l, i) => {
-    const btn = document.createElement('div');
-    btn.className = 'qbtn';
-    btn.textContent = l.height + 'p';
-    btn.onclick = () => {
-      hls.currentLevel = i;
-      qualityDiv.querySelectorAll('.qbtn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+// ============== QUALITY MENU ==============
+function buildQualityMenu() {
+  qualityMenu.innerHTML = '';
+  const levels = [{name: 'Auto', level: -1}, ...hls.levels.map((l,i) => ({name: l.height + 'p', level: i}))];
+
+  levels.forEach((lvl, i) => {
+    const item = document.createElement('div');
+    item.className = 'q-item';
+    item.tabIndex = 0;
+    item.textContent = lvl.name;
+    if (hls.currentLevel === lvl.level) item.classList.add('active');
+    item.onclick = item.onkeydown = e => {
+      if (e.type === 'click' || e.key === 'Enter') {
+        hls.currentLevel = lvl.level;
+        qualityMenu.querySelectorAll('.q-item').forEach(el => el.classList.remove('active'));
+        item.classList.add('active');
+        hideQualityMenu();
+      }
     };
-    qualityDiv.appendChild(btn);
+    qualityMenu.appendChild(item);
   });
-  qualityDiv.children[0].onclick = () => {
-    hls.currentLevel = -1;
-    qualityDiv.querySelectorAll('.qbtn').forEach((b,i) => b.classList.toggle('active', i===0));
-  };
-  qualityDiv.classList.add('show');
+
+  // Auto focus first item when opened
+  if (isQualityOpen) setTimeout(() => qualityMenu.firstChild?.focus(), 100);
+}
+
+function showQualityMenu() {
+  if (!hls) return;
+  isQualityOpen = true;
+  qualityMenu.classList.add('show');
+  buildQualityMenu();
+  showUI();
+}
+function hideQualityMenu() {
+  isQualityOpen = false;
+  qualityMenu.classList.remove('show');
+  hideAfterDelay();
 }
 
 // ============== UI CONTROL ==============
 function showUI() {
   nowPlaying.classList.add('show');
   menuBtn.classList.add('show');
+  qualityBtn.classList.add('show');
   controls.classList.add('show');
-  qualityDiv.classList.add('show');
   clearTimeout(hideTimer);
 }
-
 function hideAfterDelay() {
   clearTimeout(hideTimer);
   hideTimer = setTimeout(() => {
-    if (!isSidebarOpen) {
+    if (!isSidebarOpen && !isQualityOpen) {
       nowPlaying.classList.remove('show');
       menuBtn.classList.remove('show');
+      qualityBtn.classList.remove('show');
       controls.classList.remove('show');
-      qualityDiv.classList.remove('show');
     }
   }, 4000);
 }
 
 // ============== KEY HANDLER ==============
-let backPressTimer;
+let backTimer;
 document.addEventListener('keydown', e => {
   showUI();
   hideAfterDelay();
 
-  // Double Back to Exit
   if (e.key === 'Backspace' || e.key === 'Escape') {
     e.preventDefault();
-    if (isSidebarOpen) {
-      hideSidebar();
-      return;
-    }
+    if (isQualityOpen) { hideQualityMenu(); return; }
+    if (isSidebarOpen) { hideSidebar(); return; }
     if (backPressCount === 0) {
       backPressCount = 1;
       nowPlaying.textContent = "Press Back again to Exit";
       nowPlaying.classList.add('show');
-      clearTimeout(backPressTimer);
-      backPressTimer = setTimeout(() => { backPressCount = 0; hideAfterDelay(); }, 2000);
+      clearTimeout(backTimer);
+      backTimer = setTimeout(() => { backPressCount = 0; hideAfterDelay(); }, 2000);
     } else {
-      window.close(); // or Android.finish() if in WebView
-      // For WebView APK: send message to Android
       if (window.Android) window.Android.exitApp();
+      else window.close();
     }
     return;
   }
 
-  // Open Menu
-  if (e.key === 'm' || e.key === 'M' || e.key === 'Enter') {
+  if (e.key === 'm' || e.key === 'M') {
     e.preventDefault();
     isSidebarOpen ? hideSidebar() : showSidebar();
     return;
   }
 
-  // Only allow Prev/Next via buttons, NOT Left/Right
-  // Left/Right disabled globally
+  // Quality menu navigation
+  if (isQualityOpen) {
+    const focused = document.activeElement;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      const next = focused.nextElementSibling || qualityMenu.firstChild;
+      next?.focus();
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const prev = focused.previousElementSibling || qualityMenu.lastChild;
+      prev?.focus();
+    }
+    return;
+  }
 
   // Sidebar navigation
   if (isSidebarOpen) {
@@ -278,30 +304,34 @@ document.addEventListener('keydown', e => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       const next = focused.nextElementSibling || list.firstElementChild;
-      if (next) next.focus();
+      next?.focus();
     }
     if (e.key === 'ArrowUp') {
       e.preventDefault();
       const prev = focused.previousElementSibling || list.lastElementChild;
-      if (prev) prev.focus();
+      prev?.focus();
     }
   }
 
-  // Space = Play/Pause
   if (e.key === ' ') {
     e.preventDefault();
     video.paused ? video.play() : video.pause();
   }
 });
 
-// ============== SIDEBAR ==============
+// ============== BUTTONS ==============
 menuBtn.onclick = () => isSidebarOpen ? hideSidebar() : showSidebar();
+qualityBtn.onclick = () => isQualityOpen ? hideQualityMenu() : showQualityMenu();
 
+document.getElementById('prev').onclick = () => playChannel((current - 1 + filtered.length) % filtered.length);
+document.getElementById('next').onclick = () => playChannel((current + 1) % filtered.length);
+document.getElementById('play').onclick = () => video.paused ? video.play() : video.pause();
+
+// ============== SIDEBAR ==============
 function showSidebar() {
   sidebar.classList.add('visible');
   isSidebarOpen = true;
   search.focus();
-  showUI();
 }
 function hideSidebar() {
   sidebar.classList.remove('visible');
@@ -309,22 +339,15 @@ function hideSidebar() {
   hideAfterDelay();
 }
 
-// ============== BUTTONS ==============
-document.getElementById('prev').onclick = () => playChannel((current - 1 + filtered.length) % filtered.length);
-document.getElementById('next').onclick = () => playChannel((current + 1) % filtered.length);
-document.getElementById('play').onclick = () => video.paused ? video.play() : video.pause();
-
 // ============== SEARCH ==============
 search.oninput = () => {
   const q = search.value.toLowerCase();
   filtered = channels.filter(c => c.title.toLowerCase().includes(q));
   renderChannels();
-  if (filtered.length && current >= filtered.length) current = 0;
 };
 
 // Prevent context menu
 window.addEventListener('contextmenu', e => e.preventDefault());
-
 </script>
 </body>
 </html>
