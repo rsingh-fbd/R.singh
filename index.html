@@ -329,10 +329,17 @@ document.getElementById('next').onclick = () => playChannel((current + 1) % filt
 document.getElementById('play').onclick = () => video.paused ? video.play() : video.pause();  
   
 // ============== SIDEBAR ==============  
-function showSidebar() {  
+/*function showSidebar() {  
   sidebar.classList.add('visible');  
   isSidebarOpen = true;  
   search.focus();  
+}
+*/
+function showSidebar() {
+  sidebar.classList.add('visible');
+  isSidebarOpen = true;
+  // Do NOT focus search automatically (prevents keyboard popup)
+  setTimeout(() => list.firstElementChild?.focus(), 50);
 }  
 function hideSidebar() {  
   sidebar.classList.remove('visible');  
