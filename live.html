@@ -1,0 +1,312 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Live TV Player (single-file)</title>
+<!-- Hls.js for HLS playback in browsers that need it -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.1/dist/hls.min.js"></script>
+<style>
+  :root{--bg:#0b0f14;--card:#0f1720;--accent:#0ea5a4;--muted:#9aa6b2}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,#000814 0%,#071028 100%);color:#e6eef3}
+  .app{display:grid;grid-template-columns:360px 1fr;gap:14px;padding:18px;height:100vh;box-sizing:border-box}
+  .sidebar{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:8px;padding:10px;overflow:auto}
+  .player-wrap{display:flex;flex-direction:column;gap:12px}
+  video{width:100%;height:60vh;background:#000;border-radius:8px;outline:none}
+  .controls{display:flex;align-items:center;gap:10px}
+  .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:6px;color:var(--muted);cursor:pointer}
+  .btn:focus{outline:2px solid var(--accent)}
+  .channel-list{display:flex;flex-direction:column;gap:6px}
+  .channel{padding:8px;border-radius:6px;background:transparent;display:flex;justify-content:space-between;align-items:center}
+  .channel[tabindex]{cursor:pointer}
+  .channel:focus{outline:2px solid var(--accent);background:rgba(14,165,164,0.06)}
+  .channel.active{background:linear-gradient(90deg,rgba(14,165,164,0.12),transparent);border-left:3px solid var(--accent)}
+  .meta{font-size:12px;color:var(--muted)}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .search{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+  .quality-list{display:flex;gap:6px;flex-wrap:wrap}
+  .quality-item{padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.04)}
+  .quality-item:focus{outline:2px solid var(--accent)}
+  .small{font-size:12px;color:var(--muted)}
+  .hidden{display:none}
+  /* remote focus helpers */
+  .focus-ring{box-shadow:0 0 0 3px rgba(14,165,164,0.08);border-radius:6px}
+  @media (max-width:900px){.app{grid-template-columns:1fr} .sidebar{order:2;height:34vh}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="sidebar" id="sidebar">
+    <div class="topbar">
+      <input id="search" class="search" placeholder="Search channels or press /" />
+      <button id="toggle-list" class="btn" title="Toggle list" aria-label="Toggle channel list">☰</button>
+    </div>
+    <div class="small">Channels</div>
+    <div id="channels" class="channel-list" tabindex="0">
+      <!-- channels injected here -->
+    </div>
+  </div>  <div class="player-wrap">
+    <video id="video" playsinline controls></video>
+    <div class="controls">
+      <button id="playBtn" class="btn" aria-label="play/pause">Play</button>
+      <button id="prevBtn" class="btn" aria-label="previous channel">Prev</button>
+      <button id="nextBtn" class="btn" aria-label="next channel">Next</button>
+      <div style="flex:1"></div>
+      <div class="small">Quality:</div>
+      <div id="quality" class="quality-list" tabindex="0"></div>
+      <button id="fullscreen" class="btn">⤢</button>
+    </div>
+    <div class="small">Now Playing: <span id="now" class="meta">-</span></div>
+    <div class="small">Info / Hints: Use arrow keys + Enter to navigate. Back/Escape to close lists.</div>
+  </div>
+</div><script>
+// Single-file Live TV player with TV-remote support
+const m3uUrl = "https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u";
+const channelsEl = document.getElementById('channels');
+const video = document.getElementById('video');
+const nowEl = document.getElementById('now');
+const playBtn = document.getElementById('playBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const qualityEl = document.getElementById('quality');
+const searchEl = document.getElementById('search');
+const toggleListBtn = document.getElementById('toggle-list');
+let channels = [];
+let current = -1;
+let hls = null;
+let focusContext = 'channels'; // 'channels' or 'controls' or 'quality'
+
+// fetch and parse simple m3u
+async function loadM3U(url){
+  try{
+    const res = await fetch(url);
+    const txt = await res.text();
+    parseM3U(txt);
+  }catch(e){
+    console.error('Failed to load m3u',e);
+    channelsEl.innerHTML = '<div class="small">Failed to load playlist. Check CORS or URL.</div>';
+  }
+}
+
+function parseM3U(txt){
+  const lines = txt.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  let i=0;
+  while(i<lines.length){
+    const line = lines[i];
+    if(line.startsWith('#EXTINF')){
+      const info = line.substring(8).split(',')[1] || line;
+      const url = lines[i+1] || '';
+      channels.push({title:info.trim(), url: url.trim()});
+      i+=2;
+    }else if(!line.startsWith('#')){
+      // plain url (no extinf)
+      channels.push({title: line, url: line});
+      i++;
+    }else{
+      i++;
+    }
+  }
+  renderChannels(channels);
+}
+
+function renderChannels(list){
+  channelsEl.innerHTML='';
+  list.forEach((c,idx)=>{
+    const el = document.createElement('div');
+    el.className = 'channel';
+    el.setAttribute('tabindex','0');
+    el.dataset.idx = idx;
+    el.innerHTML = `<div><strong>${escapeHtml(c.title)}</strong><div class="meta">${c.url}</div></div><div class="meta">#${idx+1}</div>`;
+    el.addEventListener('click',()=>selectChannel(idx,true));
+    el.addEventListener('keydown',(ev)=>{
+      if(ev.key==='Enter') selectChannel(idx,true);
+    });
+    channelsEl.appendChild(el);
+  });
+}
+
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function selectChannel(idx,play=true){
+  if(idx<0||idx>=channels.length) return;
+  current = idx;
+  const ch = channels[idx];
+  nowEl.textContent = ch.title;
+  // highlight
+  Array.from(channelsEl.children).forEach((el,i)=>{
+    el.classList.toggle('active', i===idx);
+  });
+  attachStream(ch.url, play);
+}
+
+function attachStream(url, autoplay=true){
+  // destroy old hls
+  if(hls){hls.destroy();hls=null;}
+  // clear quality
+  qualityEl.innerHTML='';
+  if(Hls.isSupported() && /\.m3u8(\?|$)/i.test(url)){
+    hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, ()=>{
+      // add quality levels
+      if(hls.levels && hls.levels.length){
+        renderQuality(hls.levels);
+      }
+      if(autoplay) video.play().catch(()=>{});
+    });
+    hls.on(Hls.Events.LEVEL_SWITCHED, ()=>{
+      // update UI
+      highlightQuality(hls.currentLevel);
+    });
+  }else{
+    // native MSE or mp4
+    video.src = url;
+    if(autoplay) video.play().catch(()=>{});
+  }
+}
+
+function renderQuality(levels){
+  qualityEl.innerHTML='';
+  // add auto
+  const auto = document.createElement('button');
+  auto.className='quality-item btn'; auto.tabIndex=0; auto.textContent='Auto';
+  auto.addEventListener('click',()=>{ hls.currentLevel = -1; highlightQuality(-1); });
+  qualityEl.appendChild(auto);
+  levels.forEach((l,idx)=>{
+    const t = (l.height? l.height + 'p' : (l.bitrate? Math.round(l.bitrate/1000)+'kbps' : 'level'+idx));
+    const b = document.createElement('button'); b.className='quality-item btn'; b.tabIndex=0; b.textContent = t;
+    b.dataset.level = idx;
+    b.addEventListener('click',()=>{ hls.currentLevel = idx; highlightQuality(idx); });
+    qualityEl.appendChild(b);
+  });
+  highlightQuality(hls.currentLevel);
+}
+function highlightQuality(level){
+  Array.from(qualityEl.children).forEach((el,i)=>{
+    if(level===-1 && i===0) el.classList.add('active'); else el.classList.remove('active');
+    if(i>0 && (i-1)===level) el.classList.add('active');
+  });
+}
+
+// controls
+playBtn.addEventListener('click',()=>{ if(video.paused) video.play(); else video.pause(); updatePlayBtn(); });
+video.addEventListener('play',updatePlayBtn); video.addEventListener('pause',updatePlayBtn);
+function updatePlayBtn(){ playBtn.textContent = video.paused ? 'Play' : 'Pause'; }
+prevBtn.addEventListener('click',()=>{ changeChannel(-1); });
+nextBtn.addEventListener('click',()=>{ changeChannel(1); });
+function changeChannel(delta){ if(channels.length===0) return; let idx = (current + delta + channels.length) % channels.length; selectChannel(idx,true); scrollToChannel(idx); }
+
+function scrollToChannel(idx){ const el = channelsEl.children[idx]; if(el){ el.scrollIntoView({behavior:'smooth',block:'center'}); el.focus(); }}
+
+// search
+searchEl.addEventListener('input',()=>{
+  const q = searchEl.value.toLowerCase();
+  const filtered = channels.filter(c=> (c.title||'').toLowerCase().includes(q) || (c.url||'').toLowerCase().includes(q));
+  renderChannels(filtered);
+});
+// toggle
+toggleListBtn.addEventListener('click',()=>{ channelsEl.parentElement.classList.toggle('hidden'); channelsEl.focus(); });
+
+// TV remote and keyboard navigation handling
+window.addEventListener('keydown', (e)=>{
+  // console.log('key',e.key, e.code);
+  // if user types '/', focus search
+  if(e.key === '/'){ e.preventDefault(); searchEl.focus(); return; }
+  // context-aware navigation
+  switch(e.key){
+    case 'ArrowUp':
+      e.preventDefault(); navUp(); break;
+    case 'ArrowDown':
+      e.preventDefault(); navDown(); break;
+    case 'ArrowLeft':
+      e.preventDefault(); navLeft(); break;
+    case 'ArrowRight':
+      e.preventDefault(); navRight(); break;
+    case 'Enter':
+    case 'OK':
+      e.preventDefault(); activateFocused(); break;
+    case 'Escape':
+    case 'Backspace':
+      e.preventDefault(); backAction(); break;
+    case 'MediaPlayPause':
+      e.preventDefault(); if(video.paused) video.play(); else video.pause(); break;
+    case 'ChannelUp':
+    case 'PageUp':
+      e.preventDefault(); changeChannel(1); break;
+    case 'ChannelDown':
+    case 'PageDown':
+      e.preventDefault(); changeChannel(-1); break;
+    default:
+      // numeric channels (0-9) quick jump: build a small buffer
+      if(/^[0-9]$/.test(e.key)) handleNumeric(e.key);
+  }
+});
+
+let numericBuffer = '';
+let numTimer = null;
+function handleNumeric(digit){ numericBuffer += digit; clearTimeout(numTimer); numTimer = setTimeout(()=>{ // apply
+    const n = parseInt(numericBuffer,10); numericBuffer=''; if(isFinite(n) && n>0 && n<=channels.length){ selectChannel(n-1,true); scrollToChannel(n-1);} }, 1200); }
+
+function navUp(){
+  if(document.activeElement === searchEl){ /* ignore */ return; }
+  // focus previous channel
+  const focus = document.activeElement;
+  if(focus && focus.classList && focus.classList.contains('channel')){
+    const idx = parseInt(focus.dataset.idx);
+    const prev = focus.previousElementSibling || null;
+    if(prev) prev.focus();
+  } else {
+    // focus last
+    const last = channelsEl.lastElementChild; if(last) last.focus();
+  }
+}
+function navDown(){
+  const focus = document.activeElement;
+  if(focus && focus.classList && focus.classList.contains('channel')){
+    const next = focus.nextElementSibling || null; if(next) next.focus();
+  } else {
+    const first = channelsEl.firstElementChild; if(first) first.focus();
+  }
+}
+function navLeft(){
+  // reduce volume
+  video.volume = Math.max(0, video.volume - 0.1);
+}
+function navRight(){
+  video.volume = Math.min(1, video.volume + 0.1);
+}
+function activateFocused(){
+  const a = document.activeElement;
+  if(a === searchEl) return; // nothing
+  if(a && a.classList && a.classList.contains('channel')){
+    const idx = parseInt(a.dataset.idx); selectChannel(idx,true);
+  }
+  // quality items
+  if(a && a.classList && a.classList.contains('quality-item')){
+    a.click();
+  }
+  if(a === playBtn) playBtn.click();
+}
+function backAction(){
+  // if search focused, blur
+  if(document.activeElement === searchEl) { document.activeElement.blur(); return; }
+  // else collapse sidebar on small
+  if(window.innerWidth < 900){ document.querySelector('.sidebar').classList.toggle('hidden'); }
+}
+
+// keyboard focus visual improvements
+document.addEventListener('focusin', (e)=>{ if(e.target.classList && e.target.classList.contains('channel')) e.target.classList.add('focus-ring'); });
+document.addEventListener('focusout', (e)=>{ if(e.target.classList && e.target.classList.contains('channel')) e.target.classList.remove('focus-ring'); });
+
+// init
+loadM3U(m3uUrl).then(()=>{
+  if(channels.length) selectChannel(0,false);
+});
+
+// helper: resize handling
+window.addEventListener('resize', ()=>{ if(window.innerWidth < 900) document.querySelector('.sidebar').style.display='block'; });
+
+</script></body>
+</html>
