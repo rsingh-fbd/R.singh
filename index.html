@@ -3,100 +3,99 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Perfect OTT TV</title>
+<title>Perfect TV Pro</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
   :root{--bg:#000;--accent:#00ff9d;--text:#fff;--muted:#aaa}
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',Roboto,Arial,sans-serif;overflow:hidden}
-  video{width:100%;height:100%;object-fit:contain;background:#000;position:absolute;top:0;left:0;z-index:1}
+  video{width:100%;height:100%;object-fit:contain;background:#000;position:fixed;top:0;left:0;z-index:1}
 
   /* Top Center Channel Name */
   .now-playing{
-    position:absolute;top:30px;left:50%;transform:translateX(-50%);
-    background:rgba(0,0,0,0.75);padding:14px 40px;border-radius:50px;
-    font-size:22px;font-weight:600;letter-spacing:1px;z-index:10;
-    opacity:0;transition:opacity .6s ease, transform .6s ease;
-    pointer-events:none;white-space:nowrap;max-width:90%;
-    text-overflow:ellipsis;overflow:hidden;
+    position:fixed;top:30px;left:50%;transform:translateX(-50%);
+    background:rgba(0,0,0,0.8);padding:14px 40px;border-radius:50px;
+    font-size:22px;font-weight:600;z-index:10;opacity:0;transition:all .5s;
+    white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;
   }
-  .now-playing.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .now-playing.show{opacity:1}
 
-  /* Menu Button (Top Left) */
+  /* Menu Button */
   .menu-btn{
-    position:absolute;top:30px;left:30px;padding:14px 20px;
+    position:fixed;top:30px;left:30px;padding:12px 20px;
     background:rgba(0,0,0,0.7);border:2px solid var(--accent);border-radius:50px;
-    font-size:18px;z-index:15;opacity:0;transition:all .4s;pointer-events:all;cursor:pointer
+    font-size:18px;z-index:15;opacity:0;transition:all .4s;cursor:pointer
   }
   .menu-btn.show{opacity:1}
 
   /* Sidebar */
   .sidebar{
-    position:absolute;top:0;left:-480px;width:480px;height:100%;background:rgba(15,15,35,0.98);
-    backdrop-filter:blur(20px);transition:left .5s cubic-bezier(0.2,0.8,0.2,1);z-index:20;
+    position:fixed;top:0;left:-480px;width:480px;height:100%;
+    background:rgba(10,10,30,0.98);backdrop-filter:blur(20px);
+    transition:left .4s cubic-bezier(0.2,0.8,0.2,1);z-index:20;
     padding:20px;display:flex;flex-direction:column;gap:16px
   }
   .sidebar.visible{left:0}
 
   .search{
-    padding:16px;border-radius:16px;border:none;background:rgba(255,255,255,0.12);color:white;
-    font-size:18px;outline:none
+    padding:16px;border-radius:16px;background:rgba(255,255,255,0.12);
+    border:none;color:white;font-size:18px;outline:none
   }
-  .channel-list{flex:1;overflow-y:auto;padding-right:8px}
+  .channel-list{flex:1;overflow-y:auto}
   .channel{
-    padding:16px 18px;border-radius:16px;display:flex;align-items:center;justify-content:space-between;
-    gap:16px;transition:.25s;cursor:pointer;margin:4px 0
+    padding:16px 20px;border-radius:16px;display:flex;
+    align-items:center;justify-content:space-between;gap:16px;
+    margin:4px 0;transition:.2s;cursor:pointer
   }
-  .channel:focus{
-    background:var(--accent);color:#000;transform:scale(1.02);outline:none
-  }
-  .channel:hover{background:rgba(0,255,157,0.2)}
+  .channel:focus{background:var(--accent);color:#000;transform:scale(1.02)}
   .channel.active{background:var(--accent);color:#000;font-weight:bold}
   .channel-title{flex:1;font-size:18px}
-  .fav{font-size:24px;opacity:0.7}
-  .fav.active{color:#ffd700;opacity:1}
+  .fav{font-size:24px}
 
-  /* Bottom Controls */
+  /* Bottom Controls - Perfect Size */
   .controls{
-    position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
-    background:rgba(0,0,0,0.7);padding:16px 40px;border-radius:50px;
-    display:flex;align-items:center;gap:24px;z-index:10;opacity:0;transition:opacity .5s
+    position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+    background:rgba(0,0,0,0.8);padding:12px 30px;border-radius:50px;
+    display:flex;gap:20px;z-index:10;opacity:0;transition:opacity .5s
   }
   .controls.show{opacity:1}
-  .btn{padding:14px 28px;background:rgba(255,255,255,0.15);border-radius:50px;font-size:20px;cursor:pointer}
+  .btn{
+    padding:12px 24px;background:rgba(255,255,255,0.15);
+    border:none;border-radius:50px;font-size:18px;color:white;cursor:pointer
+  }
 
+  /* Quality Selector */
   .quality{
-    position:absolute;bottom:110px;right:40px;display:flex;gap:10px;opacity:0;transition:opacity .5s
+    position:fixed;bottom:110px;right:30px;display:flex;gap:10px;
+    background:rgba(0,0,0,0.8);padding:10px 16px;border-radius:20px;
+    opacity:0;transition:opacity .5s;z-index:10
   }
   .quality.show{opacity:1}
-  .qbtn{padding:8px 16px;background:rgba(255,255,255,0.2);border-radius:10px;font-size:14px;cursor:pointer}
-  .qbtn.active{background:var(--accent);color:#000}
+  .qbtn{
+    padding:8px 14px;background:rgba(255,255,255,0.2);border-radius:10px;
+    font-size:14px;cursor:pointer;min-width:50px;text-align:center
+  }
+  .qbtn.active{background:var(--accent);color:#000;font-weight:bold}
 </style>
 </head>
 <body>
 
 <video id="video" playsinline webkit-playsinline></video>
 
-<!-- Top Center Channel Name -->
 <div id="nowPlaying" class="now-playing">Loading...</div>
-
-<!-- Menu Button -->
 <button id="menuBtn" class="menu-btn">Menu</button>
 
-<!-- Bottom Controls -->
 <div id="controls" class="controls">
   <button class="btn" id="prev">Previous</button>
   <button class="btn" id="play">Play</button>
   <button class="btn" id="next">Next</button>
 </div>
 
-<!-- Quality Selector -->
 <div id="quality" class="quality"></div>
 
-<!-- Sidebar -->
 <aside id="sidebar" class="sidebar">
   <input type="text" id="search" class="search" placeholder="Search channels..." autocomplete="off">
-  <div id="list" class="channel-list" tabindex="0"></div>
+  <div id="list" class="channel-list" tabindex="-1"></div>
 </aside>
 
 <script>
@@ -114,26 +113,31 @@ let channels = [], filtered = [], current = -1;
 let hls = null;
 let hideTimer = null;
 let isSidebarOpen = false;
-let favorites = new Set(JSON.parse(localStorage.getItem('favs') || '[]'));
+let backPressCount = 0;
 
-// ============== LOAD M3U ==============
+// Load last played channel
+const lastChannel = localStorage.getItem('lastChannel');
+
+// ============== LOAD PLAYLIST ==============
 fetch('https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u?t=' + Date.now())
-  .then(r => r.text())
+  .then(r => r.ok ? r.text() : Promise.reject('Failed'))
   .then(text => {
     const lines = text.split(/\r?\n/);
     for (let i = 0; i < lines.length; i++) {
       if (lines[i].startsWith('#EXTINF')) {
         const title = lines[i].split(',').slice(1).join(',').trim();
         const url = lines[i + 1]?.trim();
-        if (url && !url.startsWith('#')) {
-          channels.push({title, url, fav: favorites.has(title)});
-        }
+        if (url && !url.startsWith('#')) channels.push({title, url});
       }
     }
     filtered = channels.slice();
     renderChannels();
-    playChannel(0);
-  });
+
+    // Play last channel or first
+    const idx = lastChannel ? channels.findIndex(c => c.title === lastChannel) : 0;
+    playChannel(idx >= 0 ? idx : 0);
+  })
+  .catch(() => nowPlaying.textContent = "No Internet / Playlist Error");
 
 // ============== RENDER CHANNELS ==============
 function renderChannels() {
@@ -143,74 +147,53 @@ function renderChannels() {
     div.className = 'channel';
     div.tabIndex = 0;
     div.dataset.idx = i;
-    div.innerHTML = `
-      <span class="channel-title">${ch.title}</span>
-      <span class="fav ${ch.fav?'active':''}">Star</span>
-    `;
-    div.onclick = () => playChannel(i);
+    div.innerHTML = `<span class="channel-title">${ch.title}</span>`;
+    div.onclick = () => { playChannel(i); hideSidebar(); };
     div.onkeydown = e => {
-      if (e.key === 'Enter' || e.key === 'OK') {
+      if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         playChannel(i);
-      }
-      if (e.key === ' ' || e.key === 'ContextMenu') {
-        e.preventDefault();
-        toggleFav(ch.title, div);
+        hideSidebar();
       }
     };
     if (i === current) div.classList.add('active');
     list.appendChild(div);
   });
-
-  // Auto-focus first item if sidebar open
-  if (isSidebarOpen && list.children.length) {
-    setTimeout(() => list.children[0].focus(), 100);
-  }
-}
-
-function toggleFav(title, el) {
-  if (favorites.has(title)) favorites.delete(title);
-  else favorites.add(title);
-  localStorage.setItem('favs', JSON.stringify([...favorites]));
-  el.querySelector('.fav').classList.toggle('active');
-  renderChannels(); // refresh stars
 }
 
 // ============== PLAY CHANNEL ==============
-async function playChannel(idx) {
-  if (idx < 0 || idx >= filtered.length || idx === current) return;
+function playChannel(idx) {
+  if (idx < 0 || idx >= filtered.length) return;
   current = idx;
   const ch = filtered[idx];
   nowPlaying.textContent = ch.title;
+  localStorage.setItem('lastChannel', ch.title); // Remember
   showUI();
 
   // Update active
-  document.querySelectorAll('.channel').forEach((el, i) => {
-    el.classList.toggle('active', i === idx);
-  });
+  document.querySelectorAll('.channel').forEach((el, i) => el.classList.toggle('active', i === idx));
 
   // Cleanup & play
-  if (hls) hls.destroy();
-  hls = null;
+  if (hls) { hls.destroy(); hls = null; }
   qualityDiv.innerHTML = '';
 
   if (Hls.isSupported() && ch.url.includes('.m3u8')) {
-    hls = new Hls({enableWorker:true, lowLatencyMode:true});
+    hls = new Hls({enableWorker:true});
     hls.loadSource(ch.url);
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      video.play();
+      video.play().catch(() => {});
       setupQuality();
     });
   } else {
     video.src = ch.url;
-    video.play();
+    video.play().catch(() => {});
   }
 
   hideAfterDelay();
 }
 
-// Quality Selector
+// ============== QUALITY ==============
 function setupQuality() {
   qualityDiv.innerHTML = '<div class="qbtn active">Auto</div>';
   hls.levels.forEach((l, i) => {
@@ -228,6 +211,7 @@ function setupQuality() {
     hls.currentLevel = -1;
     qualityDiv.querySelectorAll('.qbtn').forEach((b,i) => b.classList.toggle('active', i===0));
   };
+  qualityDiv.classList.add('show');
 }
 
 // ============== UI CONTROL ==============
@@ -251,46 +235,66 @@ function hideAfterDelay() {
   }, 4000);
 }
 
-// ============== KEYBOARD / REMOTE ==============
+// ============== KEY HANDLER ==============
+let backPressTimer;
 document.addEventListener('keydown', e => {
   showUI();
   hideAfterDelay();
 
-  // Open/Close Sidebar
-  if (e.key === 'm' || e.key === 'M' || e.key === 'Backspace' || e.key === 'Escape') {
+  // Double Back to Exit
+  if (e.key === 'Backspace' || e.key === 'Escape') {
     e.preventDefault();
-    if (isSidebarOpen) hideSidebar();
-    else showSidebar();
+    if (isSidebarOpen) {
+      hideSidebar();
+      return;
+    }
+    if (backPressCount === 0) {
+      backPressCount = 1;
+      nowPlaying.textContent = "Press Back again to Exit";
+      nowPlaying.classList.add('show');
+      clearTimeout(backPressTimer);
+      backPressTimer = setTimeout(() => { backPressCount = 0; hideAfterDelay(); }, 2000);
+    } else {
+      window.close(); // or Android.finish() if in WebView
+      // For WebView APK: send message to Android
+      if (window.Android) window.Android.exitApp();
+    }
     return;
   }
 
-  // Navigation inside sidebar
+  // Open Menu
+  if (e.key === 'm' || e.key === 'M' || e.key === 'Enter') {
+    e.preventDefault();
+    isSidebarOpen ? hideSidebar() : showSidebar();
+    return;
+  }
+
+  // Only allow Prev/Next via buttons, NOT Left/Right
+  // Left/Right disabled globally
+
+  // Sidebar navigation
   if (isSidebarOpen) {
     const focused = document.activeElement;
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       const next = focused.nextElementSibling || list.firstElementChild;
-      next?.focus();
+      if (next) next.focus();
     }
     if (e.key === 'ArrowUp') {
       e.preventDefault();
       const prev = focused.previousElementSibling || list.lastElementChild;
-      prev?.focus();
-    }
-    if (e.key === 'Enter' || e.key === 'OK') {
-      e.preventDefault();
-      const idx = parseInt(focused.dataset.idx);
-      if (!isNaN(idx)) playChannel(idx);
+      if (prev) prev.focus();
     }
   }
 
-  // Global shortcuts
-  if (e.key === 'ArrowLeft') { e.preventDefault(); playChannel((current - 1 + filtered.length) % filtered.length); }
-  if (e.key === 'ArrowRight') { e.preventDefault(); playChannel((current + 1) % filtered.length); }
-  if (e.key === ' ') { e.preventDefault(); video.paused ? video.play() : video.pause(); }
+  // Space = Play/Pause
+  if (e.key === ' ') {
+    e.preventDefault();
+    video.paused ? video.play() : video.pause();
+  }
 });
 
-// Menu Button
+// ============== SIDEBAR ==============
 menuBtn.onclick = () => isSidebarOpen ? hideSidebar() : showSidebar();
 
 function showSidebar() {
@@ -305,19 +309,20 @@ function hideSidebar() {
   hideAfterDelay();
 }
 
-// Search
+// ============== BUTTONS ==============
+document.getElementById('prev').onclick = () => playChannel((current - 1 + filtered.length) % filtered.length);
+document.getElementById('next').onclick = () => playChannel((current + 1) % filtered.length);
+document.getElementById('play').onclick = () => video.paused ? video.play() : video.pause();
+
+// ============== SEARCH ==============
 search.oninput = () => {
   const q = search.value.toLowerCase();
   filtered = channels.filter(c => c.title.toLowerCase().includes(q));
   renderChannels();
+  if (filtered.length && current >= filtered.length) current = 0;
 };
 
-// Controls
-document.getElementById('prev').onclick = () => playChannel(current - 1);
-document.getElementById('next').onclick = () => playChannel(current + 1);
-document.getElementById('play').onclick = () => video.paused ? video.play() : video.pause();
-
-// Prevent right-click
+// Prevent context menu
 window.addEventListener('contextmenu', e => e.preventDefault());
 
 </script>
