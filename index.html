@@ -3,44 +3,73 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Perfect TV Player</title>
+<title>Perfect OTT TV</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
   :root{--bg:#000;--accent:#00ff9d;--text:#fff;--muted:#aaa}
   *{margin:0;padding:0;box-sizing:border-box}
-  body,html{height:100%;background:var(--bg);color:var(--text);font-family:Roboto,Arial,sans-serif;overflow:hidden}
-  video{width:100%;height:100%;object-fit:contain;background:#000}
+  html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',Roboto,Arial,sans-serif;overflow:hidden}
+  video{width:100%;height:100%;object-fit:contain;background:#000;position:absolute;top:0;left:0;z-index:1}
 
-  /* Hidden by default - pure cinema mode */
-  .ui-layer{position:absolute;inset:0;pointer-events:none;z-index:10}
-  .menu-btn{position:absolute;top:20px;left:20px;padding:12px 18px;background:rgba(0,0,0,0.6);border:2px solid var(--accent);border-radius:50px;font-size:18px;opacity:0;transition:all .4s;pointer-events:all;cursor:pointer}
-  .menu-btn.show{opacity:1;transform:scale(1)} 
-  .menu-btn.hide{opacity:0;transform:scale(0.8)}
+  /* Top Center Channel Name */
+  .now-playing{
+    position:absolute;top:30px;left:50%;transform:translateX(-50%);
+    background:rgba(0,0,0,0.75);padding:14px 40px;border-radius:50px;
+    font-size:22px;font-weight:600;letter-spacing:1px;z-index:10;
+    opacity:0;transition:opacity .6s ease, transform .6s ease;
+    pointer-events:none;white-space:nowrap;max-width:90%;
+    text-overflow:ellipsis;overflow:hidden;
+  }
+  .now-playing.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-  /* Sidebar - slides in */
-  .sidebar{position:absolute;top:0;left:-450px;width:420px;height:100%;background:rgba(10,10,20,0.98);backdrop-filter:blur(20px);transition:left .4s ease;z-index:20;padding:20px;display:flex;flex-direction:column;gap:16px}
+  /* Menu Button (Top Left) */
+  .menu-btn{
+    position:absolute;top:30px;left:30px;padding:14px 20px;
+    background:rgba(0,0,0,0.7);border:2px solid var(--accent);border-radius:50px;
+    font-size:18px;z-index:15;opacity:0;transition:all .4s;pointer-events:all;cursor:pointer
+  }
+  .menu-btn.show{opacity:1}
+
+  /* Sidebar */
+  .sidebar{
+    position:absolute;top:0;left:-480px;width:480px;height:100%;background:rgba(15,15,35,0.98);
+    backdrop-filter:blur(20px);transition:left .5s cubic-bezier(0.2,0.8,0.2,1);z-index:20;
+    padding:20px;display:flex;flex-direction:column;gap:16px
+  }
   .sidebar.visible{left:0}
 
-  .search{padding:14px;border-radius:12px;border:none;background:rgba(255,255,255,0.1);color:white;font-size:16px}
-  .channel-list{flex:1;overflow-y:auto}
-  .channel{padding:14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:.2s;cursor:pointer}
-  .channel:focus,.channel:hover{background:rgba(0,255,157,0.15)}
+  .search{
+    padding:16px;border-radius:16px;border:none;background:rgba(255,255,255,0.12);color:white;
+    font-size:18px;outline:none
+  }
+  .channel-list{flex:1;overflow-y:auto;padding-right:8px}
+  .channel{
+    padding:16px 18px;border-radius:16px;display:flex;align-items:center;justify-content:space-between;
+    gap:16px;transition:.25s;cursor:pointer;margin:4px 0
+  }
+  .channel:focus{
+    background:var(--accent);color:#000;transform:scale(1.02);outline:none
+  }
+  .channel:hover{background:rgba(0,255,157,0.2)}
   .channel.active{background:var(--accent);color:#000;font-weight:bold}
-  .channel-title{flex:1;font-size:17px}
-  .fav-btn{font-size:20px;opacity:0.6}
-  .fav-btn.active{opacity:1;color:#ff9800}
+  .channel-title{flex:1;font-size:18px}
+  .fav{font-size:24px;opacity:0.7}
+  .fav.active{color:#ffd700;opacity:1}
 
-  /* Bottom info - current channel */
-  .now-playing{position:absolute;bottom:30px;left:30px;background:rgba(0,0,0,0.7);padding:10px 20px;border-radius:50px;font-size:18px;opacity:0;transition:opacity .5s}
+  /* Bottom Controls */
+  .controls{
+    position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+    background:rgba(0,0,0,0.7);padding:16px 40px;border-radius:50px;
+    display:flex;align-items:center;gap:24px;z-index:10;opacity:0;transition:opacity .5s
+  }
+  .controls.show{opacity:1}
+  .btn{padding:14px 28px;background:rgba(255,255,255,0.15);border-radius:50px;font-size:20px;cursor:pointer}
 
-  /* Controls bar - appears only on navigation */
-  .controls-bar{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,#111);padding:30px 40px;display:flex;align-items:center;gap:20px;opacity:0;transition:opacity .4s;pointer-events:none}
-  .controls-bar.show{opacity:1;pointer-events:all}
-  .ctrl-btn{padding:14px 24px;background:rgba(255,255,255,0.15);border-radius:50px;font-size:20px;border:none;color:white;cursor:pointer}
-
-  .quality-list{position:absolute;bottom:100px;right:40px;display:flex;gap:10px;flex-wrap:wrap;opacity:0;transition:opacity .4s}
-  .quality-list.show{opacity:1}
-  .qbtn{padding:8px 14px;background:rgba(255,255,255,0.2);border-radius:8px;font-size:14px}
+  .quality{
+    position:absolute;bottom:110px;right:40px;display:flex;gap:10px;opacity:0;transition:opacity .5s
+  }
+  .quality.show{opacity:1}
+  .qbtn{padding:8px 16px;background:rgba(255,255,255,0.2);border-radius:10px;font-size:14px;cursor:pointer}
   .qbtn.active{background:var(--accent);color:#000}
 </style>
 </head>
@@ -48,46 +77,46 @@
 
 <video id="video" playsinline webkit-playsinline></video>
 
-<div class="ui-layer">
-  <button id="menuBtn" class="menu-btn">Menu</button>
-  <div id="nowPlaying" class="now-playing">Loading...</div>
+<!-- Top Center Channel Name -->
+<div id="nowPlaying" class="now-playing">Loading...</div>
 
-  <div class="controls-bar" id="controls">
-    <button class="ctrl-btn" id="prevBtn">Previous</button>
-    <button class="ctrl-btn" id="playBtn">Play</button>
-    <button class="ctrl-btn" id="nextBtn">Next</button>
-    <div style="flex:1"></div>
-    <div id="qualityList" class="quality-list"></div>
-  </div>
+<!-- Menu Button -->
+<button id="menuBtn" class="menu-btn">Menu</button>
+
+<!-- Bottom Controls -->
+<div id="controls" class="controls">
+  <button class="btn" id="prev">Previous</button>
+  <button class="btn" id="play">Play</button>
+  <button class="btn" id="next">Next</button>
 </div>
 
-<!-- Sliding Sidebar -->
-<aside class="sidebar" id="sidebar">
+<!-- Quality Selector -->
+<div id="quality" class="quality"></div>
+
+<!-- Sidebar -->
+<aside id="sidebar" class="sidebar">
   <input type="text" id="search" class="search" placeholder="Search channels..." autocomplete="off">
-  <div id="channelList" class="channel-list"></div>
-  <div style="text-align:center;color:#666;font-size:14px">
-    Favorites: Long-press OK • DPAD: Navigate • Back: Hide
-  </div>
+  <div id="list" class="channel-list" tabindex="0"></div>
 </aside>
 
 <script>
 // ============== STATE ==============
 const video = document.getElementById('video');
+const nowPlaying = document.getElementById('nowPlaying');
 const menuBtn = document.getElementById('menuBtn');
 const sidebar = document.getElementById('sidebar');
-const channelList = document.getElementById('channelList');
-const nowPlaying = document.getElementById('nowPlaying');
+const list = document.getElementById('list');
+const search = document.getElementById('search');
 const controls = document.getElementById('controls');
-const qualityList = document.getElementById('qualityList');
-const searchInput = document.getElementById('search');
+const qualityDiv = document.getElementById('quality');
 
 let channels = [], filtered = [], current = -1;
-let hls = null, preHls = null;
+let hls = null;
 let hideTimer = null;
-let isSidebarVisible = false;
-let favorites = JSON.parse(localStorage.getItem('tv_favs') || '[]');
+let isSidebarOpen = false;
+let favorites = new Set(JSON.parse(localStorage.getItem('favs') || '[]'));
 
-// ============== LOAD PLAYLIST ==============
+// ============== LOAD M3U ==============
 fetch('https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u?t=' + Date.now())
   .then(r => r.text())
   .then(text => {
@@ -95,8 +124,10 @@ fetch('https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u?t=
     for (let i = 0; i < lines.length; i++) {
       if (lines[i].startsWith('#EXTINF')) {
         const title = lines[i].split(',').slice(1).join(',').trim();
-        const url = lines[i+1]?.trim();
-        if (url && !url.startsWith('#')) channels.push({title, url, fav: favorites.includes(title)});
+        const url = lines[i + 1]?.trim();
+        if (url && !url.startsWith('#')) {
+          channels.push({title, url, fav: favorites.has(title)});
+        }
       }
     }
     filtered = channels.slice();
@@ -106,52 +137,65 @@ fetch('https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u?t=
 
 // ============== RENDER CHANNELS ==============
 function renderChannels() {
-  channelList.innerHTML = '';
+  list.innerHTML = '';
   filtered.forEach((ch, i) => {
     const div = document.createElement('div');
     div.className = 'channel';
     div.tabIndex = 0;
+    div.dataset.idx = i;
     div.innerHTML = `
       <span class="channel-title">${ch.title}</span>
-      <span class="fav-btn ${ch.fav?'active':''}">Star</span>
+      <span class="fav ${ch.fav?'active':''}">Star</span>
     `;
     div.onclick = () => playChannel(i);
     div.onkeydown = e => {
-      if (e.key === 'Enter') playChannel(i);
-      if (e.key === 'OK' || e.key === ' ') { e.preventDefault(); toggleFav(ch.title, div); }
+      if (e.key === 'Enter' || e.key === 'OK') {
+        e.preventDefault();
+        playChannel(i);
+      }
+      if (e.key === ' ' || e.key === 'ContextMenu') {
+        e.preventDefault();
+        toggleFav(ch.title, div);
+      }
     };
-    div.onfocus = () => div.style.background = 'rgba(0,255,157,0.2)';
-    div.onblur = () => div.style.background = '';
     if (i === current) div.classList.add('active');
-    channelList.appendChild(div);
+    list.appendChild(div);
   });
+
+  // Auto-focus first item if sidebar open
+  if (isSidebarOpen && list.children.length) {
+    setTimeout(() => list.children[0].focus(), 100);
+  }
 }
 
 function toggleFav(title, el) {
-  const idx = favorites.indexOf(title);
-  if (idx === -1) favorites.push(title);
-  else favorites.splice(idx, 1);
-  localStorage.setItem('tv_favs', JSON.stringify(favorites));
-  el.querySelector('.fav-btn').classList.toggle('active');
+  if (favorites.has(title)) favorites.delete(title);
+  else favorites.add(title);
+  localStorage.setItem('favs', JSON.stringify([...favorites]));
+  el.querySelector('.fav').classList.toggle('active');
+  renderChannels(); // refresh stars
 }
 
 // ============== PLAY CHANNEL ==============
 async function playChannel(idx) {
-  if (idx < 0 || idx >= filtered.length) return;
+  if (idx < 0 || idx >= filtered.length || idx === current) return;
   current = idx;
   const ch = filtered[idx];
   nowPlaying.textContent = ch.title;
-  showNowPlaying();
+  showUI();
 
-  // Update active state
-  [...channelList.children].forEach((el,i) => el.classList.toggle('active', i===idx));
+  // Update active
+  document.querySelectorAll('.channel').forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
+  });
 
-  // Cleanup old
+  // Cleanup & play
   if (hls) hls.destroy();
-  if (preHls) preHls.destroy();
+  hls = null;
+  qualityDiv.innerHTML = '';
 
   if (Hls.isSupported() && ch.url.includes('.m3u8')) {
-    hls = new Hls({enableWorker: true});
+    hls = new Hls({enableWorker:true, lowLatencyMode:true});
     hls.loadSource(ch.url);
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -163,101 +207,119 @@ async function playChannel(idx) {
     video.play();
   }
 
-  hideUIAfterDelay();
+  hideAfterDelay();
 }
 
-// ============== QUALITY ==============
+// Quality Selector
 function setupQuality() {
-  qualityList.innerHTML = '<div class="qbtn active">Auto</div>';
-  hls.levels.forEach((l,i) => {
+  qualityDiv.innerHTML = '<div class="qbtn active">Auto</div>';
+  hls.levels.forEach((l, i) => {
     const btn = document.createElement('div');
     btn.className = 'qbtn';
     btn.textContent = l.height + 'p';
     btn.onclick = () => {
       hls.currentLevel = i;
-      [...qualityList.children].forEach(b => b.classList.remove('active'));
+      qualityDiv.querySelectorAll('.qbtn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     };
-    qualityList.appendChild(btn);
+    qualityDiv.appendChild(btn);
   });
-  qualityList.children[0].onclick = () => {
+  qualityDiv.children[0].onclick = () => {
     hls.currentLevel = -1;
-    [...qualityList.children].forEach((b,i) => b.classList.toggle('active', i===0));
+    qualityDiv.querySelectorAll('.qbtn').forEach((b,i) => b.classList.toggle('active', i===0));
   };
 }
 
 // ============== UI CONTROL ==============
-function showMenuButton() {
+function showUI() {
+  nowPlaying.classList.add('show');
   menuBtn.classList.add('show');
-  menuBtn.classList.remove('hide');
+  controls.classList.add('show');
+  qualityDiv.classList.add('show');
+  clearTimeout(hideTimer);
 }
-function hideMenuButton() {
-  menuBtn.classList.remove('show');
-  menuBtn.classList.add('hide');
-}
-function showNowPlaying() {
-  nowPlaying.style.opacity = '1';
-}
-function hideUIAfterDelay() {
+
+function hideAfterDelay() {
   clearTimeout(hideTimer);
   hideTimer = setTimeout(() => {
-    if (!isSidebarVisible) {
-      hideMenuButton();
-      nowPlaying.style.opacity = '0';
+    if (!isSidebarOpen) {
+      nowPlaying.classList.remove('show');
+      menuBtn.classList.remove('show');
       controls.classList.remove('show');
-      qualityList.classList.remove('show');
+      qualityDiv.classList.remove('show');
     }
-  }, 5000);
+  }, 4000);
 }
 
-// Show UI on any key
+// ============== KEYBOARD / REMOTE ==============
 document.addEventListener('keydown', e => {
-  showMenuButton();
-  showNowPlaying();
-  controls.classList.add('show');
-  qualityList.classList.add('show');
-  hideUIAfterDelay();
+  showUI();
+  hideAfterDelay();
 
-  if (e.key === 'Backspace' || e.key === 'Escape') {
-    if (isSidebarVisible) { hideSidebar(); e.preventDefault(); }
+  // Open/Close Sidebar
+  if (e.key === 'm' || e.key === 'M' || e.key === 'Backspace' || e.key === 'Escape') {
+    e.preventDefault();
+    if (isSidebarOpen) hideSidebar();
+    else showSidebar();
+    return;
   }
+
+  // Navigation inside sidebar
+  if (isSidebarOpen) {
+    const focused = document.activeElement;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      const next = focused.nextElementSibling || list.firstElementChild;
+      next?.focus();
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const prev = focused.previousElementSibling || list.lastElementChild;
+      prev?.focus();
+    }
+    if (e.key === 'Enter' || e.key === 'OK') {
+      e.preventDefault();
+      const idx = parseInt(focused.dataset.idx);
+      if (!isNaN(idx)) playChannel(idx);
+    }
+  }
+
+  // Global shortcuts
+  if (e.key === 'ArrowLeft') { e.preventDefault(); playChannel((current - 1 + filtered.length) % filtered.length); }
+  if (e.key === 'ArrowRight') { e.preventDefault(); playChannel((current + 1) % filtered.length); }
+  if (e.key === ' ') { e.preventDefault(); video.paused ? video.play() : video.pause(); }
 });
 
-// Menu button
-menuBtn.onclick = () => {
-  if (isSidebarVisible) hideSidebar();
-  else showSidebar();
-};
+// Menu Button
+menuBtn.onclick = () => isSidebarOpen ? hideSidebar() : showSidebar();
 
 function showSidebar() {
   sidebar.classList.add('visible');
-  isSidebarVisible = true;
-  setTimeout(() => searchInput.focus(), 400);
+  isSidebarOpen = true;
+  search.focus();
+  showUI();
 }
 function hideSidebar() {
   sidebar.classList.remove('visible');
-  isSidebarVisible = false;
-  hideUIAfterDelay();
+  isSidebarOpen = false;
+  hideAfterDelay();
 }
 
-// Navigation
-document.getElementById('prevBtn').onclick = () => playChannel((current - 1 + filtered.length) % filtered.length);
-document.getElementById('nextBtn').onclick = () => playChannel((current + 1) % filtered.length);
-document.getElementById('playBtn').onclick = () => video.paused ? video.play() : video.pause();
-
 // Search
-searchInput.addEventListener('input', () => {
-  const q = searchInput.value.toLowerCase();
+search.oninput = () => {
+  const q = search.value.toLowerCase();
   filtered = channels.filter(c => c.title.toLowerCase().includes(q));
   renderChannels();
-});
+};
 
-// Start hidden
-hideMenuButton();
-nowPlaying.style.opacity = '0';
+// Controls
+document.getElementById('prev').onclick = () => playChannel(current - 1);
+document.getElementById('next').onclick = () => playChannel(current + 1);
+document.getElementById('play').onclick = () => video.paused ? video.play() : video.pause();
 
-// Prevent context menu
+// Prevent right-click
 window.addEventListener('contextmenu', e => e.preventDefault());
+
 </script>
 </body>
 </html>
