@@ -1,361 +1,699 @@
-Currently using below code  
-<!DOCTYPE html>  
-<html lang="en">  
-<head>  
-<meta charset="utf-8">  
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">  
-<title>Perfect TV Pro</title>  
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>  
-<style>  
-  :root{--bg:#000;--accent:#00ff9d;--text:#fff;--muted:#aaa}  
-  *{margin:0;padding:0;box-sizing:border-box}  
-  html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',Roboto,Arial,sans-serif;overflow:hidden}  
-  video{width:100%;height:100%;object-fit:contain;background:#000;position:fixed;top:0;left:0;z-index:1}  
-  
-  /* Top Center Channel Name */  
-  .now-playing{  
-    position:fixed;top:5px;left:50%;transform:translateX(-50%);  
-    background:rgba(0,0,0,0.85);padding:14px 40px;border-radius:50px;  
-    font-size:22px;font-weight:600;z-index:10;opacity:0;transition:all .5s;  
-    white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;  
-  }  
-  .now-playing.show{opacity:1}  
-  
-  /* Menu Button */  
-  .menu-btn{  
-    position:fixed;top:5px;left:30px;padding:12px 20px;  
-    background:rgba(0,0,0,0.7);border:2px solid var(--accent);border-radius:50px;  
-    font-size:18px;z-index:15;opacity:0;transition:all .4s;cursor:pointer  
-  }  
-  .menu-btn.show{opacity:1}  
-  
-  /* Quality Button */  
-  .quality-btn{  
-    position:fixed;bottom:10px;right:30px;padding:12px 20px;  
-    background:rgba(0,0,0,0.7);border:2px solid var(--accent);border-radius:50px;  
-    font-size:16px;z-index:15;opacity:0;transition:all .4s;cursor:pointer  
-  }  
-  .quality-btn.show{opacity:1}  
-  
-  /* Quality Menu (Vertical, DPAD Navigable) */  
-  .quality-menu{  
-    position:fixed;bottom:10px;right:30px;width:180px;  
-    background:rgba(20,20,40,0.98);backdrop-filter:blur(20px);  
-    border:2px solid var(--accent);border-radius:16px;  
-    padding:12px 0;z-index:20;opacity:0;transform:scale(0.9);  
-    transition:all .3s;pointer-events:none  
-  }  
-  .quality-menu.show{opacity:1;transform:scale(1);pointer-events:all}  
-  .q-item{  
-    padding:14px 20px;font-size:18px;cursor:pointer;transition:.2s  
-  }  
-  .q-item:focus{background:var(--accent);color:#000;outline:none}  
-  .q-item.active{font-weight:bold}  
-  
-  /* Bottom Controls */  
-  .controls{  
-    position:fixed;bottom:10px;left:50%;transform:translateX(-50%);  
-    background:rgba(0,0,0,0.8);padding:12px 30px;border-radius:50px;  
-    display:flex;gap:20px;z-index:10;opacity:0;transition:opacity .5s  
-  }  
-  .controls.show{opacity:1}  
-  .btn{  
-    padding:12px 24px;background:rgba(255,255,255,0.15);  
-    border:none;border-radius:50px;font-size:18px;color:white;cursor:pointer  
-  }  
-  
-  /* Sidebar */  
-  .sidebar{  
-    position:fixed;top:0;left:-480px;width:240px;height:100%;  
-    background:rgba(10,10,30,0.98);backdrop-filter:blur(20px);  
-    transition:left .4s cubic-bezier(0.2,0.8,0.2,1);z-index:20;  
-    padding:20px;display:flex;flex-direction:column;gap:16px  
-  }  
-  .sidebar.visible{left:0}  
-  .search{padding:16px;border-radius:16px;background:rgba(255,255,255,0.12);border:none;color:white;font-size:18px;outline:none}  
-  .channel-list{flex:1;overflow-y:auto}  
-  .channel{padding:16px 20px;border-radius:16px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:4px 0;transition:.2s;cursor:pointer}  
-  .channel:focus{background:var(--accent);color:#000;transform:scale(1.02)}  
-  .channel.active{background:var(--accent);color:#000;font-weight:bold}  
-  .channel-title{flex:1;font-size:18px}  
-</style>  
-</head>  
-<body>  
-  
-<video id="video" playsinline webkit-playsinline></video>  
-  
-<div id="nowPlaying" class="now-playing">Loading...</div>  
-<button id="menuBtn" class="menu-btn">Menu</button>  
-<button id="qualityBtn" class="quality-btn">Quality</button>  
-  
-<div id="controls" class="controls">  
-  <button class="btn" id="prev">Previous</button>  
-  <button class="btn" id="play">Play</button>  
-  <button class="btn" id="next">Next</button>  
-</div>  
-  
-<!-- Quality Menu -->  
-<div id="qualityMenu" class="quality-menu"></div>  
-  
-<aside id="sidebar" class="sidebar">  
-  <input type="text" id="search" class="search" placeholder="Search channels..." autocomplete="off">  
-  <div id="list" class="channel-list" tabindex="-1"></div>  
-</aside>  
-  
-<script>  
-// ============== STATE ==============  
-const video = document.getElementById('video');  
-const nowPlaying = document.getElementById('nowPlaying');  
-const menuBtn = document.getElementById('menuBtn');  
-const qualityBtn = document.getElementById('qualityBtn');  
-const qualityMenu = document.getElementById('qualityMenu');  
-const controls = document.getElementById('controls');  
-const sidebar = document.getElementById('sidebar');  
-const list = document.getElementById('list');  
-const search = document.getElementById('search');  
-  
-let channels = [], filtered = [], current = -1;  
-let hls = null;  
-let hideTimer = null;  
-let isSidebarOpen = false;  
-let isQualityOpen = false;  
-let backPressCount = 0;  
-  
-// ============== LOAD & RESUME LAST CHANNEL ==============  
-const lastChannel = localStorage.getItem('lastChannel');  
-  
-fetch('https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u?t=' + Date.now())  
-  .then(r => r.ok ? r.text() : Promise.reject())  
-  .then(text => {  
-    const lines = text.split(/\r?\n/);  
-    for (let i = 0; i < lines.length; i++) {  
-      if (lines[i].startsWith('#EXTINF')) {  
-        const title = lines[i].split(',').slice(1).join(',').trim();  
-        const url = lines[i + 1]?.trim();  
-        if (url && !url.startsWith('#')) channels.push({title, url});  
-      }  
-    }  
-    filtered = channels.slice();  
-    renderChannels();  
-  
-    const idx = lastChannel ? channels.findIndex(c => c.title === lastChannel) : 0;  
-    playChannel(idx >= 0 ? idx : 0);  
-  })  
-  .catch(() => nowPlaying.textContent = "No Internet");  
-  
-// ============== RENDER CHANNELS ==============  
-function renderChannels() {  
-  list.innerHTML = '';  
-  filtered.forEach((ch, i) => {  
-    const div = document.createElement('div');  
-    div.className = 'channel';  
-    div.tabIndex = 0;  
-    div.dataset.idx = i;  
-    div.innerHTML = `<span class="channel-title">${ch.title}</span>`;  
-    div.onclick = () => { playChannel(i); hideSidebar(); };  
-    div.onkeydown = e => {  
-      if (e.key === 'Enter' || e.key === ' ') {  
-        e.preventDefault();  
-        playChannel(i);  
-        hideSidebar();  
-      }  
-    };  
-    if (i === current) div.classList.add('active');  
-    list.appendChild(div);  
-  });  
-}  
-  
-// ============== PLAY CHANNEL ==============  
-function playChannel(idx) {  
-  if (idx < 0 || idx >= filtered.length || idx === current) return;  
-  current = idx;  
-  const ch = filtered[idx];  
-  nowPlaying.textContent = ch.title;  
-  localStorage.setItem('lastChannel', ch.title);  
-  showUI();  
-  
-  document.querySelectorAll('.channel').forEach((el, i) => el.classList.toggle('active', i === idx));  
-  
-  if (hls) { hls.destroy(); hls = null; }  
-  qualityMenu.innerHTML = '';  
-  
-  if (Hls.isSupported() && ch.url.includes('.m3u8')) {  
-    hls = new Hls({enableWorker:true});  
-    hls.loadSource(ch.url);  
-    hls.attachMedia(video);  
-    hls.on(Hls.Events.MANIFEST_PARSED, () => {  
-      video.play().catch(() => {});  
-      buildQualityMenu();  
-    });  
-  } else {  
-    video.src = ch.url;  
-    video.play().catch(() => {});  
-  }  
-  
-  hideAfterDelay();  
-}  
-  
-// ============== QUALITY MENU ==============  
-function buildQualityMenu() {  
-  qualityMenu.innerHTML = '';  
-  const levels = [{name: 'Auto', level: -1}, ...hls.levels.map((l,i) => ({name: l.height + 'p', level: i}))];  
-  
-  levels.forEach((lvl, i) => {  
-    const item = document.createElement('div');  
-    item.className = 'q-item';  
-    item.tabIndex = 0;  
-    item.textContent = lvl.name;  
-    if (hls.currentLevel === lvl.level) item.classList.add('active');  
-    item.onclick = item.onkeydown = e => {  
-      if (e.type === 'click' || e.key === 'Enter') {  
-        hls.currentLevel = lvl.level;  
-        qualityMenu.querySelectorAll('.q-item').forEach(el => el.classList.remove('active'));  
-        item.classList.add('active');  
-        hideQualityMenu();  
-      }  
-    };  
-    qualityMenu.appendChild(item);  
-  });  
-  
-  // Auto focus first item when opened  
-  if (isQualityOpen) setTimeout(() => qualityMenu.firstChild?.focus(), 100);  
-}  
-  
-function showQualityMenu() {  
-  if (!hls) return;  
-  isQualityOpen = true;  
-  qualityMenu.classList.add('show');  
-  buildQualityMenu();  
-  showUI();  
-}  
-function hideQualityMenu() {  
-  isQualityOpen = false;  
-  qualityMenu.classList.remove('show');  
-  hideAfterDelay();  
-}  
-  
-// ============== UI CONTROL ==============  
-function showUI() {  
-  nowPlaying.classList.add('show');  
-  menuBtn.classList.add('show');  
-  qualityBtn.classList.add('show');  
-  controls.classList.add('show');  
-  clearTimeout(hideTimer);  
-}  
-function hideAfterDelay() {  
-  clearTimeout(hideTimer);  
-  hideTimer = setTimeout(() => {  
-    if (!isSidebarOpen && !isQualityOpen) {  
-      nowPlaying.classList.remove('show');  
-      menuBtn.classList.remove('show');  
-      qualityBtn.classList.remove('show');  
-      controls.classList.remove('show');  
-    }  
-  }, 4000);  
-}  
-  
-// ============== KEY HANDLER ==============  
-let backTimer;  
-document.addEventListener('keydown', e => {  
-  showUI();  
-  hideAfterDelay();  
-  
-  if (e.key === 'Backspace' || e.key === 'Escape') {  
-    e.preventDefault();  
-    if (isQualityOpen) { hideQualityMenu(); return; }  
-    if (isSidebarOpen) { hideSidebar(); return; }  
-    if (backPressCount === 0) {  
-      backPressCount = 1;  
-      nowPlaying.textContent = "Press Back again to Exit";  
-      nowPlaying.classList.add('show');  
-      clearTimeout(backTimer);  
-      backTimer = setTimeout(() => { backPressCount = 0; hideAfterDelay(); }, 2000);  
-    } else {  
-      if (window.Android) window.Android.exitApp();  
-      else window.close();  
-    }  
-    return;  
-  }  
-  
-  if (e.key === 'm' || e.key === 'M') {  
-    e.preventDefault();  
-    isSidebarOpen ? hideSidebar() : showSidebar();  
-    return;  
-  }  
-  
-  // Quality menu navigation  
-  if (isQualityOpen) {  
-    const focused = document.activeElement;  
-    if (e.key === 'ArrowDown') {  
-      e.preventDefault();  
-      const next = focused.nextElementSibling || qualityMenu.firstChild;  
-      next?.focus();  
-    }  
-    if (e.key === 'ArrowUp') {  
-      e.preventDefault();  
-      const prev = focused.previousElementSibling || qualityMenu.lastChild;  
-      prev?.focus();  
-    }  
-    return;  
-  }  
-  
-  // Sidebar navigation  
-  if (isSidebarOpen) {  
-    const focused = document.activeElement;  
-    if (e.key === 'ArrowDown') {  
-      e.preventDefault();  
-      const next = focused.nextElementSibling || list.firstElementChild;  
-      next?.focus();  
-    }  
-    if (e.key === 'ArrowUp') {  
-      e.preventDefault();  
-      const prev = focused.previousElementSibling || list.lastElementChild;  
-      prev?.focus();  
-    }  
-  }  
-  
-  if (e.key === ' ') {  
-    e.preventDefault();  
-    video.paused ? video.play() : video.pause();  
-  }  
-});  
-  
-// ============== BUTTONS ==============  
-menuBtn.onclick = () => isSidebarOpen ? hideSidebar() : showSidebar();  
-qualityBtn.onclick = () => isQualityOpen ? hideQualityMenu() : showQualityMenu();  
-  
-document.getElementById('prev').onclick = () => playChannel((current - 1 + filtered.length) % filtered.length);  
-document.getElementById('next').onclick = () => playChannel((current + 1) % filtered.length);  
-document.getElementById('play').onclick = () => video.paused ? video.play() : video.pause();  
-  
-// ============== SIDEBAR ==============  
-/*function showSidebar() {  
-  sidebar.classList.add('visible');  
-  isSidebarOpen = true;  
-  search.focus();  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Perfect TV Pro</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+:root{
+  --bg:#000;--accent:#00ff9d;--text:#fff;--muted:#aaa
 }
-*/
-function showSidebar() {
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{
+  height:100%;background:var(--bg);color:var(--text);
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;
+  overflow:hidden
+}
+
+/* VIDEO */
+video{
+  width:100%;height:100%;
+  position:fixed;top:0;left:0;
+  background:#000;
+  object-fit:contain;
+  z-index:1
+}
+
+/* NOW PLAYING */
+.now-playing{
+  position:fixed;top:5px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,0.85);
+  padding:14px 40px;border-radius:50px;
+  font-size:22px;font-weight:600;
+  z-index:10;opacity:0;transition:.5s;
+  white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;
+}
+.now-playing.show{opacity:1}
+
+/* MENU BUTTON */
+.menu-btn{
+  position:fixed;top:5px;left:30px;
+  padding:12px 20px;
+  background:rgba(0,0,0,0.7);
+  border:2px solid var(--accent);
+  border-radius:50px;font-size:18px;
+  z-index:15;opacity:0;transition:.4s;cursor:pointer
+}
+.menu-btn.show{opacity:1}
+
+/* QUALITY BUTTON */
+.quality-btn{
+  position:fixed;bottom:10px;right:30px;
+  padding:12px 20px;
+  background:rgba(0,0,0,0.7);
+  border:2px solid var(--accent);
+  border-radius:50px;font-size:16px;
+  z-index:15;opacity:0;transition:.4s;cursor:pointer
+}
+.quality-btn.show{opacity:1}
+
+/* QUALITY MENU */
+.quality-menu{
+  position:fixed;bottom:10px;right:30px;width:200px;
+  background:rgba(20,20,40,0.98);backdrop-filter:blur(20px);
+  border:2px solid var(--accent);border-radius:16px;
+  padding:12px 0;z-index:20;opacity:0;transform:scale(.9);
+  transition:.3s;pointer-events:none
+}
+.quality-menu.show{
+  opacity:1;transform:scale(1);pointer-events:all
+}
+.q-item{
+  padding:14px 20px;font-size:18px;cursor:pointer;transition:.2s
+}
+.q-item:focus{
+  background:var(--accent);color:#000;outline:none
+}
+.q-item.active{font-weight:bold}
+
+/* BOTTOM CONTROLS */
+.controls{
+  position:fixed;bottom:10px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,0.8);
+  padding:12px 30px;border-radius:50px;
+  display:flex;gap:20px;z-index:10;opacity:0;transition:.5s
+}
+.controls.show{opacity:1}
+.btn{
+  padding:12px 24px;background:rgba(255,255,255,0.15);
+  border:none;border-radius:50px;font-size:18px;color:#fff;cursor:pointer
+}
+
+/* SIDEBAR */
+.sidebar{
+  position:fixed;top:0;left:-360px;width:260px;height:100%;
+  background:rgba(10,10,30,0.98);backdrop-filter:blur(20px);
+  transition:.4s cubic-bezier(.2,.8,.2,1);
+  z-index:20;padding:20px;
+  display:flex;flex-direction:column;gap:16px
+}
+.sidebar.visible{left:0}
+.search{
+  padding:14px;border-radius:14px;font-size:18px;
+  background:rgba(255,255,255,0.12);border:none;color:#fff;
+}
+.channel-list{
+  flex:1;overflow-y:auto
+}
+.channel{
+  padding:12px 16px;
+  border-radius:14px;
+  display:flex;align-items:center;
+  justify-content:space-between;
+  margin:4px 0;
+  cursor:pointer;transition:.2s
+}
+.channel:focus{
+  background:var(--accent);color:#000;transform:scale(1.02)
+}
+.channel.active{
+  background:var(--accent);color:#000;font-weight:bold
+}
+.fav{
+  font-size:22px;margin-left:8px;cursor:pointer
+}
+
+/* FAVORITES BAR */
+#favBar{
+  position:fixed;top:60px;left:0;width:100%;
+  padding:10px;
+  overflow-x:auto;white-space:nowrap;
+  background:rgba(0,0,0,0.6);color:#fff;
+  z-index:5
+}
+.favBtn{
+  background:rgba(255,255,255,0.15);
+  border:none;color:#fff;
+  padding:10px 20px;
+  margin-right:8px;
+  border-radius:20px;
+  cursor:pointer;font-size:16px;
+}
+.favBtn:focus{outline:none;background:var(--accent);color:#000}
+</style>
+</head>
+<body>
+<video id="video" playsinline webkit-playsinline></video>
+
+<div id="nowPlaying" class="now-playing">Loading...</div>
+
+<button id="menuBtn" class="menu-btn">Menu</button>
+<button id="qualityBtn" class="quality-btn">Quality</button>
+
+<!-- Favorites bar (shows favorites as quick buttons) -->
+<div id="favBar" style="display:none;"></div>
+
+<div id="controls" class="controls">
+  <button class="btn" id="prev">Previous</button>
+  <button class="btn" id="play">Play</button>
+  <button class="btn" id="next">Next</button>
+</div>
+
+<!-- Quality Menu -->
+<div id="qualityMenu" class="quality-menu" aria-hidden="true"></div>
+
+<aside id="sidebar" class="sidebar" aria-hidden="true">
+  <input type="text" id="search" class="search" placeholder="Search channels..." autocomplete="off" />
+  <div id="list" class="channel-list" tabindex="-1"></div>
+</aside>
+
+<script>
+/* ---------------------------
+   State & Elements
+   --------------------------- */
+const video = document.getElementById('video');
+const nowPlaying = document.getElementById('nowPlaying');
+const menuBtn = document.getElementById('menuBtn');
+const qualityBtn = document.getElementById('qualityBtn');
+const qualityMenu = document.getElementById('qualityMenu');
+const controls = document.getElementById('controls');
+const sidebar = document.getElementById('sidebar');
+const list = document.getElementById('list');
+const search = document.getElementById('search');
+const favBar = document.getElementById('favBar');
+
+let channels = [];                 // original full list [{title,url}]
+let current = -1;                  // current channel index (in channels array)
+let hls = null;
+let hideTimer = null;
+let isSidebarOpen = false;
+let isQualityOpen = false;
+let backPressCount = 0;
+let numericBuffer = '';
+let numericTimer = null;
+
+// favorites stored as array of original channel indices
+let favorites = JSON.parse(localStorage.getItem('tv_favorites') || '[]');
+
+/* ---------------------------
+   Helpers
+   --------------------------- */
+const $ = s => document.querySelector(s);
+function showUI(){
+  nowPlaying.classList.add('show');
+  menuBtn.classList.add('show');
+  qualityBtn.classList.add('show');
+  controls.classList.add('show');
+  clearTimeout(hideTimer);
+}
+function hideAfterDelay(ms=4000){
+  clearTimeout(hideTimer);
+  hideTimer = setTimeout(()=>{
+    if(!isSidebarOpen && !isQualityOpen){
+      nowPlaying.classList.remove('show');
+      menuBtn.classList.remove('show');
+      qualityBtn.classList.remove('show');
+      controls.classList.remove('show');
+    }
+  }, ms);
+}
+function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+
+/* ---------------------------
+   Load M3U
+   --------------------------- */
+fetch('https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u?t=' + Date.now())
+  .then(r => r.ok ? r.text() : Promise.reject('HTTP ' + r.status))
+  .then(parseM3U)
+  .catch(err => {
+    console.error('Failed load playlist', err);
+    nowPlaying.textContent = 'Failed to load playlist';
+  });
+
+function parseM3U(txt){
+  const lines = txt.split(/\r?\n/);
+  channels = [];
+  for(let i=0;i<lines.length;i++){
+    const L = lines[i].trim();
+    if(!L) continue;
+    if(L.startsWith('#EXTINF')){
+      const title = L.split(',').slice(1).join(',').trim() || 'Unknown';
+      const url = (lines[i+1] || '').trim();
+      if(url && !url.startsWith('#')){
+        channels.push({title, url});
+      }
+      i++; // skip URL line
+    } else if(!L.startsWith('#')){
+      // plain url without extinf
+      channels.push({title: L, url: L});
+    }
+  }
+  renderChannels();
+  renderFavBar();
+  // resume last channel by title if present
+  const lastTitle = localStorage.getItem('lastChannelTitle');
+  let idx = 0;
+  if(lastTitle){
+    const found = channels.findIndex(c => c.title === lastTitle);
+    if(found >= 0) idx = found;
+  }
+  if(channels.length) playChannel(idx);
+}
+
+/* ---------------------------
+   Rendering channels (search + favorites + correct indices)
+   --------------------------- */
+let currentTab = 'all'; // 'all' or 'fav'
+
+function renderChannels(){
+  list.innerHTML = '';
+  const q = (search.value || '').trim().toLowerCase();
+  for(let idx=0; idx<channels.length; idx++){
+    const ch = channels[idx];
+    // filter by tab
+    if(currentTab === 'fav' && !favorites.includes(idx)) continue;
+    // filter by search
+    if(q && !ch.title.toLowerCase().includes(q) && !ch.url.toLowerCase().includes(q)) continue;
+
+    const div = document.createElement('div');
+    div.className = 'channel';
+    div.tabIndex = 0;
+    div.dataset.realIndex = idx; // store original channel index
+    div.innerHTML = `<span class="channel-title">${escapeHtml(ch.title)}</span><span class="fav">${favorites.includes(idx) ? '★' : '☆'}</span>`;
+
+    // click play
+    div.addEventListener('click', (ev) => {
+      const i = Number(div.dataset.realIndex);
+      playChannel(i);
+      hideSidebar();
+    });
+
+    // key handling on item
+    div.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const i = Number(div.dataset.realIndex); playChannel(i); hideSidebar(); }
+      if(e.key.toLowerCase() === 'f'){ e.preventDefault(); toggleFavorite(Number(div.dataset.realIndex)); }
+      if(e.key === 'ArrowDown'){ e.preventDefault(); const next = div.nextElementSibling || list.firstElementChild; next?.focus(); }
+      if(e.key === 'ArrowUp'){ e.preventDefault(); const prev = div.previousElementSibling || list.lastElementChild; prev?.focus(); }
+    });
+
+    // star click
+    div.querySelector('.fav').addEventListener('click', (ev) => { ev.stopPropagation(); toggleFavorite(idx); });
+
+    if(idx === current) div.classList.add('active');
+    list.appendChild(div);
+  }
+  // after render, if there are children focus first for remote users (only if sidebar open)
+  if(isSidebarOpen){
+    setTimeout(()=>{ list.firstElementChild?.focus(); }, 80);
+  }
+}
+
+function escapeHtml(s){
+  return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ---------------------------
+   Favorites handling
+   --------------------------- */
+function toggleFavorite(idx){
+  if(idx < 0 || idx >= channels.length) return;
+  if(favorites.includes(idx)) favorites = favorites.filter(x => x !== idx);
+  else favorites.push(idx);
+  localStorage.setItem('tv_favorites', JSON.stringify(favorites));
+  renderChannels();
+  renderFavBar();
+}
+
+function renderFavBar(){
+  favBar.innerHTML = '';
+  if(!favorites.length){ favBar.style.display = 'none'; return; }
+  favBar.style.display = 'block';
+  favorites.forEach(idx => {
+    if(idx < 0 || idx >= channels.length) return;
+    const btn = document.createElement('button');
+    btn.className = 'favBtn';
+    btn.textContent = channels[idx].title;
+    btn.tabIndex = 0;
+    btn.addEventListener('click', ()=> playChannel(idx));
+    favBar.appendChild(btn);
+  });
+}
+
+/* ---------------------------
+   Play channel (by original index)
+   --------------------------- */
+function playChannel(realIdx){
+  if(realIdx < 0 || realIdx >= channels.length) return;
+  // if same channel, toggle playback
+  if(current === realIdx){
+    if(video.paused) video.play(); else video.pause();
+    updateUIActive();
+    return;
+  }
+  current = realIdx;
+  const ch = channels[realIdx];
+  nowPlaying.textContent = ch.title;
+  localStorage.setItem('lastChannelTitle', ch.title);
+  showUI();
+
+  updateUIActive();
+
+  // Destroy previous HLS instance
+  try{ if(hls){ hls.destroy(); hls = null; } } catch(e){ console.warn(e); hls = null; }
+  qualityMenu.innerHTML = '';
+
+  // If m3u8 and Hls supported, use it; otherwise set src directly
+  if(Hls.isSupported() && /\.m3u8(\?|$)/i.test(ch.url)){
+    hls = new Hls({enableWorker:true});
+    hls.loadSource(ch.url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      video.play().catch(()=>{});
+      buildQualityMenu();
+    });
+    hls.on(Hls.Events.ERROR, (ev, data) => {
+      console.warn('HLS error', data);
+      // fallback if fatal
+      if(data && data.fatal){
+        try{ hls.destroy(); }catch(e){} hls = null;
+        video.src = ch.url;
+        video.load();
+        video.play().catch(()=>{});
+      }
+    });
+  } else {
+    video.src = ch.url;
+    video.load();
+    video.play().catch(()=>{});
+  }
+
+  hideAfterDelay();
+}
+
+function updateUIActive(){
+  // update active class for channels currently rendered
+  document.querySelectorAll('.channel').forEach(el => {
+    const real = Number(el.dataset.realIndex);
+    el.classList.toggle('active', real === current);
+  });
+}
+
+/* ---------------------------
+   Quality menu
+   --------------------------- */
+function buildQualityMenu(){
+  qualityMenu.innerHTML = '';
+  if(!hls || !hls.levels) return;
+  const levels = [{name:'Auto', level:-1}, ...hls.levels.map((l,i)=>({name: (l.height? l.height + 'p' : (l.bitrate? Math.round(l.bitrate/1000) + 'kbps':'level'+i)), level:i}))];
+  levels.forEach(lv => {
+    const item = document.createElement('div');
+    item.className = 'q-item';
+    item.tabIndex = 0;
+    item.textContent = lv.name;
+    if(hls.currentLevel === lv.level) item.classList.add('active');
+    item.addEventListener('click', ()=> {
+      if(!hls) return;
+      hls.currentLevel = lv.level;
+      qualityMenu.querySelectorAll('.q-item').forEach(x => x.classList.remove('active'));
+      item.classList.add('active');
+      hideQualityMenu();
+    });
+    item.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter'){ item.click(); }
+      if(e.key === 'ArrowDown'){ e.preventDefault(); (item.nextElementSibling || qualityMenu.firstChild)?.focus(); }
+      if(e.key === 'ArrowUp'){ e.preventDefault(); (item.previousElementSibling || qualityMenu.lastChild)?.focus(); }
+    });
+    qualityMenu.appendChild(item);
+  });
+}
+
+/* ---------------------------
+   Show/Hide quality menu
+   --------------------------- */
+function showQualityMenu(){
+  if(!hls) return;
+  isQualityOpen = true;
+  qualityMenu.classList.add('show');
+  qualityMenu.setAttribute('aria-hidden','false');
+  buildQualityMenu();
+  setTimeout(()=> qualityMenu.querySelector('.q-item')?.focus(), 120);
+  showUI();
+}
+function hideQualityMenu(){
+  isQualityOpen = false;
+  qualityMenu.classList.remove('show');
+  qualityMenu.setAttribute('aria-hidden','true');
+  hideAfterDelay();
+}
+
+/* ---------------------------
+   Sidebar open/close (no auto keyboard)
+   --------------------------- */
+function showSidebar(){
   sidebar.classList.add('visible');
   isSidebarOpen = true;
-  // Do NOT focus search automatically (prevents keyboard popup)
-  setTimeout(() => list.firstElementChild?.focus(), 50);
-}  
-function hideSidebar() {  
-  sidebar.classList.remove('visible');  
-  isSidebarOpen = false;  
-  hideAfterDelay();  
-}  
-  
-// ============== SEARCH ==============  
-search.oninput = () => {  
-  const q = search.value.toLowerCase();  
-  filtered = channels.filter(c => c.title.toLowerCase().includes(q));  
-  renderChannels();  
-};  
-  
-// Prevent context menu  
-window.addEventListener('contextmenu', e => e.preventDefault());  
-</script>  
-</body>  
+  // do not focus search to avoid keyboard popup; focus first channel instead
+  setTimeout(()=> list.firstElementChild?.focus(), 80);
+  showUI();
+}
+function hideSidebar(){
+  sidebar.classList.remove('visible');
+  isSidebarOpen = false;
+  hideAfterDelay();
+}
+
+/* make search focus on click/tap only */
+search.addEventListener('click', ()=> search.focus());
+
+/* ---------------------------
+   Numeric channel entry (e.g., typing 101)
+   --------------------------- */
+function handleNumericKey(digit){
+  numericBuffer += digit;
+  clearTimeout(numericTimer);
+  numericTimer = setTimeout(()=>{
+    const n = parseInt(numericBuffer, 10);
+    numericBuffer = '';
+    if(!isNaN(n) && n > 0 && n <= channels.length){
+      playChannel(n - 1);
+    }
+  }, 1300);
+}
+
+/* ---------------------------
+   Key handlers (remote / keyboard)
+   --------------------------- */
+let backTimer;
+document.addEventListener('keydown', (e) => {
+  showUI();
+  hideAfterDelay();
+
+  // numeric keys
+  if(/^[0-9]$/.test(e.key)){
+    handleNumericKey(e.key);
+    return;
+  }
+
+  if(e.key === 'Backspace' || e.key === 'Escape'){
+    e.preventDefault();
+    if(isQualityOpen){ hideQualityMenu(); return; }
+    if(isSidebarOpen){ hideSidebar(); return; }
+    if(backPressCount === 0){
+      backPressCount = 1;
+      nowPlaying.textContent = 'Press back again to exit';
+      nowPlaying.classList.add('show');
+      clearTimeout(backTimer);
+      backTimer = setTimeout(()=>{ backPressCount = 0; hideAfterDelay(); }, 2000);
+    } else {
+      if(window.Android && typeof window.Android.exitApp === 'function') window.Android.exitApp();
+      else window.close();
+    }
+    return;
+  }
+
+  // toggle sidebar
+  if(e.key === 'm' || e.key === 'M'){
+    e.preventDefault();
+    isSidebarOpen ? hideSidebar() : showSidebar();
+    return;
+  }
+
+  // quality menu navigation when open
+  if(isQualityOpen){
+    const focused = document.activeElement;
+    if(e.key === 'ArrowDown'){ e.preventDefault(); (focused.nextElementSibling || qualityMenu.firstElementChild)?.focus(); return; }
+    if(e.key === 'ArrowUp'){ e.preventDefault(); (focused.previousElementSibling || qualityMenu.lastElementChild)?.focus(); return; }
+    if(e.key === 'Enter'){ (focused && focused.click && focused.click()); return; }
+  }
+
+  // sidebar navigation when open
+  if(isSidebarOpen){
+    const focused = document.activeElement;
+    if(e.key === 'ArrowDown'){ e.preventDefault(); (focused.nextElementSibling || list.firstElementChild)?.focus(); return; }
+    if(e.key === 'ArrowUp'){ e.preventDefault(); (focused.previousElementSibling || list.lastElementChild)?.focus(); return; }
+    // Enter handled by item keydown listener
+  }
+
+  // space toggles play/pause
+  if(e.key === ' '){
+    e.preventDefault();
+    if(video.paused) video.play(); else video.pause();
+    return;
+  }
+
+  // Left/Right for channel change
+  if(e.key === 'ArrowLeft'){ playChannel((current - 1 + channels.length) % channels.length); return; }
+  if(e.key === 'ArrowRight'){ playChannel((current + 1) % channels.length); return; }
+
+  // Channel up/down (PageUp/PageDown may map on some remotes)
+  if(e.key === 'PageUp' || e.key === 'ChannelUp'){ playChannel((current + 1) % channels.length); return; }
+  if(e.key === 'PageDown' || e.key === 'ChannelDown'){ playChannel((current - 1 + channels.length) % channels.length); return; }
+
+  // Enter to toggle selected focused element (if focused is channel)
+  if(e.key === 'Enter'){
+    const a = document.activeElement;
+    if(a && a.classList && a.classList.contains('channel')){ const idx = Number(a.dataset.realIndex); playChannel(idx); hideSidebar(); }
+    return;
+  }
+});
+
+/* ---------------------------
+   Buttons & UI events
+   --------------------------- */
+menuBtn.addEventListener('click', ()=> isSidebarOpen ? hideSidebar() : showSidebar());
+qualityBtn.addEventListener('click', ()=> isQualityOpen ? hideQualityMenu() : showQualityMenu());
+document.getElementById('prev').addEventListener('click', ()=> playChannel((current - 1 + channels.length) % channels.length));
+document.getElementById('next').addEventListener('click', ()=> playChannel((current + 1) % channels.length));
+document.getElementById('play').addEventListener('click', ()=> { if(video.paused) video.play(); else video.pause(); });
+
+/* ---------------------------
+   Search input (filters list) - keyboard not auto opened unless clicked
+   --------------------------- */
+search.addEventListener('input', () => { renderChannels(); });
+
+/* ---------------------------
+   Build initial UI when channels change
+   --------------------------- */
+function refreshAll(){
+  renderChannels();
+  renderFavBar();
+  updateUIActive();
+}
+window.addEventListener('resize', ()=> { /* could adjust UI for narrow screens */ });
+
+/* ---------------------------
+   Prevent context menu / selection
+   --------------------------- */
+window.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('selectstart', e => e.preventDefault());
+
+</script>
+
+</body>
+</html>
+/* -------------------------------------------
+   AUTO HIDE UI
+--------------------------------------------*/
+let uiTimeout;
+function showUI() {
+    document.getElementById("menuBtn").classList.add("show");
+    document.getElementById("qualityBtn").classList.add("show");
+    document.getElementById("controls").classList.add("show");
+    document.getElementById("nowPlaying").classList.add("show");
+
+    clearTimeout(uiTimeout);
+    uiTimeout = setTimeout(() => {
+        document.getElementById("menuBtn").classList.remove("show");
+        document.getElementById("qualityBtn").classList.remove("show");
+        document.getElementById("controls").classList.remove("show");
+        document.getElementById("nowPlaying").classList.remove("show");
+    }, 4000);
+}
+
+document.addEventListener("mousemove", showUI);
+document.addEventListener("keydown", showUI);
+
+/* -------------------------------------------
+   REMOTE / KEYBOARD CONTROLS
+--------------------------------------------*/
+document.addEventListener("keydown", (e) => {
+    const sb = document.getElementById("sidebar");
+    const qm = document.getElementById("qualityMenu");
+
+    switch (e.key) {
+        case "ArrowUp":
+            if (sb.classList.contains("visible")) moveFocus(-1);
+            break;
+
+        case "ArrowDown":
+            if (sb.classList.contains("visible")) moveFocus(+1);
+            break;
+
+        case "ArrowLeft":
+            if (qm.classList.contains("show")) moveQuality(-1);
+            break;
+
+        case "ArrowRight":
+            if (qm.classList.contains("show")) moveQuality(+1);
+            break;
+
+        case "Enter":
+        case "OK":
+            const el = document.activeElement;
+            if (el && el.classList.contains("channel")) el.click();
+            if (el && el.classList.contains("q-item")) el.click();
+            break;
+
+        case "Backspace":
+        case "Escape":
+            if (qm.classList.contains("show")) {
+                qm.classList.remove("show");
+                break;
+            }
+            if (sb.classList.contains("visible")) {
+                sb.classList.remove("visible");
+                break;
+            }
+            break;
+
+        case "MediaPlayPause":
+        case " ":
+            togglePlay();
+            break;
+    }
+});
+
+/* -------------------------------------------
+   QUALITY NAVIGATION
+--------------------------------------------*/
+function moveQuality(dir) {
+    const items = [...document.querySelectorAll(".q-item")];
+    let idx = items.indexOf(document.activeElement);
+    idx = (idx + dir + items.length) % items.length;
+    items[idx].focus();
+}
+
+/* -------------------------------------------
+   TOGGLE PLAY
+--------------------------------------------*/
+function togglePlay() {
+    const v = document.getElementById("videoPlayer");
+    if (v.paused) v.play();
+    else v.pause();
+}
+
+/* -------------------------------------------
+   INITIALIZE
+--------------------------------------------*/
+window.onload = () => {
+    fetchM3U();
+    loadFavorites();
+    showUI();
+};
+</script>
+
+</body>
 </html>
