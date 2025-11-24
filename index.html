@@ -7,14 +7,11 @@
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-:root{--bg:#000;--accent:#00ff9d;--text:#fff;--muted:#aaa}
+:root{--bg:#000;--accent:#00ff9d;--text:#fff}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',Roboto,Arial,sans-serif;overflow:hidden}
-
-/* VIDEO */
 video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-fit:contain;z-index:1}
 
-/* NOW PLAYING */
 .now-playing{
   position:fixed;top:10px;left:50%;transform:translateX(-50%);
   background:rgba(0,0,0,0.85);padding:14px 40px;border-radius:50px;
@@ -23,8 +20,7 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
 }
 .now-playing.show{opacity:1}
 
-/* MENU, FAVORITES & QUALITY BUTTONS */
-.menu-btn, .fav-btn, .quality-btn{
+.menu-btn,.fav-btn,.quality-btn{
   position:fixed;padding:12px 20px;background:rgba(0,0,0,0.7);
   border:2px solid var(--accent);border-radius:50px;font-size:18px;
   z-index:15;opacity:0;transition:.4s;cursor:pointer
@@ -32,9 +28,8 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
 .menu-btn{top:10px;left:30px}
 .fav-btn{bottom:15px;left:30px}
 .quality-btn{bottom:15px;right:30px}
-.menu-btn.show, .fav-btn.show, .quality-btn.show{opacity:1}
+.menu-btn.show,.fav-btn.show,.quality-btn.show{opacity:1}
 
-/* FAVORITES PANEL (NEW!) */
 .favorites-panel{
   position:fixed;bottom:90px;left:30px;width:380px;max-height:60vh;
   background:rgba(20,20,40,0.98);backdrop-filter:blur(20px);
@@ -43,18 +38,12 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
   display:flex;flex-direction:column
 }
 .favorites-panel.show{opacity:1;transform:scale(1);pointer-events:all}
-.fav-header{
-  padding:16px 20px;background:var(--accent);color:#000;font-weight:bold;font-size:18px
-}
+.fav-header{padding:16px 20px;background:var(--accent);color:#000;font-weight:bold;font-size:18px}
 .fav-list{flex:1;overflow-y:auto;padding:8px}
-.fav-item{
-  padding:16px 20px;font-size:18px;cursor:pointer;transition:.2s;
-  border-bottom:1px solid rgba(255,255,255,0.1)
-}
+.fav-item{padding:16px 20px;font-size:18px;cursor:pointer;transition:.2s;border-bottom:1px solid rgba(255,255,255,0.1)}
 .fav-item:focus{background:var(--accent);color:#000;outline:none}
 .fav-item:last-child{border-bottom:none}
 
-/* QUALITY MENU */
 .quality-menu{
   position:fixed;bottom:90px;right:30px;width:200px;
   background:rgba(20,20,40,0.98);backdrop-filter:blur(20px);
@@ -66,7 +55,6 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
 .q-item:focus{background:var(--accent);color:#000}
 .q-item.active{font-weight:bold}
 
-/* BOTTOM CONTROLS */
 .controls{
   position:fixed;bottom:15px;left:50%;transform:translateX(-50%);
   background:rgba(0,0,0,0.8);padding:12px 30px;border-radius:50px;
@@ -75,7 +63,6 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
 .controls.show{opacity:1}
 .btn{padding:12px 24px;background:rgba(255,255,255,0.15);border:none;border-radius:50px;font-size:18px;color:#fff;cursor:pointer}
 
-/* SIDEBAR */
 .sidebar{
   position:fixed;top:0;left:-400px;width:400px;height:100%;
   background:rgba(10,10,30,0.98);backdrop-filter:blur(20px);
@@ -103,7 +90,6 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
 <button id="favBtn" class="fav-btn">Favorites</button>
 <button id="qualityBtn" class="quality-btn">Quality</button>
 
-<!-- FAVORITES PANEL (NEW!) -->
 <div id="favoritesPanel" class="favorites-panel">
   <div class="fav-header">Favorite Channels</div>
   <div id="favList" class="fav-list"></div>
@@ -142,6 +128,13 @@ let hideTimer = null;
 let isSidebarOpen = false, isQualityOpen = false, isFavoritesOpen = false;
 let backPressCount = 0;
 let favorites = JSON.parse(localStorage.getItem('tv_favorites') || '[]');
+
+// ====================== SAFE TEXT ======================
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
 
 // ====================== UI CONTROL ======================
 function showUI() {
@@ -187,39 +180,53 @@ fetch('https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u?t=
   })
   .catch(() => nowPlaying.textContent = "Playlist Failed");
 
-// ====================== RENDER CHANNELS ======================
+// ====================== RENDER CHANNELS (FIXED!) ======================
 function renderChannels() {
   list.innerHTML = '';
   const q = search.value.toLowerCase();
   channels.forEach((ch, idx) => {
     if (q && !ch.title.toLowerCase().includes(q)) return;
+
     const div = document.createElement('div');
     div.className = 'channel';
     div.tabIndex = 0;
     div.dataset.idx = idx;
-    div.innerHTML = `<span class="channel-title">\( {ch.title}</span><span class="fav"> \){favorites.includes(idx) ? '★' : '☆'}</span>`;
-    
+
+    // SAFE WAY – no template literals in innerHTML!
+    const titleSpan = document.createElement('span');
+    titleSpan.className = 'channel-title';
+    titleSpan.textContent = ch.title;
+
+    const starSpan = document.createElement('span');
+    starSpan.className = 'fav';
+    starSpan.textContent = favorites.includes(idx) ? '★' : '☆';
+    starSpan.style.cursor = 'pointer';
+
+    div.appendChild(titleSpan);
+    div.appendChild(starSpan);
+    list.appendChild(div);
+
     div.onclick = () => { playChannel(idx); hideSidebar(); };
     div.onkeydown = e => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); playChannel(idx); hideSidebar(); }
       if (e.key.toLowerCase() === 'f') { e.preventDefault(); toggleFavorite(idx); }
     };
-    div.querySelector('.fav').onclick = ev => { ev.stopPropagation(); toggleFavorite(idx); };
+    starSpan.onclick = ev => { ev.stopPropagation(); toggleFavorite(idx); };
+
     if (idx === current) div.classList.add('active');
-    list.appendChild(div);
   });
   if (isSidebarOpen) setTimeout(() => list.firstElementChild?.focus(), 100);
 }
 
-// ====================== FAVORITES PANEL (NEW!) ======================
+// ====================== FAVORITES PANEL ======================
 function renderFavoritesPanel() {
   favList.innerHTML = '';
   const favChannels = favorites.map(i => channels[i]).filter(Boolean);
-  if (favChannels.length === 0) {
-    favList.innerHTML = '<div style="padding:20px;color:#888;text-align:center">No favorites yet</div>';
+  if (!favChannels.length) {
+    favList.innerHTML = '<div style="padding:30px;color:#888;text-align:center">No favorites yet</div>';
     return;
   }
-  favChannels.forEach((ch, i) => {
+  favChannels.forEach(ch => {
     const idx = channels.indexOf(ch);
     const div = document.createElement('div');
     div.className = 'fav-item';
@@ -230,18 +237,8 @@ function renderFavoritesPanel() {
     favList.appendChild(div);
   });
 }
-function showFavoritesPanel() {
-  isFavoritesOpen = true;
-  favoritesPanel.classList.add('show');
-  renderFavoritesPanel();
-  setTimeout(() => favList.firstElementChild?.focus(), 100);
-  showUI();
-}
-function hideFavoritesPanel() {
-  isFavoritesOpen = false;
-  favoritesPanel.classList.remove('show');
-  hideUI();
-}
+function showFavoritesPanel() { isFavoritesOpen = true; favoritesPanel.classList.add('show'); renderFavoritesPanel(); setTimeout(() => favList.firstElementChild?.focus(), 100); showUI(); }
+function hideFavoritesPanel() { isFavoritesOpen = false; favoritesPanel.classList.remove('show'); hideUI(); }
 
 // ====================== FAVORITES SYSTEM ======================
 function toggleFavorite(idx) {
@@ -254,9 +251,10 @@ function toggleFavorite(idx) {
 
 // ====================== PLAY CHANNEL ======================
 function playChannel(idx) {
-  if (idx < 0 || idx >= channels.length) return;
-  if (idx === current) { video.paused ? video.play() : video.pause(); return; }
-
+  if (idx < 0 || idx >= channels.length || idx === current) {
+    video.paused ? video.play() : video.pause();
+    return;
+  }
   current = idx;
   const ch = channels[current];
   nowPlaying.textContent = ch.title;
@@ -277,8 +275,6 @@ function playChannel(idx) {
     video.src = ch.url;
     video.play();
   }
-  hideFavoritesPanel();
-  hideQualityMenu();
 }
 
 // ====================== QUALITY MENU ======================
@@ -292,41 +288,16 @@ function buildQualityMenu() {
     item.tabIndex = 0;
     item.textContent = lv.name;
     if (hls.currentLevel === lv.level) item.classList.add('active');
-    item.onclick = () => {
-      hls.currentLevel = lv.level;
-      qualityMenu.querySelectorAll('.q-item').forEach(x => x.classList.remove('active'));
-      item.classList.add('active');
-      hideQualityMenu();
-    };
+    item.onclick = () => { hls.currentLevel = lv.level; qualityMenu.querySelectorAll('.q-item').forEach(x => x.classList.remove('active')); item.classList.add('active'); hideQualityMenu(); };
     qualityMenu.appendChild(item);
   });
 }
-function showQualityMenu() {
-  if (!hls) return;
-  isQualityOpen = true;
-  qualityMenu.classList.add('show');
-  buildQualityMenu();
-  setTimeout(() => qualityMenu.firstChild?.focus(), 100);
-  showUI();
-}
-function hideQualityMenu() {
-  isQualityOpen = false;
-  qualityMenu.classList.remove('show');
-  hideUI();
-}
+function showQualityMenu() { if (!hls) return; isQualityOpen = true; qualityMenu.classList.add('show'); buildQualityMenu(); setTimeout(() => qualityMenu.firstChild?.focus(), 100); showUI(); }
+function hideQualityMenu() { isQualityOpen = false; qualityMenu.classList.remove('show'); hideUI(); }
 
 // ====================== SIDEBAR ======================
-function showSidebar() {
-  sidebar.classList.add('visible');
-  isSidebarOpen = true;
-  setTimeout(() => list.firstElementChild?.focus(), 100);
-  showUI();
-}
-function hideSidebar() {
-  sidebar.classList.remove('visible');
-  isSidebarOpen = false;
-  hideUI();
-}
+function showSidebar() { sidebar.classList.add('visible'); isSidebarOpen = true; setTimeout(() => list.firstElementChild?.focus(), 100); showUI(); }
+function hideSidebar() { sidebar.classList.remove('visible'); isSidebarOpen = false; hideUI(); }
 
 // ====================== KEY HANDLER ======================
 document.addEventListener('keydown', e => {
@@ -334,10 +305,10 @@ document.addEventListener('keydown', e => {
 
   if (e.key === 'Backspace' || e.key === 'Escape') {
     e.preventDefault();
-    if (isFavoritesOpen) { hideFavoritesPanel(); return; }
-    if (isQualityOpen) { hideQualityMenu(); return; }
-    if (isSidebarOpen) { hideSidebar(); return; }
-    if (backPressCount++ === 0) {
+    if (isFavoritesOpen) hideFavoritesPanel();
+    else if (isQualityOpen) hideQualityMenu();
+    else if (isSidebarOpen) hideSidebar();
+    else if (backPressCount++ === 0) {
       nowPlaying.textContent = "Press back again to exit";
       nowPlaying.classList.add('show');
       setTimeout(() => { backPressCount = 0; hideUI(); }, 2000);
@@ -351,31 +322,11 @@ document.addEventListener('keydown', e => {
   if (e.key.toLowerCase() === 'm') { e.preventDefault(); isSidebarOpen ? hideSidebar() : showSidebar(); return; }
   if (e.key === ' ') { e.preventDefault(); video.paused ? video.play() : video.pause(); return; }
 
-  // Favorites panel navigation
-  if (isFavoritesOpen) {
-    const items = favList.children;
+  if (isFavoritesOpen || isQualityOpen || isSidebarOpen) {
     const focused = document.activeElement;
-    if (e.key === 'ArrowUp') { e.preventDefault(); (focused.previousElementSibling || items[items.length-1])?.focus(); }
-    if (e.key === 'ArrowDown') { e.preventDefault(); (focused.nextElementSibling || items[0])?.focus(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); (focused.previousElementSibling || focused.parentNode.lastElementChild)?.focus(); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); (focused.nextElementSibling || focused.parentNode.firstElementChild)?.focus(); }
     if (e.key === 'Enter') focused?.click();
-    return;
-  }
-
-  // Quality menu navigation
-  if (isQualityOpen) {
-    const items = qualityMenu.children;
-    const focused = document.activeElement;
-    if (e.key === 'ArrowUp') { e.preventDefault(); (focused.previousElementSibling || items[items.length-1])?.focus(); }
-    if (e.key === 'ArrowDown') { e.preventDefault(); (focused.nextElementSibling || items[0])?.focus(); }
-    if (e.key === 'Enter') focused?.click();
-    return;
-  }
-
-  // Sidebar navigation
-  if (isSidebarOpen) {
-    const focused = document.activeElement;
-    if (e.key === 'ArrowUp') { e.preventDefault(); (focused.previousElementSibling || list.lastElementChild)?.focus(); }
-    if (e.key === 'ArrowDown') { e.preventDefault(); (focused.nextElementSibling || list.firstElementChild)?.focus(); }
   }
 });
 
@@ -383,15 +334,11 @@ document.addEventListener('keydown', e => {
 menuBtn.onclick = () => isSidebarOpen ? hideSidebar() : showSidebar();
 favBtn.onclick = () => isFavoritesOpen ? hideFavoritesPanel() : showFavoritesPanel();
 qualityBtn.onclick = () => isQualityOpen ? hideQualityMenu() : showQualityMenu();
-
 document.getElementById('prev').onclick = () => playChannel((current - 1 + channels.length) % channels.length);
 document.getElementById('next').onclick = () => playChannel((current + 1) % channels.length);
 document.getElementById('play').onclick = () => video.paused ? video.play() : video.pause();
 
-// ====================== SEARCH ======================
 search.oninput = () => renderChannels();
-
-// ====================== FINAL TOUCHES ======================
 window.addEventListener('contextmenu', e => e.preventDefault());
 </script>
 </body>
