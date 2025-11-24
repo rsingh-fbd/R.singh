@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+3<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -545,8 +545,8 @@ document.addEventListener('keydown', (e) => {
   }
 
   // Left/Right for channel change
-  if(e.key === 'ArrowLeft'){ playChannel((current - 1 + channels.length) % channels.length); return; }
-  if(e.key === 'ArrowRight'){ playChannel((current + 1) % channels.length); return; }
+ /* if(e.key === 'ArrowLeft'){ playChannel((current - 1 + channels.length) % channels.length); return; }
+  if(e.key === 'ArrowRight'){ playChannel((current + 1) % channels.length); return; }*/
 
   // Channel up/down (PageUp/PageDown may map on some remotes)
   if(e.key === 'PageUp' || e.key === 'ChannelUp'){ playChannel((current + 1) % channels.length); return; }
