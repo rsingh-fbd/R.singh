@@ -397,13 +397,6 @@ video.addEventListener('error', () => {
   hideBuffering();
   nowPlaying.textContent = "Stream Failed";
 });
-const video = document.getElementById("videoPlayer");
-video.setAttribute("playsinline", "true");
-video.setAttribute("webkit-playsinline", "true");
-video.setAttribute("preload", "none");
-
-// Remove poster completely
-video.removeAttribute("poster");
 </script>
 </body>
 </html>
