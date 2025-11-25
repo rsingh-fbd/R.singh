@@ -79,6 +79,16 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
 .channel:focus{background:var(--accent);color:#000;transform:scale(1.02)}
 .channel.active{background:var(--accent);color:#000;font-weight:bold}
 .fav{font-size:24px;margin-left:10px;cursor:pointer}
+
+/* Completely remove built-in play icon poster */
+video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+}
+
+/* Make the video element transparent before loading */
+#videoPlayer {
+    background-color: transparent !important;
+}
 </style>
 </head>
 <body>
@@ -387,6 +397,13 @@ video.addEventListener('error', () => {
   hideBuffering();
   nowPlaying.textContent = "Stream Failed";
 });
+const video = document.getElementById("videoPlayer");
+video.setAttribute("playsinline", "true");
+video.setAttribute("webkit-playsinline", "true");
+video.setAttribute("preload", "none");
+
+// Remove poster completely
+video.removeAttribute("poster");
 </script>
 </body>
 </html>
