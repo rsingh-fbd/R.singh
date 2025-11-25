@@ -85,6 +85,17 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
 
 <video id="video" playsinline webkit-playsinline></video>
 
+<!-- BUFFERING SPINNER - Beautiful & Smooth -->
+<div id="buffering" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;display:none;">
+  <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="40" stroke="#00ff9d" stroke-width="8" fill="none" opacity="0.3"/>
+    <circle cx="50" cy="50" r="40" stroke="#00ff9d" stroke-width="8" fill="none" stroke-linecap="round"
+      stroke-dasharray="80 150" transform="rotate(-90 50 50)">
+      <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+  </svg>
+</div>
+
 <div id="nowPlaying" class="now-playing">Loading...</div>
 <button id="menuBtn" class="menu-btn">Menu</button>
 <button id="favBtn" class="fav-btn">😍</button>
@@ -340,6 +351,26 @@ document.getElementById('play').onclick = () => video.paused ? video.play() : vi
 
 search.oninput = () => renderChannels();
 window.addEventListener('contextmenu', e => e.preventDefault());
+
+// Show/Hide Buffering Spinner
+const buffering = document.getElementById('buffering');
+
+video.addEventListener('waiting', () => {
+  buffering.style.display = 'block';
+  showUI(); // Keep UI visible while buffering
+});
+
+video.addEventListener('canplay', () => {
+  buffering.style.display = 'none';
+});
+
+video.addEventListener('playing', () => {
+  buffering.style.display = 'none';
+});
+
+// Also hide when error or ended
+video.addEventListener('error', () => buffering.style.display = 'none');
+video.addEventListener('ended', () => buffering.style.display = 'none');
 </script>
 </body>
 </html>
