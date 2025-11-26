@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Perfect TV Pro</title>
+<title>IPTV Pro</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
@@ -14,39 +14,46 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
 
 .now-playing{
   position:fixed;top:2px;left:50%;transform:translateX(-50%);
-  background:transparent;padding:14px 40px;border-radius:50px;
+  background:transparent;padding:10px 20px;border-radius:50px;
   font-size:22px;font-weight:600;z-index:10;opacity:0;transition:.5s;
   white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;
 }
 .now-playing.show{opacity:1}
 
-.menu-btn,.fav-btn,.quality-btn{
- /* position:fixed;*/padding:12px 20px;background:rgba(0,0,0,0.7);
+.menu-btn{
+  position:fixed;
+  padding:12px 20px;background: transparent;color: white;
   border:2px solid var(--accent);border-radius:50px;font-size:18px;
   z-index:15;opacity:0;transition:.4s;cursor:pointer
 }
-.menu-btn{top:10px;left:30px}
+.quality-btn,.fav-btn{
+  /*position:fixed;*/
+  padding:12px 20px;background:rgba(0,0,0,0.7);
+  border:2px solid var(--accent);border-radius:50px;font-size:18px;
+  z-index:15;opacity:0;transition:.4s;cursor:pointer
+}
+.menu-btn{top:5px;left:5px}
 .fav-btn{bottom:15px;left:30px}
 .quality-btn{bottom:15px;right:30px}
 .menu-btn.show,.fav-btn.show,.quality-btn.show{opacity:1}
 
 .favorites-panel{
-  position:fixed;bottom:90px;left:30px;width:380px;max-height:60vh;
-  background:rgba(20,20,40,0.98);backdrop-filter:blur(20px);
+  position:fixed;bottom:90px;left:30px;width:200px;max-height:60vh;
+  background: transparent;backdrop-filter:blur(20px);
   border:2px solid var(--accent);border-radius:16px;overflow:hidden;
   z-index:20;opacity:0;transform:scale(0.9);transition:.3s;pointer-events:none;
   display:flex;flex-direction:column
 }
 .favorites-panel.show{opacity:1;transform:scale(1);pointer-events:all}
-.fav-header{padding:16px 20px;background:var(--accent);color:#000;font-weight:bold;font-size:18px}
+.fav-header{padding:7px 7px;background:var(--accent);color:#000;font-weight:bold;font-size:18px}
 .fav-list{flex:1;overflow-y:auto;padding:8px}
-.fav-item{padding:16px 20px;font-size:18px;cursor:pointer;transition:.2s;border-bottom:1px solid rgba(255,255,255,0.1)}
+.fav-item{padding:5px 5px;font-size:15px;cursor:pointer;transition:.2s;border-bottom:1px solid rgba(255,255,255,0.1)}
 .fav-item:focus{background:var(--accent);color:#000;outline:none}
 .fav-item:last-child{border-bottom:none}
 
 .quality-menu{
-  position:fixed;bottom:90px;right:30px;width:200px;
-  background:rgba(20,20,40,0.98);backdrop-filter:blur(20px);
+  position:fixed;bottom:90px;right:30px;width:100px;
+  background: transparent;backdrop-filter:blur(20px);
   border:2px solid var(--accent);border-radius:16px;padding:12px 0;
   z-index:20;opacity:0;transform:scale(.9);transition:.3s;pointer-events:none
 }
@@ -61,11 +68,11 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
   display:flex;gap:20px;z-index:10;opacity:0;transition:.5s
 }
 .controls.show{opacity:1}
-.btn{padding:12px 24px;background:rgba(255,255,255,0.15);border:none;border-radius:50px;font-size:18px;color:#fff;cursor:pointer}
+.btn{padding:12px 24px;background:rgba(255,255,255,0.15);border:none;border: 2px solid var(--accent);border-radius:50px;font-size:18px;color:#fff;cursor:pointer}
 
 .sidebar{
   position:fixed;top:0;left:-400px;width:200px;height:100%;
-  background:rgba(10,10,30,0.98);backdrop-filter:blur(20px);
+  background: transparent;backdrop-filter:blur(20px);
   transition:left .4s cubic-bezier(.2,.8,.2,1);z-index:20;padding:20px;
   display:flex;flex-direction:column;gap:16px
 }
@@ -106,7 +113,7 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
 
 <div id="nowPlaying" class="now-playing">Loading...</div>
 <button id="menuBtn" class="menu-btn">Menu</button>
-<button id="favBtn" class="fav-btn">🌟</button>
+<!--<button id="favBtn" class="fav-btn">🌟</button> -->
 <!--<button id="qualityBtn" class="quality-btn">⚙️</button> -->
 
 <div id="favoritesPanel" class="favorites-panel">
@@ -115,6 +122,7 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
 </div>
 
 <div id="controls" class="controls">
+  <button id="favBtn" class="fav-btn">🌟</button>
   <button class="btn" id="prev">⏮️</button>
   <button class="btn" id="play"> ⏯️</button>
   <button class="btn" id="next"> ⏭️ </button>
@@ -243,7 +251,7 @@ function renderFavoritesPanel() {
   favList.innerHTML = '';
   const favChannels = favorites.map(i => channels[i]).filter(Boolean);
   if (!favChannels.length) {
-    favList.innerHTML = '<div style="padding:30px;color:#888;text-align:center">No favorites yet</div>';
+    favList.innerHTML = '<div style="padding:10px;color:#888;text-align:center">No favorites yet</div>';
     return;
   }
   favChannels.forEach(ch => {
