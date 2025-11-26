@@ -22,13 +22,13 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
 
 .menu-btn{
   position:fixed;
-  padding:12px 20px;background: transparent;color: white;
+  padding:5px 5px;background: transparent;color: white;
   border:2px solid var(--accent);border-radius:50px;font-size:18px;
   z-index:15;opacity:0;transition:.4s;cursor:pointer
 }
 .quality-btn,.fav-btn{
   /*position:fixed;*/
-  padding:12px 20px;background:rgba(0,0,0,0.7);
+  padding:7px 7px;background:rgba(0,0,0,0.7);
   border:2px solid var(--accent);border-radius:50px;font-size:18px;
   z-index:15;opacity:0;transition:.4s;cursor:pointer
 }
@@ -58,17 +58,17 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
   z-index:20;opacity:0;transform:scale(.9);transition:.3s;pointer-events:none
 }
 .quality-menu.show{opacity:1;transform:scale(1);pointer-events:all}
-.q-item{padding:14px 20px;font-size:18px;cursor:pointer;transition:.2s}
+.q-item{padding:5px 5px;font-size:18px;cursor:pointer;transition:.2s}
 .q-item:focus{background:var(--accent);color:white}
 .q-item.active{font-weight:bold}
 
 .controls{
   position:fixed;bottom:5px;left:50%;transform:translateX(-50%);
-  background:transparent;padding:12px 30px;border-radius:50px;
+  background:transparent;padding:10px 15px;border-radius:50px;
   display:flex;gap:20px;z-index:10;opacity:0;transition:.5s
 }
 .controls.show{opacity:1}
-.btn{padding:12px 24px;background:rgba(255,255,255,0.15);border:none;border: 2px solid var(--accent);border-radius:50px;font-size:18px;color:#fff;cursor:pointer}
+.btn{padding:10px 15px;background:rgba(255,255,255,0.15);border:none;border: 2px solid var(--accent);border-radius:50px;font-size:18px;color:#fff;cursor:pointer}
 
 .sidebar{
   position:fixed;top:0;left:-400px;width:200px;height:100%;
@@ -77,10 +77,10 @@ video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-
   display:flex;flex-direction:column;gap:16px
 }
 .sidebar.visible{left:0}
-.search{padding:16px;border-radius:16px;background:rgba(255,255,255,0.12);border:none;color:#fff;font-size:18px;outline:none}
+.search{padding:10px;border-radius:16px;background:rgba(255,255,255,0.12);border:none;color:#fff;font-size:18px;outline:none}
 .channel-list{flex:1;overflow-y:auto}
 .channel{
-  padding:14px 18px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;
+  padding:5px 5px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;
   margin:4px 0;cursor:pointer;transition:.2s
 }
 .channel:focus{background:var(--accent);color:#000;transform:scale(1.02)}
