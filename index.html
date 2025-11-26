@@ -327,16 +327,20 @@ function hideQualityMenu() { isQualityOpen = false; qualityMenu.classList.remove
 function showSidebar() { sidebar.classList.add('visible'); isSidebarOpen = true; setTimeout(() => list.firstElementChild?.focus(), 100); showUI(); }
 function hideSidebar() { sidebar.classList.remove('visible'); isSidebarOpen = false; hideUI(); }
 
-// ====================== KEY HANDLER ======================
+// ====================== KEY HANDLER + CLICK OUTSIDE TO CLOSE ======================
 document.addEventListener('keydown', e => {
   showUI();
 
+  // BACK / ESCAPE → Close any open panel instantly
   if (e.key === 'Backspace' || e.key === 'Escape') {
     e.preventDefault();
-    if (isFavoritesOpen) hideFavoritesPanel();
-    else if (isQualityOpen) hideQualityMenu();
-    else if (isSidebarOpen) hideSidebar();
-    else if (backPressCount++ === 0) {
+
+    if (isFavoritesOpen) { hideFavoritesPanel(); return; }
+    if (isQualityOpen)   { hideQualityMenu();   return; }
+    if (isSidebarOpen)   { hideSidebar();       return; }
+
+    // Double back to exit app
+    if (backPressCount++ === 0) {
       nowPlaying.textContent = "Press back again to exit";
       nowPlaying.classList.add('show');
       setTimeout(() => { backPressCount = 0; hideUI(); }, 2000);
@@ -347,14 +351,28 @@ document.addEventListener('keydown', e => {
     return;
   }
 
+  // Rest of your keys (m, space, arrows, etc.)
   if (e.key.toLowerCase() === 'm') { e.preventDefault(); isSidebarOpen ? hideSidebar() : showSidebar(); return; }
   if (e.key === ' ') { e.preventDefault(); video.paused ? video.play() : video.pause(); return; }
 
   if (isFavoritesOpen || isQualityOpen || isSidebarOpen) {
     const focused = document.activeElement;
-    if (e.key === 'ArrowUp') { e.preventDefault(); (focused.previousElementSibling || focused.parentNode.lastElementChild)?.focus(); }
+    if (e.key === 'ArrowUp')   { e.preventDefault(); (focused.previousElementSibling || focused.parentNode.lastElementChild)?.focus(); }
     if (e.key === 'ArrowDown') { e.preventDefault(); (focused.nextElementSibling || focused.parentNode.firstElementChild)?.focus(); }
-    if (e.key === 'Enter') focused?.click();
+    if (e.key === 'Enter')     focused?.click();
+  }
+});
+
+// CLICK OUTSIDE ANY PANEL → CLOSE IT
+document.addEventListener('click', e => {
+  if (isSidebarOpen && !sidebar.contains(e.target) && e.target !== menuBtn) {
+    hideSidebar();
+  }
+  if (isFavoritesOpen && !favoritesPanel.contains(e.target) && e.target !== favBtn) {
+    hideFavoritesPanel();
+  }
+  if (isQualityOpen && !qualityMenu.contains(e.target) && e.target !== qualityBtn) {
+    hideQualityMenu();
   }
 });
 
