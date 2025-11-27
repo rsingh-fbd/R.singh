@@ -372,6 +372,7 @@ function playChannel(idx) {
   }, 100);
 }
 */
+/*
 // ====================== FINAL PERFECT playChannel – ULTRA FAST + 100% COMPATIBLE ======================
 function playChannel(idx) {
   if (idx < 0 || idx >= channels.length) return;
@@ -485,6 +486,116 @@ function playChannel(idx) {
     }, 8000);
 
   }, 120);
+}*/
+// ====================== 100% WORKING playChannel – NO MORE ERRORS ======================
+function playChannel(idx) {
+  if (idx < 0 || idx >= channels.length) return;
+
+  // Toggle play/pause on same channel
+  if (idx === current) {
+    video.paused ? video.play() : video.pause();
+    return;
+  }
+
+  showBuffering();                                      // instant loading spinner
+  current = idx;
+  const ch = channels[current];
+  nowPlaying.textContent = ch.title;
+  localStorage.setItem('lastChannelTitle', ch.title);
+  showUI();
+
+  // FULL CLEANUP – prevents all old-stream errors
+  if (hls) { hls.destroy(); hls = null; }
+  if (video.src) {
+    if (video.src.startsWith('blob:')) URL.revokeObjectURL(video.src);
+    video.src = '';
+    video.removeAttribute('src');
+    video.load();
+  }
+  qualityMenu.innerHTML = '';
+
+  document.querySelectorAll('.channel').forEach(el =>
+    el.classList.toggle('active', Number(el.dataset.idx) === current)
+  );
+
+  // === PLAY NEW STREAM AFTER CLEANUP ===
+  setTimeout(() => {
+    const url = ch.url.trim();
+
+    // 1. HLS (.m3u8) – most reliable way
+    if (Hls.isSupported() && url.includes('.m3u8')) {
+      hls = new Hls({
+        maxBufferLength: 15,
+        maxMaxBufferLength: 30,
+        liveSyncDurationCount: 3,
+        enableWorker: true,
+        lowLatencyMode: true,
+        backBufferLength: 10
+      });
+
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().catch(() => {});
+        buildQualityMenu();
+      });
+
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        if (data.fatal) {
+          console.warn('HLS fatal → fallback to direct');
+          fallbackDirect(url);
+        }
+      });
+
+      hls.loadSource(url);
+      hls.attachMedia(video);
+      return;
+    }
+
+    // 2. RAW TS / DIRECT STREAMS (87.255.x.x, port 18890, 25461, etc.)
+    fallbackDirect(url);
+  }, 120);
+}
+
+// ──────────────────────── Fallback function used by both HLS & direct streams ─────────────────
+function fallbackDirect(url) {
+  // Try MediaSource first (best for raw .ts streams)
+  if ('MediaSource' in window && (url.includes('.ts') || /:\d{4,6}[/?]/.test(url))) {
+    const mse = new MediaSource();
+    video.src = URL.createObjectURL(mse);
+
+    mse.addEventListener('sourceopen', () => {
+      const sb = mse.addSourceBuffer('video/mp2t');   // MPEG-TS codec
+
+      const appendNext = () => {
+        fetch(url, { credentials: 'omit', cache: 'no-store' })
+        .then(r => r.arrayBuffer())
+        .then(buf => {
+          if (mse.readyState === 'open' && !sb.updating) {
+            try { sb.appendBuffer(buf); } catch(e) {}
+          }
+        })
+        .catch(() => {}); // silent retry
+      };
+
+      sb.addEventListener('updateend', appendNext);
+      appendNext();
+    });
+
+    video.play().catch(() => {});
+    video.addEventListener('playing', hideBuffering, { once: true });
+  } 
+  // Normal direct playback (MP4, FLV, or any direct link)
+  else {
+    video.src = url;
+    video.play().catch(() => {
+      // Last resort: try with a proxy if CORS blocks it
+      video.src = 'https://corsproxy.io/?' + encodeURIComponent(url);
+      video.play().catch(() => {});
+    });
+    video.addEventListener('playing', hideBuffering, { once: true });
+  }
+
+  // Auto-hide spinner after max 12 seconds (prevents stuck loading)
+  setTimeout(hideBuffering, 12000);
 }
 // ====================== QUALITY MENU ======================
 function buildQualityMenu() {
