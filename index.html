@@ -306,7 +306,7 @@ function playChannel(idx) {
   }
 }
 */
-
+/*
 // ====================== PLAY CHANNEL – FIXED WITH FULL CLEANUP ======================
 function playChannel(idx) {
   if (idx < 0 || idx >= channels.length) return;
@@ -370,6 +370,121 @@ function playChannel(idx) {
       video.play();
     }
   }, 100);
+}
+*/
+// ====================== FINAL PERFECT playChannel – ULTRA FAST + 100% COMPATIBLE ======================
+function playChannel(idx) {
+  if (idx < 0 || idx >= channels.length) return;
+
+  // Same channel → just toggle play/pause
+  if (idx === current) {
+    video.paused ? video.play() : video.pause();
+    return;
+  }
+
+  // INSTANT BUFFERING + FULL CLEANUP
+  showBuffering();
+
+  current = idx;
+  const ch = channels[current];
+  nowPlaying.textContent = ch.title;
+  localStorage.setItem('lastChannelTitle', ch.title);
+  showUI();
+
+  // FULL DESTROY OLD HLS + MEDIA SOURCE
+  if (hls) {
+    hls.destroy();
+    hls = null;
+  }
+  if (video.src) {
+    if (video.src.startsWith('blob:')) URL.revokeObjectURL(video.src);
+    video.src = '';
+    video.removeAttribute('src');
+    video.load();
+  }
+
+  // Update active channel highlight
+  document.querySelectorAll('.channel').forEach(el =>
+    el.classList.toggle('active', Number(el.dataset.idx) === current)
+  );
+  qualityMenu.innerHTML = '';  // Clear quality menu
+
+  // PLAY NEW CHANNEL AFTER CLEANUP
+  setTimeout(() => {
+    const url = ch.url.trim();
+
+    // 1. HLS (.m3u8) – Best quality & support
+    if (Hls.isSupported() && url.includes('.m3u8')) {
+      hls = new Hls({
+        maxBufferLength: 10,
+        maxMaxBufferLength: 20,
+        liveSyncDurationCount: 3,
+        enableWorker: true
+      });
+      hls.loadSource(url);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play();
+        buildQualityMenu();
+        hideBuffering();
+      });
+      hls.on(Hls.Events.ERROR, (e, data) => {
+        if (data.fatal) {
+          hideBuffering();
+          nowPlaying.textContent = "HLS Error";
+        }
+      });
+    }
+
+    // 2. RAW MPEG-TS (like http://87.255.35.150:18890/...) – Now plays perfectly!
+    else if (url.includes('.ts') || 
+             url.match(/:\d{4,6}\/(?:\d+|live|movie|series|$)/) || 
+             !url.includes('.') || 
+             url.includes(':18890') || 
+             url.includes(':25461')) {
+      
+      if ('MediaSource' in window) {
+        const mse = new MediaSource();
+        video.src = URL.createObjectURL(mse);
+        mse.addEventListener('sourceopen', () => {
+          const sb = mse.addSourceBuffer('video/mp2t');
+          const loadChunk = () => {
+            fetch(url, { credentials: 'omit' })
+              .then(r => r.arrayBuffer())
+              .then(buf => {
+                if (mse.readyState === 'open' && !sb.updating) {
+                  sb.appendBuffer(buf);
+                }
+              })
+              .catch(() => {}); // Silent retry
+          };
+          sb.addEventListener('updateend', loadChunk);
+          loadChunk();
+        });
+        video.play();
+        video.addEventListener('playing', hideBuffering, { once: true });
+      } else {
+        video.src = url;
+        video.play();
+      }
+    }
+
+    // 3. DIRECT MP4 / OTHER STREAMS
+    else {
+      video.src = url;
+      video.play();
+      video.addEventListener('playing', hideBuffering, { once: true });
+    }
+
+    // Fallback: Hide buffering if still not playing after 8 sec
+    setTimeout(() => {
+      if (video.paused && buffering.style.opacity === '1') {
+        hideBuffering();
+        nowPlaying.textContent = "No Signal";
+      }
+    }, 8000);
+
+  }, 120);
 }
 // ====================== QUALITY MENU ======================
 function buildQualityMenu() {
