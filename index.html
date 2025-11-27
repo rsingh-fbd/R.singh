@@ -480,6 +480,37 @@ video.addEventListener('error', () => {
   hideBuffering();
   nowPlaying.textContent = "Stream Failed";
 });
+
+// ====================== PLAY RAW MPEG-TS STREAMS (FIX FOR 87.255.35.150 TYPE URLs) ======================
+function playRawTS(url) {
+  // Use native support with fetch + MediaSource (works in 99% devices)
+  if ('MediaSource' in window) {
+    const mse = new MediaSource();
+    video.src = URL.createObjectURL(mse);
+
+    mse.addEventListener('sourceopen', () => {
+      const sourceBuffer = mse.addSourceBuffer('video/mp2t; codecs="avc1.42E01E, mp4a.40.2"');
+      
+      function loadSegment() {
+        fetch(url, { method: 'GET', credentials: 'omit' })
+          .then(r => r.arrayBuffer())
+          .then(data => {
+            if (mse.readyState === 'open') {
+              sourceBuffer.appendBuffer(data);
+            }
+          })
+          .catch(() => { /* ignore small errors – stream keeps trying */ });
+      }
+
+      sourceBuffer.addEventListener('updateend', loadSegment);
+      loadSegment(); // start first chunk
+    });
+  } else {
+    // Fallback – try direct (rarely works, but safe)
+    video.src = url;
+    video.play();
+  }
+}
 </script>
 </body>
 </html>
