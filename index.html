@@ -278,6 +278,7 @@ function toggleFavorite(idx) {
 }
 
 // ====================== PLAY CHANNEL ======================
+/*
 function playChannel(idx) {
   if (idx < 0 || idx >= channels.length || idx === current) {
     video.paused ? video.play() : video.pause();
@@ -304,7 +305,72 @@ function playChannel(idx) {
     video.play();
   }
 }
+*/
 
+// ====================== PLAY CHANNEL – FIXED WITH FULL CLEANUP ======================
+function playChannel(idx) {
+  if (idx < 0 || idx >= channels.length) return;
+
+  // If same channel → just play/pause
+  if (idx === current) {
+    video.paused ? video.play() : video.pause();
+    return;
+  }
+
+  // INSTANT BUFFERING + CLEAN OLD STREAM
+  showBuffering();
+
+  current = idx;
+  const ch = channels[current];
+  nowPlaying.textContent = ch.title;
+  localStorage.setItem('lastChannelTitle', ch.title);
+  showUI();
+
+  // FULL CLEANUP OF OLD STREAM
+  if (hls) {
+    hls.destroy();           // ← This was missing proper cleanup!
+    hls = null;
+  }
+  if (video.src && video.src.startsWith('blob:')) {
+    URL.revokeObjectURL(video.src);
+  }
+  video.src = '';            // ← Force clear old source
+  video.removeAttribute('src');
+  video.load();              // ← Critical: forces browser to drop old stream
+
+  document.querySelectorAll('.channel').forEach(el => 
+    el.classList.toggle('active', Number(el.dataset.idx) === current)
+  );
+
+  qualityMenu.innerHTML = '';  // Clear old quality menu
+
+  // PLAY NEW CHANNEL
+  setTimeout(() => {  // Small delay to ensure cleanup
+    if (Hls.isSupported() && /\.m3u8/i.test(ch.url)) {
+      hls = new Hls({
+        maxBufferLength: 10,
+        maxMaxBufferLength: 20,
+        liveSyncDurationCount: 3,
+        enableWorker: true
+      });
+      hls.loadSource(ch.url);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play();
+        buildQualityMenu();
+      });
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        if (data.fatal) {
+          hideBuffering();
+          nowPlaying.textContent = "Stream Error";
+        }
+      });
+    } else {
+      video.src = ch.url;
+      video.play();
+    }
+  }, 100);
+}
 // ====================== QUALITY MENU ======================
 function buildQualityMenu() {
   qualityMenu.innerHTML = '';
