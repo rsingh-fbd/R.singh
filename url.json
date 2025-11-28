@@ -1,8 +1,6 @@
 {
   "sites": [
-    { "title": "YouTube", "url": "https://www.youtube.com/tv" },
-    { "title": "Gen YT", "url": "https://www.genyt.net/" },
-    { "title": "Dashboard", "url": "https://dashboard.mysite.com" },
-    { "title": "Live Stream", "url": "https://stream.mysite.com" }
+    { "title": "YouTube", "url": "https://www.youtube.com" },
+    { "title": "Gen YT", "url": "https://www.genyt.net" }
   ]
 }
