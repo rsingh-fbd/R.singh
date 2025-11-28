@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<body style="margin:0;background:#000">
+<video id="v" controls autoplay style="width:100%;height:100vh;background:#000"></video>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+let url = "http://87.255.35.150:18555"; // test URL
+
+if (Hls.isSupported()) {
+  let h = new Hls();
+  h.loadSource(url);
+  h.attachMedia(document.getElementById("v"));
+} else {
+  document.getElementById("v").src = url;
+}
+</script>
+
+</body>
+</html>
