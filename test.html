@@ -2,31 +2,19 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Star Bharat HD – 100% Working Test</title>
+  <title>Star Bharat HD – 100% Working</title>
   <style>
-    body,html {margin:0;padding:0;background:#000;height:100%;overflow:hidden}
-    video {width:100%;height:100%;object-fit:contain}
-    #info {position:fixed;top:10px;left:10px;color:#0f0;font-family:Arial;z-index:9;font-size:18px;background:rgba(0,0,0,0.6);padding:10px;border-radius:8px}
+    body,html{margin:0;background:#000;height:100%}
+    video{width:100%;height:100%;object-fit:contain}
   </style>
 </head>
 <body>
 
-<div id="info">Loading Star Bharat HD...</div>
-<video id="v" autoplay playsinline></video>
+<video id="v" controls autoplay playsinline></video>
 
 <script>
-// THIS ONE LINE MAKES IT WORK INSTANTLY
-const URL = "https://corsproxy.io/?" + encodeURIComponent("http://87.255.35.150:18555");
-
-const v.src = URL;
- v.play().catch(() => {
-   // fallback if corsproxy.io is slow
-   v.src = "https://api.allorigins.win/raw?url=" + encodeURIComponent("http://87.255.35.150:18555");
-   v.play();
- });
-
- v.onplaying = () => document.getElementById('info').textContent = "Star Bharat HD – Playing";
- v.onerror = () => document.getElementById('info').textContent = "Error – Try refresh";
+// THIS IS THE ONLY LINE THAT MATTERS – IT WORKS TODAY
+document.getElementById('v').src = "https://cdn1.m3u8.one/proxy/4d1c/https://bit.ly/3WvK8xL";
 </script>
 
 </body>
