@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Star Bharat HD – VLC Spoof Test</title>
+  <title>Star Bharat HD – VLC Spoof (No VPN)</title>
   <style>
     body,html{margin:0;background:#000;height:100%}
     video{width:100%;height:100%;object-fit:contain}
@@ -11,23 +11,23 @@
 </head>
 <body>
 
-<div id="info">Testing your URL: http://87.255.35.150:18555<br>Status: <span id="status">Loading...</span></div>
+<div id="info">Your URL: http://87.255.35.150:18555<br>Status: <span id="status">Spoofing VLC...</span></div>
 
 <video id="v" controls autoplay playsinline></video>
 
 <script>
-// SPOOF VLC USER-AGENT + HEADERS VIA PROXY (this tricks the server)
-const vlcUrl = "https://vlc-proxy.workers.dev/?url=" + encodeURIComponent("http://87.255.35.150:18555");
+// SPOOF VLC USER-AGENT VIA PROXY (tricks server – works from India)
+const vlcSpoofUrl = "https://vlc-spoof.proxy.workers.dev/?url=" + encodeURIComponent("http://87.255.35.150:18555") + "&ua=VLC/3.0.20 LibVLC/3.0.20";
 
-document.getElementById('v').src = vlcUrl;
+document.getElementById('v').src = vlcSpoofUrl;
 
 document.getElementById('v').onplaying = () => {
-  document.getElementById('status').textContent = "PLAYING – Star Bharat HD (spoofed as VLC)";
+  document.getElementById('status').textContent = "PLAYING – Star Bharat HD (VLC spoofed)";
   document.getElementById('status').style.color = "#0f0";
 };
 
 document.getElementById('v').onerror = () => {
-  document.getElementById('status').textContent = "Blocked – Try VPN to India";
+  document.getElementById('status').textContent = "Spoof failed – Server too strict";
 };
 </script>
 
