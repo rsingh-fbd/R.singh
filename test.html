@@ -1,19 +1,61 @@
 <!DOCTYPE html>
 <html>
-<body style="margin:0;background:#000">
-<video id="v" controls autoplay style="width:100%;height:100vh;background:#000"></video>
+<head>
+  <meta charset="utf-8">
+  <title>Test Raw TS Stream</title>
+  <style>
+    body { margin:0; background:#000; font-family:Arial; color:#0f0; text-align:center; padding-top:50px; }
+    video { width:90%; max-width:800px; margin:20px auto; display:block; background:#111; }
+    button { padding:15px 30px; font-size:18px; background:#0f0; color:#000; border:none; border-radius:8px; cursor:pointer; }
+  </style>
+</head>
+<body>
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<h1>Raw MPEG-TS Stream Player</h1>
+<h2>Works with: http://87.255.35.150:18555</h2>
+
+<video id="video" controls autoplay></video>
+
+<button onclick="play()">PLAY STAR BHARAT HD (87.255.35.150:18555)</button>
+<button onclick="video.pause()">Pause</button>
+<button onclick="video.play()">Play</button>
+
 <script>
-let url = "http://87.255.35.150:18555"; // test URL
+const video = document.getElementById('video');
 
-if (Hls.isSupported()) {
-  let h = new Hls();
-  h.loadSource(url);
-  h.attachMedia(document.getElementById("v"));
-} else {
-  document.getElementById("v").src = url;
+function play() {
+  const url = "http://87.255.35.150:18555";  // ← Your exact URL
+
+  if (!'MediaSource' in window) {
+    alert("Your browser doesn't support MediaSource (try Chrome/Firefox)");
+    return;
+  }
+
+  const mse = new MediaSource();
+  video.src = URL.createObjectURL(mse);
+
+  mse.addEventListener('sourceopen', () => {
+    const sb = mse.addSourceBuffer('video/mp2t');  // This is the key!
+
+    const load = () => {
+      fetch(url, { cache: 'no-store' })
+        .then(r => r.arrayBuffer())
+        .then(data => {
+          if (mse.readyState === 'open' && data.byteLength > 1000) {
+            sb.appendBuffer(data);
+          }
+        })
+        .catch(() => console.log("Retrying..."));
+    };
+
+    sb.addEventListener('updateend', load);
+    load();
+    video.play();
+  });
 }
+
+// Auto play when page loads
+play();
 </script>
 
 </body>
