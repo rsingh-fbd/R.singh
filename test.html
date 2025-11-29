@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><title>Star Bharat HD Test</title>
-<style>body,html{margin:0;background:#000;height:100%}video{width:100%;height:100%;object-fit:contain}</style>
+<head>
+  <script src="https:                                               
 </head>
 <body>
-<video id="v" controls autoplay playsinline></video>
-<script>
-// TRY THIS PROXY (working as of Nov 29, 2025)
-document.getElementById('v').src = "https://proxy.m3u8.one/4d1c/" + btoa("http://87.255.35.150:18555");
-</script>
+  <video id="videoPlayer" width="640" height="480" controls></video>
+  <script>
+    var video = document.getElementById('videoPlayer');
+    var hls = new Hls();
+    hls.loadSource('http://87.255.35.150:18555');
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+      video.play();
+    });
+  </script>
 </body>
 </html>
