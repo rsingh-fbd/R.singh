@@ -1,5 +1,6 @@
 {
   "sites": [
+    { "title": "YouTube", "url": "https://proxyearth.org" },
     { "title": "YouTube", "url": "https://www.youtube.com" },
     { "title": "Gen YT", "url": "https://www.genyt.net" }
   ]
