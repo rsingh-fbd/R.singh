@@ -1,35 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Star Bharat HD – VLC Spoof (No VPN)</title>
-  <style>
-    body,html{margin:0;background:#000;height:100%}
-    video{width:100%;height:100%;object-fit:contain}
-    #info{position:fixed;top:10px;left:10px;color:#0f0;background:rgba(0,0,0,0.7);padding:10px;border-radius:8px;z-index:9}
-  </style>
+    <meta charset="UTF-8">
+    <title>Live Channel Stream Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        /* Optional: Basic styling to make the video fill the screen */
+        body {
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        #video {
+            width: 80%;
+            max-width: 1200px;
+            border: 5px solid #009688;
+            box-shadow: 0 0 20px rgba(0, 150, 136, 0.5);
+        }
+    </style>
 </head>
 <body>
 
-<div id="info">Your URL: http://87.255.35.150:18555<br>Status: <span id="status">Spoofing VLC...</span></div>
+    <video id="video" controls autoplay muted></video>
 
-<video id="v" controls autoplay playsinline></video>
+    <script>
+        // 1. Define the stream URL (Replace this if you get an .m3u8 link!)
+        const videoSrc = 'http://87.255.35.150:18882';
 
-<script>
-// SPOOF VLC USER-AGENT VIA PROXY (tricks server – works from India)
-const vlcSpoofUrl = "https://vlc-spoof.proxy.workers.dev/?url=" + encodeURIComponent("http://87.255.35.150:18555") + "&ua=VLC/3.0.20 LibVLC/3.0.20";
+        const video = document.getElementById('video');
+        
+        // 2. Check if the browser supports Media Source Extensions (required for hls.js)
+        if (Hls.isSupported()) {
+            // A. Use hls.js for playback
+            const hls = new Hls();
+            
+            // Attach the video stream source
+            hls.loadSource(videoSrc);
+            
+            // Link hls.js to the HTML video element
+            hls.attachMedia(video);
+            
+            // Wait for the stream manifest to be parsed, then start playing
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                // Autoplay often requires the video to be muted first in many browsers
+                video.muted = true; 
+                video.play().catch(error => {
+                    console.error("Autoplay failed, user interaction may be required:", error);
+                    // Inform the user if autoplay is blocked
+                    if (video.paused) {
+                        alert("The browser blocked automatic playback. Please click the play button.");
+                        video.muted = false; // Unmute if user has to interact
+                    }
+                });
+            });
 
-document.getElementById('v').src = vlcSpoofUrl;
+            // Optional: Handle errors for better debugging
+            hls.on(Hls.Events.ERROR, function(event, data) {
+                if (data.fatal) {
+                    console.error("HLS Fatal Error:", data.type, data.details);
+                }
+            });
 
-document.getElementById('v').onplaying = () => {
-  document.getElementById('status').textContent = "PLAYING – Star Bharat HD (VLC spoofed)";
-  document.getElementById('status').style.color = "#0f0";
-};
-
-document.getElementById('v').onerror = () => {
-  document.getElementById('status').textContent = "Spoof failed – Server too strict";
-};
-</script>
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            // B. Fallback for browsers with native HLS support (e.g., Safari on iOS/macOS)
+            video.src = videoSrc;
+            video.addEventListener('loadedmetadata', function() {
+                video.play();
+            });
+        } else {
+            // C. Final fallback if the browser is old or non-compliant
+            alert('Your browser does not support playing this stream.');
+        }
+    </script>
 
 </body>
 </html>
