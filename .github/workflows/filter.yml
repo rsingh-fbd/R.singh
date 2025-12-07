@@ -3,10 +3,10 @@ name: Filter IPTV Playlist
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 */2 * * *"   # Every 2 hours (you can change to */1 if you really need hourly)
+    - cron: "0 */2 * * *"   # Every 2 hours
 
 permissions:
-  contents: write   # Needed to push changes
+  contents: write
 
 jobs:
   filter:
@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -23,17 +21,22 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
+      - name: Create requirements.txt (if missing)
+        run: |
+          echo "requests>=2.25.1" > requirements.txt
+          echo "urllib3>=1.26.0" >> requirements.txt
+
       - name: Install dependencies
-        run: pip install requests urllib3
+        run: pip install -r requirements.txt
 
       - name: Run filter script
         run: python scripts/filter.py
 
-      - name: Commit & Push if changed
+      - name: Commit & Push if playlist changed
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add playlist1.m3u
+          git add playlist1.m3u requirements.txt
           git diff --quiet && echo "No changes" && exit 0
-          git commit -m "Auto-update playlist1.m3u $(date +'%Y-%m-%d %H:%M')"
+          git commit -m "Auto-update playlist + requirements.txt $(date +'%Y-%m-%d %H:%M')"
           git push
