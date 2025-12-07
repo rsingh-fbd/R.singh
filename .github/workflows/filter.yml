@@ -1,76 +1,38 @@
 name: Filter IPTV Playlist
 
 on:
+  workflow_dispatch:
   schedule:
-    - cron: "0 */1 * * *"   # every 12 hours
-  workflow_dispatch:         # manual run button
+    - cron: "0 */1 * * *"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Install Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y curl
 
-    - name: Download JSON and M3U
-      run: |
-        curl -o channels.json https://rsingh-fbd.github.io/R.singh/channels.json
-        curl -o all.m3u https://iptv-org.github.io/iptv/countries/in.m3u
+      - name: Download full Indian playlist
+        run: curl -L "https://iptv-org.github.io/iptv/countries/in.m3u" -o full.m3u
 
-    - name: Create filter script
-      run: |
-        cat << 'EOF' > filter.py
-import json
-import re
+      - name: Filter channels using channels.json
+        run: |
+          echo "#EXTM3U" > playlist1.m3u
+          while IFS= read -r channel; do
+            awk -v ch="$channel" '
+              $0 ~ ch { print p; print $0 }
+              { p = $0 }
+            ' full.m3u >> playlist1.m3u
+          done < channels.json
 
-# Load required channels list
-with open('channels.json', 'r') as f:
-    required = json.load(f)
-
-required_names = [ch.lower() for ch in required['channels']]
-
-# Read M3U
-with open('all.m3u', 'r', encoding="utf-8") as f:
-    lines = f.readlines()
-
-final = []
-keep_next = False
-
-for line in lines:
-    if line.startswith("#EXTINF"):
-        # Extract channel name using regex
-        match = re.search(r',\s*(.*)', line)
-        channel_name = match.group(1).strip().lower() if match else ""
-
-        # Check if name matches required list
-        keep_next = any(req in channel_name for req in required_names)
-
-        if keep_next:
-            final.append(line)  # keep full metadata line
-
-    else:
-        if keep_next:
-            final.append(line)  # keep stream URL
-
-# Save final filtered playlist
-with open('playlist1.m3u', 'w', encoding="utf-8") as f:
-    f.write("#EXTM3U\n")
-    f.writelines(final)
-EOF
-
-    - name: Run filter
-      run: python3 filter.py
-
-    - name: Commit and push changes
-      run: |
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
-        git add playlist1.m3u
-        git commit -m "Updated playlist1.m3u" || echo "No changes"
-        git push
+      - name: Commit filtered playlist
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add playlist1.m3u
+          git commit -m "Updated playlist1.m3u" || echo "No changes"
+          git push
