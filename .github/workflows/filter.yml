@@ -10,29 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
-      - name: Install tools
-        run: sudo apt-get update && sudo apt-get install -y curl
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
 
-      - name: Download full Indian playlist
-        run: curl -L "https://iptv-org.github.io/iptv/countries/in.m3u" -o full.m3u
+    - name: Install Python dependencies
+      run: pip install requests
 
-      - name: Filter channels using channels.json
-        run: |
-          echo "#EXTM3U" > playlist1.m3u
-          while IFS= read -r channel; do
-            awk -v ch="$channel" '
-              $0 ~ ch { print p; print $0 }
-              { p = $0 }
-            ' full.m3u >> playlist1.m3u
-          done < channels.json
+    - name: Run Filter Script
+      run: python scripts/filter.py
 
-      - name: Commit filtered playlist
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add playlist1.m3u
-          git commit -m "Updated playlist1.m3u" || echo "No changes"
-          git push
+    - name: Commit and Push Changes
+      run: |
+        git config --local user.email "actions@github.com"
+        git config --local user.name "GitHub Actions"
+        git add playlist1.m3u
+        git commit -m "Updated playlist1.m3u" || echo "No changes to commit"
+        git push
