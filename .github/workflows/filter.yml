@@ -9,14 +9,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
-    # ADDED: Explicitly grant write permission to the GITHUB_TOKEN for contents
+    # CRITICAL FIX: Grant write permission to the default token
     permissions:
       contents: write 
 
     steps:
     - name: Checkout Repository
+      # Best practice: Explicitly tell checkout to use the GITHUB_TOKEN
       uses: actions/checkout@v3
-
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }} # Ensures the correct token is used
+        
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -34,4 +37,5 @@ jobs:
         git config --local user.name "GitHub Actions"
         git add playlist1.m3u
         git commit -m "Updated playlist1.m3u" || echo "No changes to commit"
+        # The push command uses the GITHUB_TOKEN implicitly due to the 'contents: write' permission
         git push
