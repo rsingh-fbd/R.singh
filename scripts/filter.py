@@ -12,7 +12,6 @@ def load_wanted_channels():
     try:
         with open(CHANNELS_JSON, "r", encoding="utf-8") as f:
             data = json.load(f)
-        # Accept both string list and object with "channels" key
         if isinstance(data, list):
             channels = data
         elif isinstance(data, dict) and "channels" in data:
@@ -36,7 +35,7 @@ def download_playlist():
         exit(1)
 
 def extract_name_from_extinf(line):
-    """Gets the text after the last comma (this is the real channel name)
+    """Gets the text after the last comma — this is the real channel name in iptv-org"""
     if ',' in line:
         return line.split(',')[-1].strip()
     return ""
@@ -46,24 +45,24 @@ def main():
     print(f"Loaded {len(wanted)} channel keywords to keep.")
 
     playlist = download_playlist()
-    lines = .splitlines()
+    lines = playlist.splitlines()
 
     result = ["#EXTM3U"]
     saved = 0
 
     i = 0
     while i < len(lines):
-        line = lines[i]
+        line = lines[i].strip()
 
         if line.startswith("#EXTINF:"):
             # Extract real channel name (after last comma)
             channel_name = extract_name_from_extinf(line).lower()
 
-            # If any keyword from your channels.json appears in the name → keep it
+            # Match if any keyword from channels.json is inside the name
             if any(keyword in channel_name for keyword in wanted):
-                result.append(line)                    # EXTINF line
+                result.append(lines[i])                    # EXTINF line
                 if i+1 < len(lines) and not lines[i+1].startswith("#"):
-                    result.append(lines[i+1])           # URL line
+                    result.append(lines[i+1])               # URL line
                     saved += 1
                 else:
                     print(f"Warning: No URL after {channel_name}")
