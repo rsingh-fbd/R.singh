@@ -2,77 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Live Channel Stream Player</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <title>Raw TS Stream Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.js"></script>
     <style>
-        /* Optional: Basic styling to make the video fill the screen */
-        body {
-            background-color: #1a1a1a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-        #video {
-            width: 80%;
-            max-width: 1200px;
-            border: 5px solid #009688;
-            box-shadow: 0 0 20px rgba(0, 150, 136, 0.5);
-        }
+        body { margin: 0; background-color: #1a1a1a; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        #videoElement { width: 80%; max-width: 1200px; background-color: black; }
     </style>
 </head>
 <body>
 
-    <video id="video" controls autoplay muted></video>
+    <video id="videoElement" controls autoplay muted></video>
 
     <script>
-        // 1. Define the stream URL (Replace this if you get an .m3u8 link!)
-        const videoSrc = 'http://87.255.35.150:18882';
+        const videoSrc = 'http://87.255.35.150:18882/index.ts';
+        const videoElement = document.getElementById('videoElement');
 
-        const video = document.getElementById('video');
-        
-        // 2. Check if the browser supports Media Source Extensions (required for hls.js)
-        if (Hls.isSupported()) {
-            // A. Use hls.js for playback
-            const hls = new Hls();
-            
-            // Attach the video stream source
-            hls.loadSource(videoSrc);
-            
-            // Link hls.js to the HTML video element
-            hls.attachMedia(video);
-            
-            // Wait for the stream manifest to be parsed, then start playing
-            hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                // Autoplay often requires the video to be muted first in many browsers
-                video.muted = true; 
-                video.play().catch(error => {
-                    console.error("Autoplay failed, user interaction may be required:", error);
-                    // Inform the user if autoplay is blocked
-                    if (video.paused) {
-                        alert("The browser blocked automatic playback. Please click the play button.");
-                        video.muted = false; // Unmute if user has to interact
-                    }
-                });
+        // 2. Check for mpegts.js support
+        if (mpegts.isSupported()) {
+            // 3. Create a player instance
+            const player = mpegts.createPlayer({
+                type: 'ts', // Specify stream type as Transport Stream
+                url: videoSrc,
+                isLive: true, // Crucial for a live stream
+                cors: true // May be necessary if the server doesn't send CORS headers
+            }, {
+                // Optional: Reduce default buffer size for lower latency (more live-like)
+                liveBufferLatencyMaxLatency: 2, 
+                liveBufferLatencyMinFetchDuration: 0.5 
             });
 
-            // Optional: Handle errors for better debugging
-            hls.on(Hls.Events.ERROR, function(event, data) {
-                if (data.fatal) {
-                    console.error("HLS Fatal Error:", data.type, data.details);
+            // 4. Attach the player to the video element
+            player.attachMediaElement(videoElement);
+            
+            // 5. Load the stream and attempt to play
+            player.load();
+            videoElement.play().catch(error => {
+                console.error("Autoplay failed:", error);
+                // Prompt user to interact if autoplay is blocked
+                if (videoElement.paused) {
+                    alert("Click OK to play the live stream.");
+                    videoElement.muted = false; // Unmute if user has to interact
+                    videoElement.play();
                 }
             });
-
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            // B. Fallback for browsers with native HLS support (e.g., Safari on iOS/macOS)
-            video.src = videoSrc;
-            video.addEventListener('loadedmetadata', function() {
-                video.play();
+            
+            // Optional: Error handling
+            player.on(mpegts.Events.ERROR, function(errorType, errorDetails, errorInfo) {
+                console.error('MPEGTS Error:', errorType, errorDetails);
             });
+
         } else {
-            // C. Final fallback if the browser is old or non-compliant
-            alert('Your browser does not support playing this stream.');
+            // Fallback for unsupported browsers
+            videoElement.innerHTML = '<p style="color:white;padding:20px;">Your browser does not support MPEG-TS playback.</p>';
         }
     </script>
 
