@@ -8,6 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    # ADDED: Explicitly grant write permission to the GITHUB_TOKEN for contents
+    permissions:
+      contents: write 
 
     steps:
     - name: Checkout Repository
