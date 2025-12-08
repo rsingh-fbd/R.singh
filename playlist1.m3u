@@ -43,12 +43,30 @@ https://live-bhojpuri.akamaized.net/liveabr/playlist.m3u8
 https://cdn-1.pishow.tv/live/1059/master.m3u8
 #EXTINF:-1 tvg-id="BoogleBollywood.in@SD" tvg-logo="https://i.imgur.com/gaKzWdo.png" group-title="Music","Boogle Bollywood"
 http://live.agmediachandigarh.com/booglebollywood/774e3ea9f3fa9bcdac47f445b83b6653.sdp/index.m3u8
+#EXTINF:-1 tvg-id="Colors.in@SD" tvg-logo="https://i.imgur.com/M8uCJ0D.png" group-title="Entertainment","Colors"
+http://87.255.35.150:18890
+#EXTINF:-1 tvg-id="ColorsBangla.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/en/7/7b/Colors_Bangla.png" group-title="Entertainment","Colors Bangla"
+http://87.255.35.150:18236
 #EXTINF:-1 tvg-id="ColorsCineplex.in@SD" tvg-logo="https://i.imgur.com/Hvvjfk5.png" group-title="Movies","Colors Cineplex"
 http://87.255.35.150:18296
 #EXTINF:-1 tvg-id="ColorsCineplexBollywood.in@SD" tvg-logo="https://i.imgur.com/EbHSQAJ.png" group-title="Movies","Colors Cineplex Bollywood"
 http://103.182.170.32:8888/play/a01o
+#EXTINF:-1 tvg-id="ColorsGujarati.in@SD" tvg-logo="https://i.imgur.com/ZWMyR3j.png" group-title="Entertainment","Colors Gujarati"
+http://87.255.35.150:18230
 #EXTINF:-1 tvg-id="ColorsInfinity.in@SD" tvg-logo="https://i.imgur.com/a5uES9j.png" group-title="Entertainment","Colors Infinity"
 http://87.255.35.150:18838
+#EXTINF:-1 tvg-id="ColorsKannada.in@SD" tvg-logo="https://i.imgur.com/CFUn43Z.png" group-title="Entertainment","Colors Kannada"
+http://87.255.35.150:18219
+#EXTINF:-1 tvg-id="ColorsKannadaCinema.in@SD" tvg-logo="https://i.imgur.com/gNbA3NO.png" group-title="Movies","Colors Kannada Cinema"
+http://87.255.35.150:18940
+#EXTINF:-1 tvg-id="ColorsMarathi.in@SD" tvg-logo="https://i.imgur.com/q43P31H.png" group-title="Entertainment","Colors Marathi"
+http://87.255.35.150:18233
+#EXTINF:-1 tvg-id="ColorsRishteyAsia.in@SD" tvg-logo="https://i.imgur.com/YKWfMZo.png" group-title="General","Colors Rishtey Asia"
+http://87.255.35.150:18886
+#EXTINF:-1 tvg-id="ColorsSuper.in@SD" tvg-logo="" group-title="Entertainment","Colors Super"
+http://87.255.35.150:18445
+#EXTINF:-1 tvg-id="ColorsTamil.in@SD" tvg-logo="https://i.imgur.com/zZXCFqF.png" group-title="Entertainment","Colors Tamil"
+http://87.255.35.150:18225
 #EXTINF:-1 tvg-id="Dabangg.in@SD" tvg-logo="https://i.imgur.com/6ChpxLy.png" group-title="Entertainment","Dabangg"
 https://cdn-apse1-prod.tsv2.amagi.tv/linear/amg01448-samsungin-dabanggin-samsungin/playlist.m3u8
 #EXTINF:-1 tvg-id="DangalTV.in@SD" tvg-logo="https://i.imgur.com/6JTb3cd.png" group-title="General","Dangal TV"
