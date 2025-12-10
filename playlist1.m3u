@@ -23,6 +23,8 @@ https://amg02159-kcglobal-amg02159c1-samsung-in-521.playouts.now.amagi.tv/playli
 https://cdnb4u.wiseplayout.com/B4U_Bhojpuri/master.m3u8
 #EXTINF:-1 tvg-id="B4UKadak.in@SD" tvg-logo="https://i.imgur.com/CKLn0ft.png" group-title="Movies","B4U Kadak"
 https://cdnb4u.wiseplayout.com/B4U_Kadak/master.m3u8
+#EXTINF:-1 tvg-id="B4UMovies.in@India" tvg-logo="https://i.imgur.com/M9kMFJl.png" group-title="Movies","B4U Movies India"
+https://cdnb4u.wiseplayout.com/B4U_Movies/master.m3u8
 #EXTINF:-1 tvg-id="B4UMusic.in@India" tvg-logo="https://i.imgur.com/KSxPLJA.png" group-title="Music","B4U Music"
 https://cdnb4u.wiseplayout.com/B4U_Music/master.m3u8
 #EXTINF:-1 tvg-id="B4UPlus.in@SD" tvg-logo="https://i.postimg.cc/L4Cpy9qt/b4uplus.png" group-title="Movies","B4U Plus"
@@ -43,6 +45,8 @@ http://87.255.35.150:18296
 http://103.182.170.32:8888/play/a01o
 #EXTINF:-1 tvg-id="ColorsInfinity.in@SD" tvg-logo="https://i.imgur.com/a5uES9j.png" group-title="Entertainment","Colors Infinity"
 http://87.255.35.150:18838
+#EXTINF:-1 tvg-id="ColorsRishteyAsia.in@SD" tvg-logo="https://i.imgur.com/YKWfMZo.png" group-title="General","Colors Rishtey Asia"
+http://87.255.35.150:18886
 #EXTINF:-1 tvg-id="Dabangg.in@SD" tvg-logo="https://i.imgur.com/6ChpxLy.png" group-title="Entertainment","Dabangg"
 https://cdn-apse1-prod.tsv2.amagi.tv/linear/amg01448-samsungin-dabanggin-samsungin/playlist.m3u8
 #EXTINF:-1 tvg-id="DangalTV.in@SD" tvg-logo="https://i.imgur.com/6JTb3cd.png" group-title="General","Dangal TV"
@@ -81,6 +85,8 @@ https://livetv.newsx.com/itv/itvnetwork3/playlist.m3u8
 https://indiatodaylive.akamaized.net/hls/live/2014320/indiatoday/indiatodaylive/playlist.m3u8
 #EXTINF:-1 tvg-id="IndiaTV.in@SD" tvg-logo="https://i.imgur.com/ztn2IR8.png" group-title="News","India TV"
 https://pl-indiatvnews.akamaized.net/out/v1/db79179b608641ceaa5a4d0dd0dca8da/index.m3u8
+#EXTINF:-1 tvg-id="IshwarBhaktiTV.in@SD" tvg-logo="https://i.imgur.com/tsPPU1Y.png" group-title="Religious","Ishwar Bhakti TV"
+https://6n3yow8pl9ok-hls-live.5centscdn.com/ishwartvlive/tv.stream/playlist.m3u8
 #EXTINF:-1 tvg-id="LokSabhaTV.in@SD" tvg-logo="https://i.imgur.com/QavgfiK.png" group-title="Legislative","Lok Sabha TV"
 #EXTINF:-1 tvg-id="MahaMovie.in@SD" tvg-logo="https://i.imgur.com/hpShFDL.png" group-title="Movies","Maha Movie"
 http://14.199.164.20:4001/play/a0q7/index.m3u8
@@ -143,6 +149,8 @@ http://87.255.35.150:18927
 #EXTINF:-1 tvg-id="SonySportsTen3.in@SD" tvg-logo="https://i.imgur.com/vG19HxD.png" group-title="Sports","Sony Sports Ten 3"
 http://87.255.35.150:18848
 #EXTINF:-1 tvg-id="SonySportsTen5.in@SD" tvg-logo="https://i.imgur.com/40BbQUd.png" group-title="Sports","Sony Sports Ten 5"
+#EXTINF:-1 tvg-id="SonyYay.in@SD" tvg-logo="https://i.imgur.com/MhlO1dB.png" group-title="Undefined","Sony Yay!"
+http://87.255.35.150:18285
 #EXTINF:-1 tvg-id="StarBharat.in@HD" tvg-logo="https://i.imgur.com/Q8ajPij.png" group-title="Entertainment","Star Bharat"
 http://87.255.35.150:18555
 #EXTINF:-1 tvg-id="StarGold2.in@SD" tvg-logo="https://i.imgur.com/G0ZfzZr.png" group-title="Movies","Star Gold 2"
@@ -200,3 +208,5 @@ https://amg17931-zee-amg17931c5-samsung-au-8873.playouts.now.amagi.tv/playlist.m
 https://dknttpxmr0dwf.cloudfront.net/index_57.m3u8
 #EXTINF:-1 tvg-id="ZeeTV.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Zee_TV_Logo_2025.svg/512px-Zee_TV_Logo_2025.svg.png" group-title="Undefined","Zee TV"
 http://87.255.35.150:18849
+#EXTINF:-1 tvg-id="Zing.in@SD" tvg-logo="https://i.imgur.com/zStK8g2.png" group-title="Undefined","Zing!"
+http://183.89.246.119:8881/play/a09a/index.m3u8
