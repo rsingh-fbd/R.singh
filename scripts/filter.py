@@ -4,7 +4,7 @@ import requests
 import re
 
 # ================= CONFIG =================
-SOURCE_URL    = "https://iptv-org.github.io/iptv/index.m3u"
+SOURCE_URL    = "https://iptv-org.github.io/iptv/countries/in.m3u"
 CHANNELS_JSON = "channels.json"
 OUTPUT_M3U    = "playlist1.m3u"
 # ==========================================
