@@ -175,6 +175,8 @@ http://87.255.35.150:18804
 http://87.255.35.150:18893
 #EXTINF:-1 tvg-id="StarSportsSelect2.in@HD" tvg-logo="https://i.imgur.com/FtRT73R.png" group-title="Sports","Star Sports Select 2"
 http://87.255.35.150:18952
+#EXTINF:-1 tvg-id="StarPlus.in@HD" tvg-logo="https://i.imgur.com/xWxNy3L.png" group-title="Entertainment","StarPlus"
+http://87.255.35.150:18880
 #EXTINF:-1 tvg-id="SudarshanNews.in@SD" tvg-logo="https://i.imgur.com/7AV1VI9.png" group-title="News","Sudarshan News"
 https://ott.livelegitpro.in/sudarshannews/sudarshannews/tracks-v1/index.fmp4.m3u8
 #EXTINF:-1 tvg-id="SuryaComedy.in@SD" tvg-logo="https://i.imgur.com/dNI0Vm5.png" group-title="Comedy","Surya Comedy"
@@ -208,31 +210,7 @@ https://dknttpxmr0dwf.cloudfront.net/index_57.m3u8
 http://87.255.35.150:18849
 #EXTINF:-1 tvg-id="Zing.in@SD" tvg-logo="https://i.imgur.com/zStK8g2.png" group-title="Undefined","Zing!"
 http://183.89.246.119:8881/play/a09a/index.m3u8
-#EXTINF:-1 tvg-name="Bharat Samachar" group-title="News","Bharat Samachar"
-https://idvd.multitvsolution.com/idvo/bharatsamachar.m3u
-#EXTINF:-1 tvg-name="Sadhna TV" group-title="Devotional","Sadhna TV"
-https://6n3yow8pl9ok-hls-live.5centscdn.com/sadhanalivetv/live.stream/playlist.m3u8
-#EXTINF:-1 tvg-name="Show Box" group-title="Entertainment","Show Box"
-https://epiconvh.akamaized.net/live/showbox/master.m3u8
-#EXTINF:-1 tvg-name="Subh Sandesh" group-title="Devotional","Subh Sandesh"
-https://6284rn2xr7xv-hls-live.wmncdn.net/shubhsandeshtv1/live123.stream/index.m3u8
-#EXTINF:-1 tvg-name="SVBC News" group-title="News","SVBC News"
-https://player.mslivestream.net/mslive/13a2927187b9700ae7ea82d7841d5b68.sdp/playlist.m3u8
-#EXTINF:-1 tvg-name="Pitara Movie" group-title="Movies","Pitara Movie"
-https://vg-pitaaratvlive.akamaized.net/ptnr-WatchO/title-PitaaraTV/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/vglive-sk-583798/playlist.m3u8
-#EXTINF:-1 tvg-name="The Q" group-title="Entertainment","The Q"
-https://vg-theqlive.akamaized.net/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/vglive-sk-306905/main.m3u8
-#EXTINF:-1 tvg-name="Kiddo+" group-title="Kids","Kiddo+"
-https://streams2.sofast.tv/ptnr-yupptv/title-KIDDO-ENG_yupptv/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/5bcf9d24-04f2-401d-a93f-7af54f29461a/3ed20915-7a5a-424e-afa8-b5c7692b08ee/0.m3u8
-#EXTINF:-1 tvg-name="Masti Music" group-title="Music","Masti Music"
-https://sabliveyupp.akamaized.net/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/sablive_https/mastii/playlist.m3u8
-#EXTINF:-1 tvg-name="Bollywood 4U" group-title="Movies","Bollywood 4U"
-https://streams2.sofast.tv/ptnr-yupptv/title-BOLLYWOOD-4U-ENG_yupptv/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/22d13e33-8705-40e8-9809-4e80aa795f15/e1479e4d-f60d-4ebc-b706-82ca9d15cfdd/0.m3u8
-#EXTINF:-1 tvg-name="MBC Movie" group-title="Movies","MBC Movie"
-https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-bollywood/546eb40d7dcf9a209255dd2496903764/index.m3u8
-#EXTINF:-1 tvg-name="Sony Kal" group-title="Entertainment","Sony Kal"
-https://spt-sonykal-1-us.lg.wurl.tv/playlist.m3u8
-#EXTINF:-1 tvg-name="Star Plus HD" group-title="Entertainment","Star Plus"
-https://tvsen7.aynaott.com/sphdbd/index.m3u8
-#EXTINF:-1 tvg-name="Zoom SD" group-title="Entertainment","Zoom"
-https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/zoom-tv/master.m3u8
+#EXTINF:-1 tvg-name="&Picture" group-title="Entertainment","&Picture"
+http://87.255.35.150:18415
+#EXTINF:-1 tvg-name="Sony Max" group-title="Entertainment","Sony Max"
+http://87.255.35.150:18851
