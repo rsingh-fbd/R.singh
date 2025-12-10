@@ -175,8 +175,6 @@ http://87.255.35.150:18804
 http://87.255.35.150:18893
 #EXTINF:-1 tvg-id="StarSportsSelect2.in@HD" tvg-logo="https://i.imgur.com/FtRT73R.png" group-title="Sports","Star Sports Select 2"
 http://87.255.35.150:18952
-#EXTINF:-1 tvg-id="StarPlus.in@HD" tvg-logo="https://i.imgur.com/xWxNy3L.png" group-title="Entertainment","StarPlus"
-http://87.255.35.150:18880
 #EXTINF:-1 tvg-id="SudarshanNews.in@SD" tvg-logo="https://i.imgur.com/7AV1VI9.png" group-title="News","Sudarshan News"
 https://ott.livelegitpro.in/sudarshannews/sudarshannews/tracks-v1/index.fmp4.m3u8
 #EXTINF:-1 tvg-id="SuryaComedy.in@SD" tvg-logo="https://i.imgur.com/dNI0Vm5.png" group-title="Comedy","Surya Comedy"
@@ -210,8 +208,6 @@ https://dknttpxmr0dwf.cloudfront.net/index_57.m3u8
 http://87.255.35.150:18849
 #EXTINF:-1 tvg-id="Zing.in@SD" tvg-logo="https://i.imgur.com/zStK8g2.png" group-title="Undefined","Zing!"
 http://183.89.246.119:8881/play/a09a/index.m3u8
-#EXTINF:-1 tvg-name="Aaj Tak Day" group-title="News","Aaj Tak Day"
-https://feeds.intoday.in/aajtak/api/aajtakhd/master.m3u8
 #EXTINF:-1 tvg-name="Bharat Samachar" group-title="News","Bharat Samachar"
 https://idvd.multitvsolution.com/idvo/bharatsamachar.m3u
 #EXTINF:-1 tvg-name="Sadhna TV" group-title="Devotional","Sadhna TV"
@@ -222,8 +218,6 @@ https://epiconvh.akamaized.net/live/showbox/master.m3u8
 https://6284rn2xr7xv-hls-live.wmncdn.net/shubhsandeshtv1/live123.stream/index.m3u8
 #EXTINF:-1 tvg-name="SVBC News" group-title="News","SVBC News"
 https://player.mslivestream.net/mslive/13a2927187b9700ae7ea82d7841d5b68.sdp/playlist.m3u8
-#EXTINF:-1 tvg-name="R Bharat" group-title="News","R Bharat"
-https://vg-republictvlive.akamaized.net/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/vglive-sk-275673/3aee0aba-4fad-4de5-bd08-47d5abb2ce45/1.m3u8
 #EXTINF:-1 tvg-name="Pitara Movie" group-title="Movies","Pitara Movie"
 https://vg-pitaaratvlive.akamaized.net/ptnr-WatchO/title-PitaaraTV/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/vglive-sk-583798/playlist.m3u8
 #EXTINF:-1 tvg-name="The Q" group-title="Entertainment","The Q"
