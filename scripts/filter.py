@@ -63,7 +63,8 @@ def main():
             clean_lower = clean_name.lower()
 
             # Match against your wanted list
-            if any(kw in clean_lower for kw in wanted):
+           # if any(kw in clean_lower for kw in wanted):
+            if clean_lower in wanted:
                 # Rebuild clean EXTINF line with nice name
                 new_line = line.split(",", 1)[0] + ',"' + clean_name + '"'
                 result.append(new_line)
