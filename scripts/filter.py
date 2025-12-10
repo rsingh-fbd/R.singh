@@ -6,7 +6,7 @@ import re
 SOURCE_URL      = "https://iptv-org.github.io/iptv/countries/in.m3u"
 CHANNELS_JSON   = "channels.json"
 OUTPUT_M3U      = "playlist1.m3u"
-EXTRA_PLAYLIST  = "Playlist.m3u"      # fallback playlist
+EXTRA_PLAYLIST  = "backup.m3u"      # fallback playlist
 # ==========================================
 
 
