@@ -96,6 +96,8 @@ https://cdn-2.pishow.tv/live/228/master.m3u8
 https://2nbyjxw5l53k-hls-live.qezycdn.com/metrotv/live.stream/playlist.m3u8
 #EXTINF:-1 tvg-id="MTV.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/MTV_2021_%28brand_version%29.svg/512px-MTV_2021_%28brand_version%29.svg.png" group-title="Entertainment","MTV"
 http://87.255.35.150:18901
+#EXTINF:-1 tvg-id="MusicIndia.in@SD" tvg-logo="https://i.imgur.com/kXTCYqg.png" group-title="Music","Music India"
+https://cdn-2.pishow.tv/live/226/master.m3u8
 #EXTINF:-1 tvg-id="Nazara.in@SD" tvg-logo="https://www.epicon.in/img/nazara-logo.png" group-title="Entertainment","Nazara"
 https://epiconvh.akamaized.net/live/nazara/master.m3u8
 #EXTINF:-1 tvg-id="NDTV24x7.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/NDTV_247.svg/512px-NDTV_247.svg.png" group-title="News","NDTV 24X7"
@@ -108,6 +110,8 @@ https://vidcdn.vidgyor.com/news24-origin/liveabr/playlist.m3u8
 https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/6cd2f649739a45ca9de1daf81cc7d0f2/index.m3u8
 #EXTINF:-1 tvg-id="PeaceofMindTV.in@SD" tvg-logo="https://i.imgur.com/Sr1wUNC.png" group-title="Religious","Peace of Mind TV"
 http://202.164.50.194:8000/play/a04c/index.m3u8
+#EXTINF:-1 tvg-id="PunjabiHits.in@SD" tvg-logo="https://i.imgur.com/i9xE87K.png" group-title="Undefined","Punjabi Hits"
+https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/punjabi-hits/index.m3u8
 #EXTINF:-1 tvg-id="RepublicBharat.in@SD" tvg-logo="https://i.imgur.com/NEAoh6O.png" group-title="Undefined","Republic Bharat"
 https://vg-republictvlive.akamaized.net/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/vglive-sk-275673/main.m3u8
 #EXTINF:-1 tvg-id="RepublicTV.in@SD" tvg-logo="https://i.imgur.com/K9KX8un.png" group-title="Undefined","Republic TV"
