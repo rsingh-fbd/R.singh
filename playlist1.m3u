@@ -215,6 +215,6 @@ http://87.255.35.150:18849
 #EXTINF:-1 tvg-id="Zing.in@SD" tvg-logo="https://i.imgur.com/zStK8g2.png" group-title="Undefined","Zing!"
 http://183.89.246.119:8881/play/a09a/index.m3u8
 #EXTINF:-1 tvg-name="&Picture" group-title="Entertainment","&Picture"
-http://87.255.35.150:18415
+http://87.255.35.150:18510
 #EXTINF:-1 tvg-name="Sony Max" group-title="Entertainment","Sony Max"
 http://87.255.35.150:18851
