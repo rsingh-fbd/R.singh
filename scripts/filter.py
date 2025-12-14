@@ -88,35 +88,32 @@ def main():
             clean_name = clean_channel_name(raw_name)
             clean_lower = clean_name.lower()
 
-            # Exact match ONLY
+            # Exact match ONLY (unchanged)
             if clean_lower in wanted:
                 found_channels.add(clean_lower)
 
                 new_line = line.split(",", 1)[0] + ',"' + clean_name + '"'
                 result.append(new_line)
 
-  """
-                if i + 1 < len(lines) and not lines[i + 1].startswith("#"):
-                    result.append(lines[i + 1])
-                    saved += 1
+                # FIX: find actual URL (skip #EXTVLCOPT etc.)
+                j = i + 1
+                while j < len(lines):
+                    if lines[j].strip() and not lines[j].startswith("#"):
+                        result.append(lines[j])
+                        saved += 1
+                        break
+                    j += 1
 
-        i += 1 
-"""
-              j = i + 1
-while j < len(lines):
-    if lines[j].strip() and not lines[j].startswith("#"):
-        result.append(lines[j])
-        saved += 1
-        break
-    j += 1
+        i += 1
 
     # ============================
-    # FALLBACK SEARCH IN extra.m3u
+    # FALLBACK SEARCH IN backup.m3u
+    # (unchanged)
     # ============================
     missing = [ch for ch in wanted if ch not in found_channels]
 
     if missing:
-        print(f"{len(missing)} channels not found in main playlist. Checking extra.m3u...")
+        print(f"{len(missing)} channels not found in main playlist. Checking backup.m3u...")
 
         extra_lines = load_extra_playlist()
         j = 0
