@@ -22,7 +22,8 @@ def load_wanted_channels():
         else:
             channels = []
 
-        return [ch.strip().lower() for ch in channels if ch.strip()]
+ #       return [ch.strip().lower() for ch in channels if ch.strip()]
+        return [clean_channel_name(ch).lower() for ch in channels if ch.strip()]
 
     except Exception as e:
         print(f"Error: Cannot read {CHANNELS_JSON}: {e}")
