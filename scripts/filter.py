@@ -95,11 +95,18 @@ def main():
                 new_line = line.split(",", 1)[0] + ',"' + clean_name + '"'
                 result.append(new_line)
 
-                if i + 1 < len(lines) and not lines[i + 1].startswith("#"):
+  """              if i + 1 < len(lines) and not lines[i + 1].startswith("#"):
                     result.append(lines[i + 1])
                     saved += 1
 
-        i += 1
+        i += 1 """
+              j = i + 1
+while j < len(lines):
+    if lines[j].strip() and not lines[j].startswith("#"):
+        result.append(lines[j])
+        saved += 1
+        break
+    j += 1
 
     # ============================
     # FALLBACK SEARCH IN extra.m3u
