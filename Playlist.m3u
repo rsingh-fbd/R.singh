@@ -117,14 +117,8 @@ https://live-bhojpuri.akamaized.net/liveabr/playlist.m3u8
 https://cdn-1.pishow.tv/live/1059/master.m3u8
 #EXTINF:-1 tvg-name="Boogle Bollywood SD" group-title="Music",Boogle Bollywood SD
 http://live.agmediachandigarh.com/booglebollywood/774e3ea9f3fa9bcdac47f445b83b6653.sdp/index.m3u8
-#EXTINF:-1 tvg-name="Colors SD" group-title="Entertainment",Colors SD
-http://87.255.35.150:18890
-#EXTINF:-1 tvg-name="Colors Cineplex SD" group-title="Movies",Colors Cineplex SD
-http://87.255.35.150:18296
 #EXTINF:-1 tvg-name="Colors Cineplex Bollywood SD" group-title="Movies",Colors Cineplex Bollywood SD
 http://103.182.170.32:8888/play/a01o
-#EXTINF:-1 tvg-name="Colors Infinity SD" group-title="Entertainment",Colors Infinity SD
-http://87.255.35.150:18838
 #EXTINF:-1 tvg-name="Dabangg SD" group-title="Entertainment",Dabangg SD
 https://cdn-apse1-prod.tsv2.amagi.tv/linear/amg01448-samsungin-dabanggin-samsungin/playlist.m3u8
 #EXTINF:-1 tvg-name="DD Bharati SD" group-title="Culture",DD Bharati SD
@@ -171,51 +165,10 @@ https://hls.media.nic.in/hls/live/lstv/lstv.m3u8
 https://cdn-1.pishow.tv/live/1451/master.m3u8
 #EXTINF:-1 tvg-name="Shemaroo TV SD" group-title="Entertainment",Shemaroo TV SD
 https://cdn-3.pishow.tv/live/230/master.m3u8
-#EXTINF:-1 tvg-name="Sony Max 2 SD" group-title="Movies",Sony Max 2 SD
-http://87.255.35.150:18841
-#EXTINF:-1 tvg-name="Sony Pal SD" group-title="Entertainment",Sony Pal SD
-http://87.255.35.150:18887
-#EXTINF:-1 tvg-name="Sony Pix SD" group-title="Movies",Sony Pix SD
-http://87.255.35.150:18495
-#EXTINF:-1 tvg-name="Sony Sports Ten 1 SD" group-title="Sports",Sony Sports Ten 1 SD
-http://87.255.35.150:18926
-#EXTINF:-1 tvg-name="Sony Sports Ten 2 SD" group-title="Sports",Sony Sports Ten 2 SD
-http://87.255.35.150:18927
-#EXTINF:-1 tvg-name="Sony Sports Ten 3 SD" group-title="Sports",Sony Sports Ten 3 SD
-http://87.255.35.150:18848
-#EXTINF:-1 tvg-name="Sony Sports Ten 5 SD" group-title="Sports" user-agent="stream",Sony Sports Ten 5 SD
-#EXTVLCOPT:http-user-agent=stream
-http://87.255.35.150:18818
-#EXTINF:-1 tvg-name="Sony Yay! SD" group-title="Kids",Sony Yay! SD
-http://87.255.35.150:18285
-#EXTINF:-1 tvg-name="Star Bharat HD" group-title="Entertainment",Star Bharat HD
-http://87.255.35.150:18555
-#EXTINF:-1 tvg-name="Star Gold Select HD" group-title="Movies",Star Gold Select HD
-http://87.255.35.150:18429
-#EXTINF:-1 tvg-name="Star Jalsha HD" group-title="Entertainment",Star Jalsha HD
-http://87.255.35.150:18237
-#EXTINF:-1 tvg-name="Star Maa HD" group-title="Entertainment",Star Maa HD
-http://87.255.35.150:18846
-#EXTINF:-1 tvg-name="Star Maa Movies SD" group-title="Movies",Star Maa Movies SD
-http://87.255.35.150:18817
-#EXTINF:-1 tvg-name="Star Movies HD" group-title="Movies",Star Movies HD
-http://87.255.35.150:18301
-#EXTINF:-1 tvg-name="Star Movies Select HD" group-title="Movies",Star Movies Select HD
-http://87.255.35.150:18548
 #EXTINF:-1 tvg-name="Star Plus HD" group-title="Entertainment",Star Plus HD
 https://tvsen7.aynaott.com/sphdbd/index.m3u8
-#EXTINF:-1 tvg-name="Star Pravah HD" group-title="Entertainment",Star Pravah HD
-http://87.255.35.150:18447
-#EXTINF:-1 tvg-name="Star Sports 2 HD" group-title="Sports",Star Sports 2 HD
-http://87.255.35.150:18828
-#EXTINF:-1 tvg-name="Star Sports 3 SD" group-title="Sports",Star Sports 3 SD
-http://87.255.35.150:18804
 #EXTINF:-1 tvg-name="Studio One + SD" group-title="Movies",Studio One + SD
 https://cdn-1.pishow.tv/live/276/master.m3u8
-#EXTINF:-1 tvg-name="Surya Comedy SD" group-title="Comedy",Surya Comedy SD
-http://87.255.35.150:18253
-#EXTINF:-1 tvg-name="Surya Movies SD" group-title="Movies",Surya Movies SD
-http://87.255.35.150:18932
 #EXTINF:-1 tvg-name="SVBC 4 SD" group-title="Religious",SVBC 4 SD
 https://player.mslivestream.net/mslive/13a2927187b9700ae7ea82d7841d5b68.sdp/playlist.m3u8
 #EXTINF:-1 tvg-name="Times Now SD" group-title="News",Times Now SD
@@ -226,36 +179,13 @@ https://amg01448-samsungin-tinnavbharat-samsungin-ad-m8.amagi.tv/playlist/amg014
 https://vg-zeefta.akamaized.net/ptnr-yupptv/title-zeehindustan/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/96bbab12-582e-4540-af70-510ab6824581/main.m3u8
 #EXTINF:-1 tvg-name="Zee Bollymovies Australia" group-title="Movies",Zee Bollymovies Australia
 https://amg17931-zee-amg17931c8-samsung-au-8871.playouts.now.amagi.tv/playlist.m3u8
-#EXTINF:-1 tvg-name="Zee Bollywood SD" group-title="Movies",Zee Bollywood SD
-http://87.255.35.150:18861
 #EXTINF:-1 tvg-name="Zee Business SD" group-title="Business",Zee Business SD
 https://dwby15d04agvq.cloudfront.net/index_1.m3u8
 #EXTINF:-1 tvg-name="Zee Cinema SD" group-title="Movies",Zee Cinema SD
 https://amg17931-zee-amg17931c5-samsung-au-8873.playouts.now.amagi.tv/playlist.m3u8
 #EXTINF:-1 tvg-name="Zee News SD" group-title="News",Zee News SD
 https://dknttpxmr0dwf.cloudfront.net/index_57.m3u8
-#EXTINF:-1 tvg-name="Zee TV SD" group-title="Entertainment" referrer="https://onezoo.net",Zee TV SD
-#EXTVLCOPT:http-referrer=https://onezoo.net
-http://87.255.35.150:18849
 #EXTINF:-1 tvg-name="Zing! SD" group-title="Music",Zing! SD
 http://183.89.246.119:8881/play/a09a/index.m3u8
 #EXTINF:-1 tvg-name="Zoom SD" group-title="Entertainment",Zoom SD
 https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/zoom-tv/master.m3u8
-#EXTINF:-1 tvg-name="Sony Entertainment Television SD" group-title="Entertainment",Sony Entertainment Television SD
-http://87.255.35.150:18546
-#EXTINF:-1 tvg-name="Star Gold 2 SD" group-title="Movies",Star Gold 2 SD
-http://87.255.35.150:18807/
-#EXTINF:-1 tvg-name="Star Gold HD" group-title="Movies",Star Gold HD
-http://87.255.35.150:18859/
-#EXTINF:-1 tvg-name="Star Sports 1 HD" group-title="Sports",Star Sports 1 HD
-http://87.255.35.150:18891/
-#EXTINF:-1 tvg-name="Star Sports 1 Hindi HD" group-title="Sports",Star Sports 1 Hindi HD
-http://87.255.35.150:18302
-#EXTINF:-1 tvg-name="Star Sports 2 Hindi SD" group-title="Sports",Star Sports 2 Hindi SD
-http://87.255.35.150:18882
-#EXTINF:-1 tvg-name="Star Sports Select 1 HD" group-title="Sports",Star Sports Select 1 HD
-http://87.255.35.150:18893/
-#EXTINF:-1 tvg-name="Star Sports Select 2 HD" group-title="Sports",Star Sports Select 2 HD
-http://87.255.35.150:18952/
-#EXTINF:-1 tvg-name="Zee Action SD" group-title="Movies",Zee Action SD
-http://87.255.35.150:18507
