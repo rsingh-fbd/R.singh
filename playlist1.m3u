@@ -45,8 +45,6 @@ http://87.255.35.150:18890
 http://87.255.35.150:18296
 #EXTINF:-1 tvg-id="ColorsCineplexBollywood.in@SD" tvg-logo="https://i.imgur.com/EbHSQAJ.png" group-title="Movies","Colors Cineplex Bollywood"
 http://103.182.170.32:8888/play/a01o
-#EXTINF:-1 tvg-id="ColorsInfinity.in@SD" tvg-logo="https://i.imgur.com/a5uES9j.png" group-title="Entertainment","Colors Infinity"
-http://87.255.35.150:18838
 #EXTINF:-1 tvg-id="ColorsRishteyAsia.in@SD" tvg-logo="https://i.imgur.com/YKWfMZo.png" group-title="General","Colors Rishtey Asia"
 http://87.255.35.150:18886
 #EXTINF:-1 tvg-id="Dabangg.in@SD" tvg-logo="https://i.imgur.com/6ChpxLy.png" group-title="Entertainment","Dabangg"
@@ -127,25 +125,25 @@ https://vidcdn.vidgyor.com/news24-origin/liveabr/playlist.m3u8
 https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/6cd2f649739a45ca9de1daf81cc7d0f2/index.m3u8
 #EXTINF:-1 tvg-id="PeaceofMindTV.in@SD" tvg-logo="https://i.imgur.com/Sr1wUNC.png" group-title="Religious","Peace of Mind TV"
 http://202.164.50.194:8000/play/a04c/index.m3u8
-#EXTINF:-1 tvg-id="PunjabiHits.in@SD" tvg-logo="https://i.imgur.com/i9xE87K.png" group-title="Undefined","Punjabi Hits"
+#EXTINF:-1 tvg-id="PunjabiHits.in@SD" tvg-logo="https://i.imgur.com/i9xE87K.png" group-title="Music","Punjabi Hits"
 https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/punjabi-hits/index.m3u8
-#EXTINF:-1 tvg-id="RepublicBharat.in@SD" tvg-logo="https://i.imgur.com/NEAoh6O.png" group-title="Undefined","Republic Bharat"
+#EXTINF:-1 tvg-id="RepublicBharat.in@SD" tvg-logo="https://i.imgur.com/NEAoh6O.png" group-title="News","Republic Bharat"
 https://vg-republictvlive.akamaized.net/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/vglive-sk-275673/main.m3u8
-#EXTINF:-1 tvg-id="RepublicTV.in@SD" tvg-logo="https://i.imgur.com/K9KX8un.png" group-title="Undefined","Republic TV"
+#EXTINF:-1 tvg-id="RepublicTV.in@SD" tvg-logo="https://i.imgur.com/K9KX8un.png" group-title="News","Republic TV"
 https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/2e31d831f08640ff92f65003bdc89991/index.m3u8
 #EXTINF:-1 tvg-id="SadhnaPlusNews.in@SD" tvg-logo="https://i.imgur.com/h4UehKC.png" group-title="News","Sadhna Plus News"
 https://6n3yow8pl9ok-hls-live.5centscdn.com/sadhananewstv/live.stream/playlist.m3u8
 #EXTINF:-1 tvg-id="SanskarTV.in@SD" tvg-logo="https://i.imgur.com/SDkiMvR.png" group-title="Culture;Religious","Sanskar TV"
 https://d26idhjf0y1p2g.cloudfront.net/out/v1/cd66dd25b9774cb29943bab54bbf3e2f/index.m3u8
-#EXTINF:-1 tvg-id="SanskarUK.in@SD" tvg-logo="https://i.imgur.com/AU5vSPF.png" group-title="Undefined","Sanskar UK"
+#EXTINF:-1 tvg-id="SanskarUK.in@SD" tvg-logo="https://i.imgur.com/AU5vSPF.png" group-title="Religious","Sanskar UK"
 https://d34z4embz0hjf6.cloudfront.net/out/v1/7ac2789ff9a544a49337d1ffc54ce61c/index.m3u8
-#EXTINF:-1 tvg-id="SanskarUSA.in@SD" tvg-logo="https://i.imgur.com/5WBWruX.png" group-title="Undefined","Sanskar USA"
+#EXTINF:-1 tvg-id="SanskarUSA.in@SD" tvg-logo="https://i.imgur.com/5WBWruX.png" group-title="Religious","Sanskar USA"
 https://d2netiedy8cz3x.cloudfront.net/out/v1/9bf6fa4ac8d6432cb98da13b121ba3c2/index.m3u8
-#EXTINF:-1 tvg-id="SanskarWebTV.in@SD" tvg-logo="https://i.imgur.com/mu2B6hw.png" group-title="Undefined","Sanskar Web TV"
+#EXTINF:-1 tvg-id="SanskarWebTV.in@SD" tvg-logo="https://i.imgur.com/mu2B6hw.png" group-title="Religious","Sanskar Web TV"
 https://deatfcv3xdvi3.cloudfront.net/out/v1/7a43dd2f64e34ec28da1b4bd6923251a/index.m3u8
-#EXTINF:-1 tvg-id="SatsangTV.in@SD" tvg-logo="https://i.imgur.com/jnsaMrJ.png" group-title="Undefined","Satsang TV"
+#EXTINF:-1 tvg-id="SatsangTV.in@SD" tvg-logo="https://i.imgur.com/jnsaMrJ.png" group-title="Religious","Satsang TV"
 https://d2vfwvjxwtwq1t.cloudfront.net/out/v1/6b24239d5517495b986e7705490c6e65/index.m3u8
-#EXTINF:-1 tvg-id="SatsangWebTV.in@SD" tvg-logo="https://i.imgur.com/40kNu1w.png" group-title="Undefined","Satsang Web TV"
+#EXTINF:-1 tvg-id="SatsangWebTV.in@SD" tvg-logo="https://i.imgur.com/40kNu1w.png" group-title="Religious","Satsang Web TV"
 https://d1ji7e9jbzm5g8.cloudfront.net/out/v1/769f22f64d80442889306b9c4abea63c/index.m3u8
 #EXTINF:-1 tvg-id="ShemarooJosh.in@SD" tvg-logo="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSutWZzQySLPpaZvaSHq1SnpV0dXNSFZimyag&s" group-title="Movies","Shemaroo Josh"
 https://airtelapp.shemaroo.com/shemarooChumbakTV/smil:shemarooChumbakTVadp.smil/playlist.m3u8
@@ -155,11 +153,11 @@ https://cdn-3.pishow.tv/live/230/master.m3u8
 https://d2g1vdc6ozl2o8.cloudfront.net/out/v1/0a0dc7d7911b4fddbb4dfc963fdd4b9e/index.m3u8
 #EXTINF:-1 tvg-id="SonyEntertainmentTelevision.in@SD" tvg-logo="https://i.imgur.com/AkdfpVr.png" group-title="Entertainment","Sony Entertainment Television"
 http://87.255.35.150:18546
-#EXTINF:-1 tvg-id="SonyMax2.in@SD" tvg-logo="https://i.imgur.com/gqUYk6C.png" group-title="Undefined","Sony Max 2"
+#EXTINF:-1 tvg-id="SonyMax2.in@SD" tvg-logo="https://i.imgur.com/gqUYk6C.png" group-title="Movies","Sony Max 2"
 http://87.255.35.150:18841
-#EXTINF:-1 tvg-id="SonyPal.in@SD" tvg-logo="https://i.imgur.com/GnoJkj4.png" group-title="Undefined","Sony Pal"
+#EXTINF:-1 tvg-id="SonyPal.in@SD" tvg-logo="https://i.imgur.com/GnoJkj4.png" group-title="Entertainment","Sony Pal"
 http://87.255.35.150:18887
-#EXTINF:-1 tvg-id="SonyPix.in@SD" tvg-logo="https://i.postimg.cc/Z5G8j67L/PIX-HD-WHITE.png" group-title="Undefined","Sony Pix"
+#EXTINF:-1 tvg-id="SonyPix.in@SD" tvg-logo="https://i.postimg.cc/Z5G8j67L/PIX-HD-WHITE.png" group-title="Movies","Sony Pix"
 http://87.255.35.150:18495
 #EXTINF:-1 tvg-id="SonySportsTen1.in@SD" tvg-logo="https://i.imgur.com/hWo7Ba4.png" group-title="Sports","Sony Sports Ten 1"
 http://87.255.35.150:18926
@@ -169,9 +167,9 @@ http://87.255.35.150:18927
 http://87.255.35.150:18848
 #EXTINF:-1 tvg-id="SonySportsTen5.in@SD" tvg-logo="https://i.imgur.com/40BbQUd.png" group-title="Sports","Sony Sports Ten 5"
 http://87.255.35.150:18818
-#EXTINF:-1 tvg-id="SonyYay.in@SD" tvg-logo="https://i.imgur.com/MhlO1dB.png" group-title="Undefined","Sony Yay!"
+#EXTINF:-1 tvg-id="SonyYay.in@SD" tvg-logo="https://i.imgur.com/MhlO1dB.png" group-title="Animation;Kids","Sony Yay!"
 http://87.255.35.150:18285
-#EXTINF:-1 tvg-id="StarBharat.in@HD" tvg-logo="https://i.imgur.com/Q8ajPij.png" group-title="Entertainment","Star Bharat"
+#EXTINF:-1 tvg-id="StarBharat.in@HD" tvg-logo="https://i.imgur.com/Q8ajPij.png" group-title="News","Star Bharat"
 http://87.255.35.150:18555
 #EXTINF:-1 tvg-id="StarGold2.in@SD" tvg-logo="https://i.imgur.com/G0ZfzZr.png" group-title="Movies","Star Gold 2"
 http://87.255.35.150:18807
@@ -209,13 +207,13 @@ https://player.mslivestream.net/mslive/13a2927187b9700ae7ea82d7841d5b68.sdp/play
 https://dztlhgid9me95.cloudfront.net/live-tv/Vidgyor/timesnow/timesnow_master.m3u8
 #EXTINF:-1 tvg-id="TimesNowNavbharat.in@SD" tvg-logo="https://i.imgur.com/kSCozXg.png" group-title="News","Times Now Navbharat"
 https://amg01448-samsungin-tinnavbharat-samsungin-ad-m8.amagi.tv/playlist/amg01448-samsungin-tinnavbharat-samsungin/playlist.m3u8
-#EXTINF:-1 tvg-id="TotalBhakti.in@SD" tvg-logo="https://i.imgur.com/LPwRdmF.png" group-title="Undefined","Total Bhakti"
+#EXTINF:-1 tvg-id="TotalBhakti.in@SD" tvg-logo="https://i.imgur.com/LPwRdmF.png" group-title="Religious","Total Bhakti"
 https://d34z4embz0hjf6.cloudfront.net/out/v1/d55b3323a9f142638f897378f0b526fe/index.m3u8
-#EXTINF:-1 tvg-id="TV9Bharatvarsh.in@SD" tvg-logo="https://i.imgur.com/GEqUslW.png" group-title="Undefined","TV9 Bharatvarsh"
+#EXTINF:-1 tvg-id="TV9Bharatvarsh.in@SD" tvg-logo="https://i.imgur.com/GEqUslW.png" group-title="News","TV9 Bharatvarsh"
 https://dyjmyiv3bp2ez.cloudfront.net/pub-iotv9hinjzgtpe/liveabr/playlist.m3u8
 #EXTINF:-1 tvg-id="ZeeAction.in@SD" tvg-logo="https://i.imgur.com/MIzc3I1.png" group-title="Movies","Zee Action"
 http://87.255.35.150:18507
-#EXTINF:-1 tvg-id="ZeeBharat.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Zee_Bharat_2025.svg/512px-Zee_Bharat_2025.svg.png" group-title="Undefined","Zee Bharat"
+#EXTINF:-1 tvg-id="ZeeBharat.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Zee_Bharat_2025.svg/512px-Zee_Bharat_2025.svg.png" group-title="News","Zee Bharat"
 https://vg-zeefta.akamaized.net/ptnr-yupptv/title-zeehindustan/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/96bbab12-582e-4540-af70-510ab6824581/main.m3u8
 #EXTINF:-1 tvg-id="ZeeBollymovies.in@SD" tvg-logo="https://framerusercontent.com/images/mqfJ18x4jYe0GbZUbxSHsbnWU.png?scale-down-to=512" group-title="Movies","Zee Bollymovies"
 https://amg17931-zee-amg17931c8-samsung-th-6526.playouts.now.amagi.tv/playlist.m3u8
@@ -227,9 +225,9 @@ https://dwby15d04agvq.cloudfront.net/index_1.m3u8
 https://amg17931-zee-amg17931c5-samsung-au-8873.playouts.now.amagi.tv/playlist.m3u8
 #EXTINF:-1 tvg-id="ZeeNews.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Zee_news.svg/512px-Zee_news.svg.png" group-title="News","Zee News"
 https://dknttpxmr0dwf.cloudfront.net/index_57.m3u8
-#EXTINF:-1 tvg-id="ZeeTV.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Zee_TV_Logo_2025.svg/512px-Zee_TV_Logo_2025.svg.png" group-title="Undefined","Zee TV"
+#EXTINF:-1 tvg-id="ZeeTV.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Zee_TV_Logo_2025.svg/512px-Zee_TV_Logo_2025.svg.png" group-title="Entertainment","Zee TV"
 http://87.255.35.150:18849
-#EXTINF:-1 tvg-id="Zing.in@SD" tvg-logo="https://i.imgur.com/zStK8g2.png" group-title="Undefined","Zing!"
+#EXTINF:-1 tvg-id="Zing.in@SD" tvg-logo="https://i.imgur.com/zStK8g2.png" group-title="Music","Zing!"
 http://183.89.246.119:8881/play/a09a/index.m3u8
 #EXTINF:-1 tvg-name="&Picture" group-title="Entertainment","&Picture"
 http://87.255.35.150:18510
