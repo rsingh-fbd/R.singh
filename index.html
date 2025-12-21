@@ -187,7 +187,7 @@ document.addEventListener('mousemove', showUI);
 document.addEventListener('keydown', showUI);
 
 // ====================== LOAD PLAYLIST ======================
-fetch('https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/playlist1.m3u?t=' + Date.now())
+fetch('https://raw.githubusercontent.com/rsingh-fbd/R.singh/main/Playlist.m3u?t=' + Date.now())
   .then(r => r.ok ? r.text() : Promise.reject())
   .then(text => {
     const lines = text.split(/\r?\n/);
