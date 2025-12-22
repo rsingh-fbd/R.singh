@@ -39,12 +39,14 @@ http://163.61.227.29:8000/play/a05s/index.m3u8
 https://live-bhojpuri.akamaized.net/liveabr/playlist.m3u8
 #EXTINF:-1 tvg-id="BoogleBollywood.in@SD" tvg-logo="https://i.imgur.com/gaKzWdo.png" group-title="Music","Boogle Bollywood"
 http://live.agmediachandigarh.com/booglebollywood/774e3ea9f3fa9bcdac47f445b83b6653.sdp/index.m3u8
-#EXTINF:-1 tvg-id="Colors.in@SD" tvg-logo="https://i.imgur.com/M8uCJ0D.png" group-title="Entertainment","Colors"
+#EXTINF:-1 tvg-id="Colors.in@HD" tvg-logo="https://i.imgur.com/M8uCJ0D.png" group-title="Entertainment","Colors"
 http://87.255.35.150:18890
-#EXTINF:-1 tvg-id="ColorsCineplex.in@SD" tvg-logo="https://i.imgur.com/Hvvjfk5.png" group-title="Movies","Colors Cineplex"
+#EXTINF:-1 tvg-id="ColorsCineplex.in@HD" tvg-logo="https://i.imgur.com/Hvvjfk5.png" group-title="Movies","Colors Cineplex"
 http://87.255.35.150:18296
 #EXTINF:-1 tvg-id="ColorsCineplexBollywood.in@SD" tvg-logo="https://i.imgur.com/EbHSQAJ.png" group-title="Movies","Colors Cineplex Bollywood"
 http://103.182.170.32:8888/play/a01o
+#EXTINF:-1 tvg-id="ColorsInfinity.in@HD" tvg-logo="https://i.imgur.com/a5uES9j.png" group-title="Entertainment","Colors Infinity"
+http://87.255.35.150:18838
 #EXTINF:-1 tvg-id="ColorsRishteyAsia.in@SD" tvg-logo="https://i.imgur.com/YKWfMZo.png" group-title="General","Colors Rishtey Asia"
 http://87.255.35.150:18886
 #EXTINF:-1 tvg-id="Dabangg.in@SD" tvg-logo="https://i.imgur.com/6ChpxLy.png" group-title="Entertainment","Dabangg"
@@ -95,8 +97,6 @@ https://indiatodaylive.akamaized.net/hls/live/2014320/indiatoday/indiatodaylive/
 https://pl-indiatvnews.akamaized.net/out/v1/db79179b608641ceaa5a4d0dd0dca8da/index.m3u8
 #EXTINF:-1 tvg-id="IshwarBhaktiTV.in@SD" tvg-logo="https://i.imgur.com/tsPPU1Y.png" group-title="Religious","Ishwar Bhakti TV"
 https://6n3yow8pl9ok-hls-live.5centscdn.com/ishwartvlive/tv.stream/playlist.m3u8
-#EXTINF:-1 tvg-id="LokSabhaTV.in@SD" tvg-logo="https://i.imgur.com/QavgfiK.png" group-title="Legislative","Lok Sabha TV"
-https://playhls.media.nic.in/hls/live/lstv/lstv.m3u8
 #EXTINF:-1 tvg-id="MahaMovie.in@SD" tvg-logo="https://i.imgur.com/hpShFDL.png" group-title="Movies","Maha Movie"
 http://14.199.164.20:4001/play/a0q7/index.m3u8
 #EXTINF:-1 tvg-id="ManoranjanGrand.in@SD" tvg-logo="https://i.imgur.com/qfMEz78.png" group-title="Movies","Manoranjan Grand"
@@ -123,6 +123,8 @@ https://ndtvindiaelemarchana.akamaized.net/hls/live/2003679/ndtvindia/master.m3u
 https://vidcdn.vidgyor.com/news24-origin/liveabr/playlist.m3u8
 #EXTINF:-1 tvg-id="NewsNation.in@SD" tvg-logo="https://i.imgur.com/9xeIWqm.png" group-title="News","News Nation"
 https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/6cd2f649739a45ca9de1daf81cc7d0f2/index.m3u8
+#EXTINF:-1 tvg-id="Sonic.in@SD" tvg-logo="https://i.imgur.com/vSJzF6o.png" group-title="Kids","Nickelodeon Sonic Hindi"
+https://prod-sports-north-gm.jiocinema.com/bpk-tv/Sonic_Nickelodeon_voot_MOB/Fallback/index.m3u8
 #EXTINF:-1 tvg-id="PeaceofMindTV.in@SD" tvg-logo="https://i.imgur.com/Sr1wUNC.png" group-title="Religious","Peace of Mind TV"
 http://202.164.50.194:8000/play/a04c/index.m3u8
 #EXTINF:-1 tvg-id="PunjabiHits.in@SD" tvg-logo="https://i.imgur.com/i9xE87K.png" group-title="Music","Punjabi Hits"
@@ -225,7 +227,7 @@ https://dwby15d04agvq.cloudfront.net/index_1.m3u8
 https://amg17931-zee-amg17931c5-samsung-au-8873.playouts.now.amagi.tv/playlist.m3u8
 #EXTINF:-1 tvg-id="ZeeNews.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Zee_news.svg/512px-Zee_news.svg.png" group-title="News","Zee News"
 https://dknttpxmr0dwf.cloudfront.net/index_57.m3u8
-#EXTINF:-1 tvg-id="ZeeTV.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Zee_TV_Logo_2025.svg/512px-Zee_TV_Logo_2025.svg.png" group-title="Entertainment","Zee TV"
+#EXTINF:-1 tvg-id="ZeeTV.in@HD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Zee_TV_Logo_2025.svg/512px-Zee_TV_Logo_2025.svg.png" group-title="Entertainment","Zee TV"
 http://87.255.35.150:18849
 #EXTINF:-1 tvg-id="Zing.in@SD" tvg-logo="https://i.imgur.com/zStK8g2.png" group-title="Music","Zing!"
 http://183.89.246.119:8881/play/a09a/index.m3u8
