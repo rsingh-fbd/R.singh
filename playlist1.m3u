@@ -19,8 +19,6 @@ https://d2lk5u59tns74c.cloudfront.net/out/v1/4fe6ab07a13543d6bdb2ec63b3e2df44/in
 https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/db8d4eca72d64748a00d0631debf542d/index.m3u8
 #EXTINF:-1 tvg-id="Animax.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Animax.png/512px-Animax.png" group-title="Animation","Animax"
 https://amg02159-kcglobal-amg02159c1-samsung-in-521.playouts.now.amagi.tv/playlist/amg02159-kcglobal-animax-samsungin/playlist.m3u8
-#EXTINF:-1 tvg-id="AnmolTV.in@SD" tvg-logo="https://static.wikia.nocookie.net/logopedia/images/9/9b/Anmol_TV_Logo_%282025%2C_Low_Quality%29.jpg" group-title="Entertainment","Anmol TV"
-http://87.255.35.150:18467
 #EXTINF:-1 tvg-id="B4UBhojpuri.in@SD" tvg-logo="https://i.imgur.com/NwOQUDp.png" group-title="Movies","B4U Bhojpuri"
 https://cdnb4u.wiseplayout.com/B4U_Bhojpuri/master.m3u8
 #EXTINF:-1 tvg-id="B4UKadak.in@SD" tvg-logo="https://i.imgur.com/CKLn0ft.png" group-title="Movies","B4U Kadak"
@@ -40,15 +38,13 @@ https://live-bhojpuri.akamaized.net/liveabr/playlist.m3u8
 #EXTINF:-1 tvg-id="BoogleBollywood.in@SD" tvg-logo="https://i.imgur.com/gaKzWdo.png" group-title="Music","Boogle Bollywood"
 http://live.agmediachandigarh.com/booglebollywood/774e3ea9f3fa9bcdac47f445b83b6653.sdp/index.m3u8
 #EXTINF:-1 tvg-id="Colors.in@HD" tvg-logo="https://i.imgur.com/M8uCJ0D.png" group-title="Entertainment","Colors"
-http://87.255.35.150:18890
+http://66.102.120.18:8000/play/a00a/index.m3u8
 #EXTINF:-1 tvg-id="ColorsCineplex.in@HD" tvg-logo="https://i.imgur.com/Hvvjfk5.png" group-title="Movies","Colors Cineplex"
-http://87.255.35.150:18296
+http://66.102.120.18:8000/play/a06z/index.m3u8
 #EXTINF:-1 tvg-id="ColorsCineplexBollywood.in@SD" tvg-logo="https://i.imgur.com/EbHSQAJ.png" group-title="Movies","Colors Cineplex Bollywood"
 http://103.182.170.32:8888/play/a01o
 #EXTINF:-1 tvg-id="ColorsInfinity.in@HD" tvg-logo="https://i.imgur.com/a5uES9j.png" group-title="Entertainment","Colors Infinity"
-http://87.255.35.150:18838
-#EXTINF:-1 tvg-id="ColorsRishteyAsia.in@SD" tvg-logo="https://i.imgur.com/YKWfMZo.png" group-title="General","Colors Rishtey Asia"
-http://87.255.35.150:18886
+http://66.102.120.18:8000/play/a014/index.m3u8
 #EXTINF:-1 tvg-id="Dabangg.in@SD" tvg-logo="https://i.imgur.com/6ChpxLy.png" group-title="Entertainment","Dabangg"
 https://cdn-apse1-prod.tsv2.amagi.tv/linear/amg01448-samsungin-dabanggin-samsungin/playlist.m3u8
 #EXTINF:-1 tvg-id="DangalTV.in@SD" tvg-logo="https://i.imgur.com/6JTb3cd.png" group-title="General","Dangal TV"
@@ -107,8 +103,6 @@ https://cdn-1.pishow.tv/live/1013/master.m3u8
 https://2nbyjxw5l53k-hls-live.qezycdn.com/metrotv/live.stream/playlist.m3u8
 #EXTINF:-1 tvg-id="MoviePlus.in@SD" tvg-logo="https://i.imgur.com/THJEAqJ.png" group-title="Movies","MoviePlus"
 http://202.164.50.194:8000/play/a03n/index.m3u8
-#EXTINF:-1 tvg-id="MTV.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/MTV_2021_%28brand_version%29.svg/512px-MTV_2021_%28brand_version%29.svg.png" group-title="Entertainment","MTV"
-http://87.255.35.150:18901
 #EXTINF:-1 tvg-id="MusicIndia.in@SD" tvg-logo="https://i.imgur.com/kXTCYqg.png" group-title="Music","Music India"
 https://cdn-2.pishow.tv/live/226/master.m3u8
 #EXTINF:-1 tvg-id="Nazara.in@SD" tvg-logo="https://www.epicon.in/img/nazara-logo.png" group-title="Entertainment","Nazara"
@@ -151,59 +145,15 @@ https://airtelapp.shemaroo.com/shemarooChumbakTV/smil:shemarooChumbakTVadp.smil/
 https://cdn-3.pishow.tv/live/230/master.m3u8
 #EXTINF:-1 tvg-id="ShubhTV.in@SD" tvg-logo="https://i.imgur.com/QHv8CL2.png" group-title="Undefined","Shubh TV"
 https://d2g1vdc6ozl2o8.cloudfront.net/out/v1/0a0dc7d7911b4fddbb4dfc963fdd4b9e/index.m3u8
-#EXTINF:-1 tvg-id="SonyEntertainmentTelevision.in@SD" tvg-logo="https://i.imgur.com/AkdfpVr.png" group-title="Entertainment","Sony Entertainment Television"
-http://87.255.35.150:18546
 #EXTINF:-1 tvg-id="SonyMax2.in@SD" tvg-logo="https://i.imgur.com/gqUYk6C.png" group-title="Movies","Sony Max 2"
-http://87.255.35.150:18841
-#EXTINF:-1 tvg-id="SonyPal.in@SD" tvg-logo="https://i.imgur.com/GnoJkj4.png" group-title="Entertainment","Sony Pal"
-http://87.255.35.150:18887
+http://66.102.120.18:8000/play/a00h/index.m3u8
 #EXTINF:-1 tvg-id="SonyPix.in@SD" tvg-logo="https://i.postimg.cc/Z5G8j67L/PIX-HD-WHITE.png" group-title="Movies","Sony Pix"
-http://87.255.35.150:18495
-#EXTINF:-1 tvg-id="SonySportsTen1.in@SD" tvg-logo="https://i.imgur.com/hWo7Ba4.png" group-title="Sports","Sony Sports Ten 1"
-http://87.255.35.150:18926
-#EXTINF:-1 tvg-id="SonySportsTen2.in@SD" tvg-logo="https://i.imgur.com/W96KVqu.png" group-title="Sports","Sony Sports Ten 2"
-http://87.255.35.150:18927
-#EXTINF:-1 tvg-id="SonySportsTen3.in@SD" tvg-logo="https://i.imgur.com/vG19HxD.png" group-title="Sports","Sony Sports Ten 3"
-http://87.255.35.150:18848
-#EXTINF:-1 tvg-id="SonySportsTen5.in@SD" tvg-logo="https://i.imgur.com/40BbQUd.png" group-title="Sports","Sony Sports Ten 5"
-http://87.255.35.150:18818
-#EXTINF:-1 tvg-id="SonyYay.in@SD" tvg-logo="https://i.imgur.com/MhlO1dB.png" group-title="Animation;Kids","Sony Yay!"
-http://87.255.35.150:18285
-#EXTINF:-1 tvg-id="StarBharat.in@HD" tvg-logo="https://i.imgur.com/Q8ajPij.png" group-title="News","Star Bharat"
-http://87.255.35.150:18555
-#EXTINF:-1 tvg-id="StarGold2.in@SD" tvg-logo="https://i.imgur.com/G0ZfzZr.png" group-title="Movies","Star Gold 2"
-http://87.255.35.150:18807
-#EXTINF:-1 tvg-id="StarGold.in@HD" tvg-logo="https://i.imgur.com/xC460sj.png" group-title="Movies","Star Gold"
-http://87.255.35.150:18859
-#EXTINF:-1 tvg-id="StarGoldSelect.in@HD" tvg-logo="https://i.imgur.com/U7eiuqv.png" group-title="Movies","Star Gold Select"
-http://87.255.35.150:18429
-#EXTINF:-1 tvg-id="StarMovies.in@HD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/STAR_Movies_logo.svg/512px-STAR_Movies_logo.svg.png" group-title="Movies","Star Movies"
-http://87.255.35.150:18301
-#EXTINF:-1 tvg-id="StarMoviesSelect.in@HD" tvg-logo="https://i.imgur.com/bnzDNCF.png" group-title="Movies","Star Movies Select"
-http://87.255.35.150:18548
-#EXTINF:-1 tvg-id="StarPravah.in@HD" tvg-logo="https://i.imgur.com/ZT0u7AK.png" group-title="Entertainment","Star Pravah"
-http://87.255.35.150:18447
-#EXTINF:-1 tvg-id="StarSports1Hindi.in@HD" tvg-logo="https://i.imgur.com/RGeLxjv.png" group-title="Sports","Star Sports 1 Hindi"
-http://87.255.35.150:18302
-#EXTINF:-1 tvg-id="StarSports2Hindi.in@SD" tvg-logo="https://i.imgur.com/kHerF19.png" group-title="Sports","Star Sports 2 Hindi"
-http://87.255.35.150:18882
-#EXTINF:-1 tvg-id="StarSports3.in@SD" tvg-logo="https://i.imgur.com/dbp2Mig.png" group-title="Sports","Star Sports 3"
-http://87.255.35.150:18804
-#EXTINF:-1 tvg-id="StarSportsSelect1.in@HD" tvg-logo="https://i.imgur.com/Mh9tKPx.png" group-title="Sports","Star Sports Select 1"
-http://87.255.35.150:18893
-#EXTINF:-1 tvg-id="StarSportsSelect2.in@HD" tvg-logo="https://i.imgur.com/FtRT73R.png" group-title="Sports","Star Sports Select 2"
-http://87.255.35.150:18952
-#EXTINF:-1 tvg-id="StarPlus.in@HD" tvg-logo="https://i.imgur.com/xWxNy3L.png" group-title="Entertainment","StarPlus"
-http://87.255.35.150:18880
+http://66.102.120.18:8000/play/a01z/index.m3u8
 #EXTINF:-1 tvg-id="SudarshanNews.in@SD" tvg-logo="https://i.imgur.com/7AV1VI9.png" group-title="News","Sudarshan News"
 https://ott.livelegitpro.in/sudarshannews/sudarshannews/tracks-v1/index.fmp4.m3u8
-#EXTINF:-1 tvg-id="SuryaComedy.in@SD" tvg-logo="https://i.imgur.com/dNI0Vm5.png" group-title="Comedy","Surya Comedy"
-http://87.255.35.150:18253
-#EXTINF:-1 tvg-id="SuryaMovies.in@SD" tvg-logo="https://i.imgur.com/FkSCjIo.png" group-title="Movies","Surya Movies"
-http://87.255.35.150:18932
 #EXTINF:-1 tvg-id="SVBC4.in@SD" tvg-logo="https://i.imgur.com/vCFdZny.png" group-title="Religious","SVBC 4"
 https://player.mslivestream.net/mslive/13a2927187b9700ae7ea82d7841d5b68.sdp/playlist.m3u8
-#EXTINF:-1 tvg-id="TimesNow.in@SD" tvg-logo="https://i.imgur.com/C6QK1LB.png" group-title="News","Times Now"
+#EXTINF:-1 tvg-id="TimesNow.in@SD" tvg-logo="https://i.imgur.com/C6QK1LB.png" http-referrer="https://www.timesnownews.com/" group-title="News","Times Now"
 https://dztlhgid9me95.cloudfront.net/live-tv/Vidgyor/timesnow/timesnow_master.m3u8
 #EXTINF:-1 tvg-id="TimesNowNavbharat.in@SD" tvg-logo="https://i.imgur.com/kSCozXg.png" group-title="News","Times Now Navbharat"
 https://amg01448-samsungin-tinnavbharat-samsungin-ad-m8.amagi.tv/playlist/amg01448-samsungin-tinnavbharat-samsungin/playlist.m3u8
@@ -211,20 +161,14 @@ https://amg01448-samsungin-tinnavbharat-samsungin-ad-m8.amagi.tv/playlist/amg014
 https://d34z4embz0hjf6.cloudfront.net/out/v1/d55b3323a9f142638f897378f0b526fe/index.m3u8
 #EXTINF:-1 tvg-id="TV9Bharatvarsh.in@SD" tvg-logo="https://i.imgur.com/GEqUslW.png" group-title="News","TV9 Bharatvarsh"
 https://dyjmyiv3bp2ez.cloudfront.net/pub-iotv9hinjzgtpe/liveabr/playlist.m3u8
-#EXTINF:-1 tvg-id="ZeeAction.in@SD" tvg-logo="https://i.imgur.com/MIzc3I1.png" group-title="Movies","Zee Action"
-http://87.255.35.150:18507
 #EXTINF:-1 tvg-id="ZeeBharat.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Zee_Bharat_2025.svg/512px-Zee_Bharat_2025.svg.png" group-title="News","Zee Bharat"
 https://vg-zeefta.akamaized.net/ptnr-yupptv/title-zeehindustan/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/96bbab12-582e-4540-af70-510ab6824581/main.m3u8
 #EXTINF:-1 tvg-id="ZeeBollymovies.in@SD" tvg-logo="https://framerusercontent.com/images/mqfJ18x4jYe0GbZUbxSHsbnWU.png?scale-down-to=512" group-title="Movies","Zee Bollymovies"
 https://amg17931-zee-amg17931c8-samsung-th-6526.playouts.now.amagi.tv/playlist.m3u8
-#EXTINF:-1 tvg-id="ZeeBollywood.in@SD" tvg-logo="https://i.imgur.com/0qQrV84.png" group-title="Movies","Zee Bollywood"
-http://87.255.35.150:18861
 #EXTINF:-1 tvg-id="ZeeBusiness.in@SD" tvg-logo="https://i.imgur.com/vkWBtL4.png" group-title="Business","Zee Business"
 https://dwby15d04agvq.cloudfront.net/index_1.m3u8
 #EXTINF:-1 tvg-id="ZeeNews.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Zee_news.svg/512px-Zee_news.svg.png" group-title="News","Zee News"
 https://dknttpxmr0dwf.cloudfront.net/index_57.m3u8
-#EXTINF:-1 tvg-id="ZeeTV.in@HD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Zee_TV_Logo_2025.svg/512px-Zee_TV_Logo_2025.svg.png" group-title="Entertainment","Zee TV"
-http://87.255.35.150:18849
 #EXTINF:-1 tvg-id="Zing.in@SD" tvg-logo="https://i.imgur.com/zStK8g2.png" group-title="Music","Zing!"
 http://183.89.246.119:8881/play/a09a/index.m3u8
 #EXTINF:-1 tvg-name="&Picture" group-title="Entertainment","&Picture"
