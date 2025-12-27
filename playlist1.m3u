@@ -27,6 +27,8 @@ https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/db8d4eca72d64748a00d0631debf542d/in
 https://amg02159-kcglobal-amg02159c1-samsung-in-521.playouts.now.amagi.tv/playlist/amg02159-kcglobal-animax-samsungin/playlist.m3u8
 #EXTINF:-1 tvg-id="AnmolCinema.in@SD" tvg-logo="https://static.wikia.nocookie.net/logopedia/images/d/db/Anmol_Cinema_2025_Logo_%28Low_Quality%29.jpg" group-title="Movies","Anmol Cinema"
 http://66.102.120.18:8000/play/a01v/index.m3u8
+#EXTINF:-1 tvg-id="AnmolCinema2.in@SD" tvg-logo="https://static.wikia.nocookie.net/logopedia/images/a/a7/Anmol_Cinema_2.jpg" group-title="Movies","Anmol Cinema 2"
+http://110.39.27.47:8001/play/a03w/index.m3u8
 #EXTINF:-1 tvg-id="B4UBhojpuri.in@SD" tvg-logo="https://i.imgur.com/NwOQUDp.png" group-title="Movies","B4U Bhojpuri"
 https://cdnb4u.wiseplayout.com/B4U_Bhojpuri/master.m3u8
 #EXTINF:-1 tvg-id="B4UKadak.in@SD" tvg-logo="https://i.imgur.com/CKLn0ft.png" group-title="Movies","B4U Kadak"
