@@ -1,18 +1,19 @@
 {
-  "generated_at": "2025-12-28T13:29:18.121062Z",
+  "generated_at": "2025-12-28T13:33:55.660793Z",
   "language": "Hindi",
   "items": [
     {
       "type": "movie",
-      "title": "Creative Artists of India - Satyajit Ray",
-      "year": 1974,
+      "title": "Spartacus - Hindi Drama",
+      "year": null,
       "language": "Hindi",
       "source": "archive.org",
-      "identifier": "dli.MoI.CreativeArtistsofIndia_SatyjitRay_Hindi",
-      "poster": "https://archive.org/services/img/dli.MoI.CreativeArtistsofIndia_SatyjitRay_Hindi",
+      "identifier": "Spartacus-HindiDrama",
+      "poster": "https://archive.org/services/img/Spartacus-HindiDrama",
       "streams": {
         "mp4": [
-          "https://archive.org/download/dli.MoI.CreativeArtistsofIndia_SatyjitRay_Hindi/CreativeArtistsofIndia_SatyjitRay_Hindi.mp4"
+          "https://archive.org/download/Spartacus-HindiDrama/Spartcus-HindiDrama.mp4",
+          "https://archive.org/download/Spartacus-HindiDrama/Spartcus-HindiDrama_512kb.mp4"
         ],
         "hls": []
       }
