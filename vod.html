@@ -11,15 +11,17 @@ body {
   background: #0f1115;
   color: #fff;
   font-family: Arial, sans-serif;
-  overflow: hidden;
 }
 
-/* GRID */
+/* ================= GRID ================= */
 #grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 16px;
   padding: 20px;
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .card {
@@ -28,10 +30,12 @@ body {
   padding: 10px;
   cursor: pointer;
   outline: none;
+  transition: transform 0.15s, border 0.15s;
 }
 
 .card.focused {
   border: 3px solid #00e5ff;
+  transform: scale(1.05);
 }
 
 .card img {
@@ -47,20 +51,22 @@ body {
   text-align: center;
 }
 
-/* PLAYER */
+/* ================= PLAYER ================= */
 #playerContainer {
   position: fixed;
   inset: 0;
   background: #000;
   display: none;
+  overflow: hidden;
 }
 
 video {
   width: 100%;
   height: 100%;
+  background: #000;
 }
 
-/* CONTROLS */
+/* ================= CONTROLS ================= */
 #controls {
   position: absolute;
   bottom: 0;
@@ -80,16 +86,17 @@ video {
   font-size: 16px;
 }
 
-/* SIDE LIST */
+/* ================= SIDE LIST ================= */
 #sideList {
   position: absolute;
   right: 0;
   top: 0;
   width: 320px;
   height: 100%;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.9);
   display: none;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .side-item {
@@ -110,18 +117,22 @@ video {
 <div id="grid"></div>
 
 <div id="playerContainer">
-  <video id="video" controls></video>
+  <video id="video" playsinline></video>
 
   <div id="controls">
     <button onclick="togglePlay()">Play / Pause</button>
-    <button onclick="video.currentTime -= 10">-10s</button>
-    <button onclick="video.currentTime += 10">+10s</button>
+    <button onclick="seek(-10)">-10s</button>
+    <button onclick="seek(10)">+10s</button>
   </div>
 
   <div id="sideList"></div>
 </div>
 
 <script>
+/* ================= DEVICE DETECT ================= */
+const isTV = /Android TV|TV|AFT|BRAVIA|FireTV/i.test(navigator.userAgent);
+
+/* ================= STATE ================= */
 const M3U_URL = "vod.m3u";
 
 let items = [];
@@ -136,7 +147,6 @@ const controls = document.getElementById("controls");
 const sideList = document.getElementById("sideList");
 
 /* ================= LOAD M3U ================= */
-
 fetch(M3U_URL)
   .then(r => r.text())
   .then(parseM3U);
@@ -147,15 +157,16 @@ function parseM3U(data) {
     if (lines[i].startsWith("#EXTINF")) {
       const title = lines[i].split(",").pop();
       const url = lines[i + 1];
-      items.push({ title, url });
+      if (url && !url.startsWith("#")) {
+        items.push({ title, url });
+      }
     }
   }
   renderGrid();
   renderSideList();
 }
 
-/* ================= UI ================= */
-
+/* ================= RENDER ================= */
 function renderGrid() {
   grid.innerHTML = "";
   items.forEach((item, i) => {
@@ -181,6 +192,7 @@ function renderSideList() {
   });
 }
 
+/* ================= PLAYER ================= */
 function playItem(index) {
   const item = items[index];
   video.src = item.url;
@@ -193,69 +205,54 @@ function playItem(index) {
 }
 
 /* ================= CONTROLS ================= */
-
 function togglePlay() {
   video.paused ? video.play() : video.pause();
 }
 
-/* ================= DPAD HANDLING ================= */
+function seek(sec) {
+  video.currentTime += sec;
+}
 
+/* ================= DPAD & KEYS ================= */
 document.addEventListener("keydown", e => {
-  switch (e.key) {
 
-    case "ArrowRight":
-      if (mode === "grid") {
-        gridIndex = Math.min(items.length - 1, gridIndex + 1);
-        renderGrid();
-      }
-      break;
-
-    case "ArrowLeft":
-      if (mode === "grid") {
-        gridIndex = Math.max(0, gridIndex - 1);
-        renderGrid();
-      }
-      break;
-
-    case "ArrowDown":
-      if (mode === "player") {
-        controls.classList.add("show");
-        mode = "controls";
-      } else if (mode === "controls") {
-        sideList.style.display = "block";
-        renderSideList();
-        mode = "list";
-      }
-      break;
-
-    case "ArrowUp":
-      if (mode === "list") {
-        sideList.style.display = "none";
-        mode = "controls";
-      } else if (mode === "controls") {
-        controls.classList.remove("show");
-        mode = "player";
-      }
-      break;
-
-    case "Enter":
-      if (mode === "grid") playItem(gridIndex);
-      if (mode === "list") playItem(sideIndex);
-      break;
-
-    case "Backspace":
-    case "Escape":
-      video.pause();
-      player.style.display = "none";
-      grid.style.display = "grid";
-      mode = "grid";
-      break;
+  if (mode === "grid") {
+    if (e.key === "ArrowRight") gridIndex = Math.min(items.length - 1, gridIndex + 1);
+    if (e.key === "ArrowLeft") gridIndex = Math.max(0, gridIndex - 1);
+    if (e.key === "Enter") playItem(gridIndex);
+    renderGrid();
   }
 
-  if (mode === "list") {
+  if (mode === "player" && e.key === "ArrowDown") {
+    controls.classList.add("show");
+    mode = "controls";
+  }
+
+  else if (mode === "controls" && e.key === "ArrowDown") {
+    sideList.style.display = "block";
+    mode = "list";
+    renderSideList();
+  }
+
+  else if (mode === "list") {
     if (e.key === "ArrowDown") sideIndex = Math.min(items.length - 1, sideIndex + 1);
     if (e.key === "ArrowUp") sideIndex = Math.max(0, sideIndex - 1);
+    if (e.key === "Enter") playItem(sideIndex);
     renderSideList();
+  }
+
+  if (e.key === "ArrowUp" && mode === "controls") {
+    controls.classList.remove("show");
+    mode = "player";
+  }
+
+  if ((e.key === "Backspace" || e.key === "Escape") && mode !== "grid") {
+    video.pause();
+    player.style.display = "none";
+    grid.style.display = "grid";
+    controls.classList.remove("show");
+    sideList.style.display = "none";
+    mode = "grid";
   }
 });
 </script>
