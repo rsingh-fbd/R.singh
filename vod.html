@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hindi VOD OTT</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  background: #0f1115;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+/* GRID */
+#grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  padding: 20px;
+}
+
+.card {
+  background: #1c1f26;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  outline: none;
+}
+
+.card.focused {
+  border: 3px solid #00e5ff;
+}
+
+.card img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.card h3 {
+  font-size: 14px;
+  margin: 8px 0 0;
+  text-align: center;
+}
+
+/* PLAYER */
+#playerContainer {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: none;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+}
+
+/* CONTROLS */
+#controls {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  display: none;
+}
+
+#controls.show {
+  display: block;
+}
+
+#controls button {
+  padding: 10px 15px;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+/* SIDE LIST */
+#sideList {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 320px;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  overflow-y: auto;
+}
+
+.side-item {
+  padding: 12px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+}
+
+.side-item.focused {
+  background: #00e5ff;
+  color: #000;
+}
+</style>
+</head>
+
+<body>
+
+<div id="grid"></div>
+
+<div id="playerContainer">
+  <video id="video" controls></video>
+
+  <div id="controls">
+    <button onclick="togglePlay()">Play / Pause</button>
+    <button onclick="video.currentTime -= 10">-10s</button>
+    <button onclick="video.currentTime += 10">+10s</button>
+  </div>
+
+  <div id="sideList"></div>
+</div>
+
+<script>
+const M3U_URL = "vod.m3u";
+
+let items = [];
+let gridIndex = 0;
+let sideIndex = 0;
+let mode = "grid"; // grid | player | controls | list
+
+const grid = document.getElementById("grid");
+const video = document.getElementById("video");
+const player = document.getElementById("playerContainer");
+const controls = document.getElementById("controls");
+const sideList = document.getElementById("sideList");
+
+/* ================= LOAD M3U ================= */
+
+fetch(M3U_URL)
+  .then(r => r.text())
+  .then(parseM3U);
+
+function parseM3U(data) {
+  const lines = data.split("\n");
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].startsWith("#EXTINF")) {
+      const title = lines[i].split(",").pop();
+      const url = lines[i + 1];
+      items.push({ title, url });
+    }
+  }
+  renderGrid();
+  renderSideList();
+}
+
+/* ================= UI ================= */
+
+function renderGrid() {
+  grid.innerHTML = "";
+  items.forEach((item, i) => {
+    const card = document.createElement("div");
+    card.className = "card" + (i === gridIndex ? " focused" : "");
+    card.innerHTML = `
+      <img src="https://via.placeholder.com/300x450?text=Hindi+VOD">
+      <h3>${item.title}</h3>
+    `;
+    card.onclick = () => playItem(i);
+    grid.appendChild(card);
+  });
+}
+
+function renderSideList() {
+  sideList.innerHTML = "";
+  items.forEach((item, i) => {
+    const div = document.createElement("div");
+    div.className = "side-item" + (i === sideIndex ? " focused" : "");
+    div.textContent = item.title;
+    div.onclick = () => playItem(i);
+    sideList.appendChild(div);
+  });
+}
+
+function playItem(index) {
+  const item = items[index];
+  video.src = item.url;
+  video.play();
+  player.style.display = "block";
+  grid.style.display = "none";
+  controls.classList.remove("show");
+  sideList.style.display = "none";
+  mode = "player";
+}
+
+/* ================= CONTROLS ================= */
+
+function togglePlay() {
+  video.paused ? video.play() : video.pause();
+}
+
+/* ================= DPAD HANDLING ================= */
+
+document.addEventListener("keydown", e => {
+  switch (e.key) {
+
+    case "ArrowRight":
+      if (mode === "grid") {
+        gridIndex = Math.min(items.length - 1, gridIndex + 1);
+        renderGrid();
+      }
+      break;
+
+    case "ArrowLeft":
+      if (mode === "grid") {
+        gridIndex = Math.max(0, gridIndex - 1);
+        renderGrid();
+      }
+      break;
+
+    case "ArrowDown":
+      if (mode === "player") {
+        controls.classList.add("show");
+        mode = "controls";
+      } else if (mode === "controls") {
+        sideList.style.display = "block";
+        renderSideList();
+        mode = "list";
+      }
+      break;
+
+    case "ArrowUp":
+      if (mode === "list") {
+        sideList.style.display = "none";
+        mode = "controls";
+      } else if (mode === "controls") {
+        controls.classList.remove("show");
+        mode = "player";
+      }
+      break;
+
+    case "Enter":
+      if (mode === "grid") playItem(gridIndex);
+      if (mode === "list") playItem(sideIndex);
+      break;
+
+    case "Backspace":
+    case "Escape":
+      video.pause();
+      player.style.display = "none";
+      grid.style.display = "grid";
+      mode = "grid";
+      break;
+  }
+
+  if (mode === "list") {
+    if (e.key === "ArrowDown") sideIndex = Math.min(items.length - 1, sideIndex + 1);
+    if (e.key === "ArrowUp") sideIndex = Math.max(0, sideIndex - 1);
+    renderSideList();
+  }
+});
+</script>
+
+</body>
+</html>
