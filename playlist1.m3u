@@ -17,8 +17,6 @@ https://amg01117-amg01117c1-amgplt0165.playout.now3.amagi.tv/playlist.m3u8
 https://livehub-voidnet.onrender.com/cluster/streamcore/in/AAJTAK_REDIS.m3u8
 #EXTINF:-1 tvg-id="AasthaBhajan.in@SD" tvg-logo="https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/transparentImages/Aastha%20Bhajan.png" group-title="Religious","Aastha Bhajan"
 https://aasthaott.akamaized.net/110923/smil:bhajan.smil/playlist.m3u8
-#EXTINF:-1 tvg-id="ABPGanga.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/ABP_Ganga.svg/512px-ABP_Ganga.svg.png" group-title="News","ABP Ganga"
-https://abplivetv.akamaized.net/hls/live/2043013/ganga/master.m3u8
 #EXTINF:-1 tvg-id="AbzyDhakad.in@SD" tvg-logo="https://i.imgur.com/5ORC4tn.png" group-title="Movies","Abzy Dhakad"
 https://d2lk5u59tns74c.cloudfront.net/out/v1/4fe6ab07a13543d6bdb2ec63b3e2df44/index.m3u8
 #EXTINF:-1 tvg-id="AbzyMovies.in@SD" tvg-logo="https://i.imgur.com/LnVgKVF.png" group-title="Movies","Abzy Movies"
