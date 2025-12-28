@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Video Player</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body {
+        margin: 0;
+        background: #000;
+        overflow: hidden;
+    }
+
+    video {
+        width: 100vw;
+        height: 100vh;
+        outline: none;
+        background: #000;
+    }
+</style>
+</head>
+<body>
+
+<video id="player" controls autoplay tabindex="0">
+    <source src="https://ia800901.us.archive.org/19/items/raid-2.2025.720p.-hevc.-hindi.-ds-4-k.-web-dl.-5.1.-esub.x-265-hdhub-4u.-ms/Raid-2.2025.720p.HEVC.Hindi.DS4K.WEB-DL.5.1.ESub.x265-HDHub4u.Ms.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+</video>
+
+<script>
+    const video = document.getElementById("player");
+
+    // Auto focus for DPAD
+    video.focus();
+
+    document.addEventListener("keydown", function (e) {
+        switch (e.key) {
+
+            case "Enter":
+            case " ":
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+                e.preventDefault();
+                break;
+
+            case "ArrowRight": // Seek forward 10 sec
+                video.currentTime += 10;
+                e.preventDefault();
+                break;
+
+            case "ArrowLeft": // Seek backward 10 sec
+                video.currentTime -= 10;
+                e.preventDefault();
+                break;
+
+            case "ArrowUp": // Volume up
+                video.volume = Math.min(video.volume + 0.1, 1);
+                e.preventDefault();
+                break;
+
+            case "ArrowDown": // Volume down
+                video.volume = Math.max(video.volume - 0.1, 0);
+                e.preventDefault();
+                break;
+
+            case "f": // Fullscreen
+                if (video.requestFullscreen) {
+                    video.requestFullscreen();
+                }
+                break;
+        }
+    });
+</script>
+
+</body>
+</html>
