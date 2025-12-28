@@ -72,13 +72,13 @@
   /* ================= TITLE OVERLAY ================= */
   #videoTitle {
     position: absolute;
-    top: 30px;
+    top: 40px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0,0,0,0.7);
-    padding: 12px 30px;
+    padding: 14px 36px;
     border-radius: 12px;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
     z-index: 20;
     opacity: 0;
@@ -101,7 +101,7 @@
     bottom: 0;
     width: 100%;
     background: linear-gradient(transparent, rgba(0,0,0,0.9));
-    padding: 20px;
+    padding: 24px;
     box-sizing: border-box;
     opacity: 0;
     transition: opacity 0.5s ease;
@@ -117,15 +117,17 @@
   .control-bar {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
     flex-wrap: wrap;
+    justify-content: center;
   }
 
   .progress-container {
     flex: 1;
+    min-width: 200px;
     background: rgba(255,255,255,0.2);
-    height: 8px;
-    border-radius: 4px;
+    height: 10px;
+    border-radius: 5px;
     overflow: hidden;
     cursor: pointer;
   }
@@ -141,9 +143,9 @@
     background: rgba(255,255,255,0.2);
     border: none;
     color: white;
-    padding: 12px 18px;
-    border-radius: 8px;
-    font-size: 18px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-size: 20px;
     cursor: pointer;
     transition: background 0.3s;
   }
@@ -154,12 +156,13 @@
   }
 
   #timeDisplay {
-    font-size: 16px;
-    min-width: 110px;
+    font-size: 18px;
+    min-width: 140px;
     text-align: center;
+    font-weight: bold;
   }
 
-  /* ================= SIDE LIST (Optional) ================= */
+  /* ================= SIDE LIST ================= */
   #sideList {
     position: absolute;
     right: 0;
@@ -196,7 +199,7 @@
 <div id="playerContainer">
   <video id="video" playsinline webkit-playsinline></video>
 
-  <div id="videoTitle">Movie Title Here</div>
+  <div id="videoTitle">Movie Title</div>
 
   <div id="controls">
     <div class="control-bar">
@@ -215,13 +218,13 @@
 </div>
 
 <script>
-const M3U_URL = "vod.m3u"; // Make sure this file is in the same folder
+const M3U_URL = "vod.m3u";
 
 let items = [];
 let currentIndex = 0;
 let gridIndex = 0;
 let sideIndex = 0;
-let mode = "grid"; // grid, player
+let mode = "grid";
 let columns = 1;
 
 const grid = document.getElementById("grid");
@@ -271,7 +274,7 @@ function parseM3U(data) {
   focusGridItem();
 }
 
-/* ================= RENDER GRID ================= */
+/* ================= RENDER ================= */
 function renderGrid() {
   grid.innerHTML = "";
   items.forEach((item, i) => {
@@ -296,7 +299,7 @@ function renderSideList() {
   focusSideItem();
 }
 
-/* ================= FOCUS & NAVIGATION ================= */
+/* ================= FOCUS ================= */
 function calculateColumns() {
   columns = Math.max(1, Math.floor((window.innerWidth - 80) / 240));
 }
@@ -313,7 +316,7 @@ function focusSideItem() {
   items[sideIndex]?.scrollIntoView({ block: "nearest" });
 }
 
-/* ================= PLAY VIDEO ================= */
+/* ================= PLAYER ================= */
 function playItem(index) {
   if (index < 0 || index >= items.length) return;
   currentIndex = index;
@@ -327,18 +330,17 @@ function playItem(index) {
   grid.style.display = "none";
   mode = "player";
 
-  // Show title for 5 seconds
   videoTitle.classList.add("show");
   clearTimeout(hideTimeout);
   hideTimeout = setTimeout(() => videoTitle.classList.remove("show"), 5000);
 
-  video.play().catch(() => {});
+  video.play().catch(() => console.log("Play failed"));
 
   renderSideList();
   showControls();
 }
 
-/* ================= EXIT PLAYER ================= */
+/* ================= EXIT ================= */
 function exitPlayer() {
   video.pause();
   video.src = "";
@@ -351,14 +353,14 @@ function exitPlayer() {
   focusGridItem();
 }
 
-/* ================= CONTROLS & UI ================= */
+/* ================= CONTROLS ================= */
 function showControls() {
   controls.classList.add("show");
   videoTitle.classList.add("show");
   clearTimeout(hideTimeout);
   hideTimeout = setTimeout(() => {
     controls.classList.remove("show");
-    videoTitle.classList.remove("show");
+    if (!video.paused) videoTitle.classList.remove("show");
   }, 5000);
 }
 
@@ -374,23 +376,27 @@ function togglePlay() {
 }
 
 function seek(seconds) {
-  video.currentTime += seconds;
+  video.currentTime = Math.max(0, video.currentTime + seconds);
   showControls();
 }
 
 function formatTime(seconds) {
+  if (isNaN(seconds)) return "00:00";
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
-  return `\( {m.toString().padStart(2,'0')}: \){s.toString().padStart(2,'0')}`;
+  return `\( {m.toString().padStart(2, '0')}: \){s.toString().padStart(2, '0')}`;
 }
 
-// Update time and progress
 video.addEventListener("timeupdate", () => {
   if (video.duration) {
     const percent = (video.currentTime / video.duration) * 100;
     progress.style.width = percent + "%";
     timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
   }
+});
+
+video.addEventListener("loadedmetadata", () => {
+  timeDisplay.textContent = `00:00 / ${formatTime(video.duration)}`;
 });
 
 playBtn.onclick = togglePlay;
@@ -409,7 +415,6 @@ fullscreenBtn.onclick = () => {
 
 /* ================= KEY NAVIGATION ================= */
 document.addEventListener("keydown", e => {
-  // Back / Exit
   if (["Escape", "Backspace"].includes(e.key) || e.keyCode === 461) {
     if (mode === "player") {
       e.preventDefault();
@@ -423,20 +428,19 @@ document.addEventListener("keydown", e => {
     else if (e.key === "ArrowLeft") gridIndex = Math.max(0, gridIndex - 1);
     else if (e.key === "ArrowDown") gridIndex = Math.min(items.length - 1, gridIndex + columns);
     else if (e.key === "ArrowUp") gridIndex = Math.max(0, gridIndex - columns);
-    else if (e.key === "Enter") playItem(gridIndex);
+    else if (e.key === "Enter" || e.key === " ") playItem(gridIndex);
 
     focusGridItem();
   }
 
   if (mode === "player") {
-    showControls(); // Any key press shows controls + title
+    showControls();
     if (e.key === " ") { e.preventDefault(); togglePlay(); }
     else if (e.key === "ArrowLeft") seek(-10);
     else if (e.key === "ArrowRight") seek(30);
   }
 });
 
-// Show controls on mouse move (for PC testing)
 document.addEventListener("mousemove", () => {
   if (mode === "player") showControls();
 });
