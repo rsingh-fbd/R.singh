@@ -2,8 +2,8 @@ import json
 import requests
 import time
 
-INPUT_FILE = "movie.json"
-OUTPUT_FILE = "output.json"
+INPUT_FILE = "../movie.json"
+OUTPUT_FILE = "../output.json"
 
 ARCHIVE_SEARCH_URL = "https://archive.org/advancedsearch.php"
 
