@@ -5,20 +5,188 @@
 <title>Hindi VOD OTT</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-  body { margin: 0; background: #0f1115; color: #fff; font-family: Arial, sans-serif; overflow: hidden; }
-  #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; padding: 30px; height: 100vh; overflow-y: auto; box-sizing: border-box; }
-  .card { background: #1c1f26; border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-  .card.focused { transform: scale(1.08); box-shadow: 0 0 25px #00e5ff; border: 4px solid #00e5ff; }
-  .card img { width: 100%; height: 260px; object-fit: cover; }
-  .card h3 { font-size: 15px; margin: 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #playerContainer { position: fixed; inset: 0; background: #000; display: none; flex-direction: column; }
-  video { width: 100%; height: 100%; flex: 1; background: #000; }
-  #controls { position: absolute; bottom: 0; width: 100%; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); text-align: center; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
-  #controls.show { opacity: 1; pointer-events: all; }
-  #controls button { padding: 12px 24px; margin: 0 10px; font-size: 18px; background: #00e5ff; color: #000; border: none; border-radius: 8px; cursor: pointer; }
-  #sideList { position: absolute; right: 0; top: 0; width: 380px; height: 100%; background: rgba(0,0,0,0.95); display: none; overflow-y: auto; padding: 20px; box-sizing: border-box; border-left: 2px solid #00e5ff; }
-  .side-item { padding: 16px; font-size: 18px; border-bottom: 1px solid #444; cursor: pointer; transition: background 0.2s; }
-  .side-item.focused { background: #00e5ff; color: #000; font-weight: bold; }
+  body {
+    margin: 0;
+    background: #0d1117;
+    color: #fff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  /* ================= GRID ================= */
+  #grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+    padding: 40px;
+    height: 100vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+
+  .card {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+  }
+
+  .card.focused {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px #00e5ff;
+    border: 4px solid #00e5ff;
+    z-index: 10;
+  }
+
+  .card h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+    line-height: 1.4;
+    word-wrap: break-word;
+  }
+
+  /* ================= PLAYER ================= */
+  #playerContainer {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: none;
+    flex-direction: column;
+  }
+
+  video {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+  }
+
+  /* ================= TITLE OVERLAY ================= */
+  #videoTitle {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
+    padding: 12px 30px;
+    border-radius: 12px;
+    font-size: 24px;
+    font-weight: bold;
+    z-index: 20;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    max-width: 90%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #videoTitle.show {
+    opacity: 1;
+  }
+
+  /* ================= TRADITIONAL CONTROLS ================= */
+  #controls {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: linear-gradient(transparent, rgba(0,0,0,0.9));
+    padding: 20px;
+    box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 30;
+  }
+
+  #controls.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .control-bar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .progress-container {
+    flex: 1;
+    background: rgba(255,255,255,0.2);
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  #progress {
+    height: 100%;
+    width: 0%;
+    background: #00e5ff;
+    transition: width 0.2s;
+  }
+
+  button {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  button:hover, button:focus {
+    background: #00e5ff;
+    color: #000;
+  }
+
+  #timeDisplay {
+    font-size: 16px;
+    min-width: 110px;
+    text-align: center;
+  }
+
+  /* ================= SIDE LIST (Optional) ================= */
+  #sideList {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 400px;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    display: none;
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    border-left: 3px solid #00e5ff;
+    z-index: 40;
+  }
+
+  .side-item {
+    padding: 18px;
+    font-size: 20px;
+    border-bottom: 1px solid #444;
+    cursor: pointer;
+  }
+
+  .side-item.focused {
+    background: #00e5ff;
+    color: #000;
+    font-weight: bold;
+  }
 </style>
 </head>
 <body>
@@ -27,84 +195,94 @@
 
 <div id="playerContainer">
   <video id="video" playsinline webkit-playsinline></video>
+
+  <div id="videoTitle">Movie Title Here</div>
+
   <div id="controls">
-    <button onclick="togglePlay()">▶ / ❚❚ Play / Pause</button>
-    <button onclick="seek(-10)">◄◄ -10s</button>
-    <button onclick="seek(30)">+30s ►►</button>
+    <div class="control-bar">
+      <button id="playBtn">▶</button>
+      <button onclick="seek(-10)">-10s</button>
+      <button onclick="seek(30)">+30s</button>
+      <div id="timeDisplay">00:00 / 00:00</div>
+      <div class="progress-container" id="progressContainer">
+        <div id="progress"></div>
+      </div>
+      <button id="fullscreenBtn">⛶</button>
+    </div>
   </div>
+
   <div id="sideList"></div>
 </div>
 
 <script>
-const M3U_URL = "vod.m3u";
+const M3U_URL = "vod.m3u"; // Make sure this file is in the same folder
 
 let items = [];
+let currentIndex = 0;
 let gridIndex = 0;
 let sideIndex = 0;
-let mode = "grid";
+let mode = "grid"; // grid, player
 let columns = 1;
 
 const grid = document.getElementById("grid");
 const playerContainer = document.getElementById("playerContainer");
 const video = document.getElementById("video");
+const videoTitle = document.getElementById("videoTitle");
 const controls = document.getElementById("controls");
+const progress = document.getElementById("progress");
+const progressContainer = document.getElementById("progressContainer");
+const timeDisplay = document.getElementById("timeDisplay");
+const playBtn = document.getElementById("playBtn");
+const fullscreenBtn = document.getElementById("fullscreenBtn");
 const sideList = document.getElementById("sideList");
 
-/* ================= NEW THUMBNAIL GENERATOR - Supports Hindi! ================= */
-function generateThumbnail(title) {
-  // Clean and shorten title for better display
-  let displayText = title.trim();
-  if (displayText.length > 40) displayText = displayText.substring(0, 37) + "...";
+let hideTimeout;
 
-  // Replace spaces with %20 and newlines with %0A for multi-line
-  const encodedText = encodeURIComponent(displayText).replace(/%20/g, '+');
-
-  // via.placeholder.com handles Hindi/Devanagari well
-  // Dark blue gradient background, white text, large font
-  return `https://via.placeholder.com/400x600/1a1a2e/ffffff?text=${encodedText}`;
-}
-
-/* ================= REST OF CODE (unchanged except renderGrid uses new thumbnail) ================= */
+/* ================= LOAD M3U ================= */
 fetch(M3U_URL)
-  .then(r => { if (!r.ok) throw new Error("M3U not found"); return r.text(); })
+  .then(r => { if (!r.ok) throw new Error("vod.m3u not found!"); return r.text(); })
   .then(parseM3U)
-  .catch(err => { grid.innerHTML = `<h2 style="text-align:center;color:red;grid-column:1/-1;">Error: ${err.message}</h2>`; });
+  .catch(err => {
+    grid.innerHTML = `<h2 style="color:red; text-align:center; grid-column:1/-1; margin-top:100px;">${err.message}</h2>`;
+  });
 
 function parseM3U(data) {
   const lines = data.trim().split("\n");
   items = [];
   for (let i = 0; i < lines.length; i++) {
     if (lines[i].trim().startsWith("#EXTINF:")) {
-      const titleMatch = lines[i].match(/,(.*)$/);
-      const title = titleMatch ? titleMatch[1].trim() : "Unknown Movie";
+      const title = lines[i].split(",").pop().trim();
       i++;
       const url = lines[i]?.trim();
-      if (url && !url.startsWith("#")) items.push({ title, url });
+      if (url && !url.startsWith("#")) {
+        items.push({ title, url });
+      }
     }
   }
-  if (items.length === 0) { grid.innerHTML = "<h2 style='text-align:center;grid-column:1/-1;'>No videos in M3U</h2>"; return; }
+
+  if (items.length === 0) {
+    grid.innerHTML = "<h2 style='text-align:center; grid-column:1/-1;'>No videos found in vod.m3u</h2>";
+    return;
+  }
+
   calculateColumns();
   renderGrid();
   renderSideList();
   focusGridItem();
 }
 
+/* ================= RENDER GRID ================= */
 function renderGrid() {
   grid.innerHTML = "";
   items.forEach((item, i) => {
     const card = document.createElement("div");
     card.className = "card";
-    card.innerHTML = `
-      <img src="\( {generateThumbnail(item.title)}" alt=" \){item.title}" loading="lazy">
-      <h3>${item.title}</h3>
-    `;
-    card.addEventListener("click", () => playItem(i));
+    card.innerHTML = `<h3>${item.title}</h3>`;
+    card.onclick = () => playItem(i);
     grid.appendChild(card);
   });
   focusGridItem();
 }
-
-// ... (All other functions remain exactly the same: renderSideList, focus helpers, playItem, controls, key navigation, etc.)
 
 function renderSideList() {
   sideList.innerHTML = "";
@@ -112,14 +290,15 @@ function renderSideList() {
     const div = document.createElement("div");
     div.className = "side-item";
     div.textContent = item.title;
-    div.addEventListener("click", () => { sideIndex = i; playItem(i); });
+    div.onclick = () => playItem(i);
     sideList.appendChild(div);
   });
   focusSideItem();
 }
 
+/* ================= FOCUS & NAVIGATION ================= */
 function calculateColumns() {
-  columns = Math.max(1, Math.floor((window.innerWidth - 60) / 200));
+  columns = Math.max(1, Math.floor((window.innerWidth - 80) / 240));
 }
 
 function focusGridItem() {
@@ -129,62 +308,138 @@ function focusGridItem() {
 }
 
 function focusSideItem() {
-  const sides = sideList.querySelectorAll(".side-item");
-  sides.forEach((s, i) => s.classList.toggle("focused", i === sideIndex));
-  sides[sideIndex]?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  const items = sideList.querySelectorAll(".side-item");
+  items.forEach((el, i) => el.classList.toggle("focused", i === sideIndex));
+  items[sideIndex]?.scrollIntoView({ block: "nearest" });
 }
 
+/* ================= PLAY VIDEO ================= */
 function playItem(index) {
   if (index < 0 || index >= items.length) return;
+  currentIndex = index;
+  gridIndex = index;
+  sideIndex = index;
+
   video.src = items[index].url;
-  video.play().catch(() => {});
+  videoTitle.textContent = items[index].title;
+
   playerContainer.style.display = "flex";
   grid.style.display = "none";
-  sideIndex = index;
-  renderSideList();
   mode = "player";
-  hideControlsTimeout();
+
+  // Show title for 5 seconds
+  videoTitle.classList.add("show");
+  clearTimeout(hideTimeout);
+  hideTimeout = setTimeout(() => videoTitle.classList.remove("show"), 5000);
+
+  video.play().catch(() => {});
+
+  renderSideList();
+  showControls();
 }
 
+/* ================= EXIT PLAYER ================= */
 function exitPlayer() {
-  video.pause(); video.src = "";
+  video.pause();
+  video.src = "";
   playerContainer.style.display = "none";
   grid.style.display = "grid";
   controls.classList.remove("show");
   sideList.style.display = "none";
+  videoTitle.classList.remove("show");
   mode = "grid";
   focusGridItem();
 }
 
-let controlsTimeout;
-function showControls() { controls.classList.add("show"); clearTimeout(controlsTimeout); controlsTimeout = setTimeout(() => controls.classList.remove("show"), 5000); }
-function hideControlsTimeout() { clearTimeout(controlsTimeout); controlsTimeout = setTimeout(() => controls.classList.remove("show"), 5000); }
-function togglePlay() { video.paused ? video.play() : video.pause(); showControls(); }
-function seek(sec) { video.currentTime = Math.max(0, video.currentTime + sec); showControls(); }
+/* ================= CONTROLS & UI ================= */
+function showControls() {
+  controls.classList.add("show");
+  videoTitle.classList.add("show");
+  clearTimeout(hideTimeout);
+  hideTimeout = setTimeout(() => {
+    controls.classList.remove("show");
+    videoTitle.classList.remove("show");
+  }, 5000);
+}
 
+function togglePlay() {
+  if (video.paused) {
+    video.play();
+    playBtn.textContent = "❚❚";
+  } else {
+    video.pause();
+    playBtn.textContent = "▶";
+  }
+  showControls();
+}
+
+function seek(seconds) {
+  video.currentTime += seconds;
+  showControls();
+}
+
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `\( {m.toString().padStart(2,'0')}: \){s.toString().padStart(2,'0')}`;
+}
+
+// Update time and progress
+video.addEventListener("timeupdate", () => {
+  if (video.duration) {
+    const percent = (video.currentTime / video.duration) * 100;
+    progress.style.width = percent + "%";
+    timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+  }
+});
+
+playBtn.onclick = togglePlay;
+
+progressContainer.onclick = (e) => {
+  const rect = progressContainer.getBoundingClientRect();
+  const pos = (e.clientX - rect.left) / rect.width;
+  video.currentTime = pos * video.duration;
+  showControls();
+};
+
+fullscreenBtn.onclick = () => {
+  if (video.requestFullscreen) video.requestFullscreen();
+  else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+};
+
+/* ================= KEY NAVIGATION ================= */
 document.addEventListener("keydown", e => {
-  if (["Backspace", "Escape"].includes(e.key) || e.keyCode === 461) {
-    if (mode !== "grid") { e.preventDefault(); exitPlayer(); }
+  // Back / Exit
+  if (["Escape", "Backspace"].includes(e.key) || e.keyCode === 461) {
+    if (mode === "player") {
+      e.preventDefault();
+      exitPlayer();
+    }
     return;
   }
-  // Grid navigation, player controls, etc. (same as before)
+
   if (mode === "grid") {
-    let moved = true;
     if (e.key === "ArrowRight") gridIndex = Math.min(items.length - 1, gridIndex + 1);
     else if (e.key === "ArrowLeft") gridIndex = Math.max(0, gridIndex - 1);
     else if (e.key === "ArrowDown") gridIndex = Math.min(items.length - 1, gridIndex + columns);
     else if (e.key === "ArrowUp") gridIndex = Math.max(0, gridIndex - columns);
-    else if (["Enter", " "].includes(e.key)) { playItem(gridIndex); return; }
-    else moved = false;
-    if (moved) { e.preventDefault(); focusGridItem(); }
-  } else {
-    showControls();
-    // Down/Up navigation for controls and list (same logic as before)
-    if (e.key === "ArrowDown") { /* ... same as previous */ }
+    else if (e.key === "Enter") playItem(gridIndex);
+
+    focusGridItem();
+  }
+
+  if (mode === "player") {
+    showControls(); // Any key press shows controls + title
+    if (e.key === " ") { e.preventDefault(); togglePlay(); }
+    else if (e.key === "ArrowLeft") seek(-10);
+    else if (e.key === "ArrowRight") seek(30);
   }
 });
 
-document.addEventListener("mousemove", () => { if (mode !== "grid") showControls(); });
+// Show controls on mouse move (for PC testing)
+document.addEventListener("mousemove", () => {
+  if (mode === "player") showControls();
+});
 </script>
 
 </body>
