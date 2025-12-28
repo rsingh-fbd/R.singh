@@ -28,7 +28,7 @@ jobs:
 
       - name: Run archive fetch script
         run: |
-          python scripts/fetch_archive.py
+          python script/fetch_archive.py
 
       - name: Commit and push output.json
         run: |
