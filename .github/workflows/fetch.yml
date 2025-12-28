@@ -1,0 +1,40 @@
+name: Fetch Archive Movies
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */12 * * *"   # Every 12 hours
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run archive fetch script
+        run: |
+          python scripts/fetch_archive.py
+
+      - name: Commit and push output.json
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+          git add output.json
+          git commit -m "Auto-update output.json ($(date '+%Y-%m-%d %H:%M'))" || echo "No changes to commit"
+          git push
