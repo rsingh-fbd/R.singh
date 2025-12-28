@@ -4,166 +4,202 @@
 <meta charset="UTF-8">
 <title>Hindi VOD OTT</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
-body {
-  margin: 0;
-  background: #0f1115;
-  color: #fff;
-  font-family: Arial, sans-serif;
-}
+  body {
+    margin: 0;
+    background: #0f1115;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
 
-/* ================= GRID ================= */
-#grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 16px;
-  padding: 20px;
-  height: 100vh;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
+  /* ================= GRID ================= */
+  #grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    padding: 30px;
+    height: 100vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
 
-.card {
-  background: #1c1f26;
-  border-radius: 10px;
-  padding: 10px;
-  cursor: pointer;
-  outline: none;
-  transition: transform 0.15s, border 0.15s;
-}
+  .card {
+    background: #1c1f26;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+  }
 
-.card.focused {
-  border: 3px solid #00e5ff;
-  transform: scale(1.05);
-}
+  .card.focused {
+    transform: scale(1.08);
+    box-shadow: 0 0 20px #00e5ff;
+    border: 4px solid #00e5ff;
+  }
 
-.card img {
-  width: 100%;
-  height: 240px;
-  object-fit: cover;
-  border-radius: 8px;
-}
+  .card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    background: #333;
+  }
 
-.card h3 {
-  font-size: 14px;
-  margin: 8px 0 0;
-  text-align: center;
-}
+  .card h3 {
+    font-size: 15px;
+    margin: 10px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-/* ================= PLAYER ================= */
-#playerContainer {
-  position: fixed;
-  inset: 0;
-  background: #000;
-  display: none;
-  overflow: hidden;
-}
+  /* ================= PLAYER ================= */
+  #playerContainer {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: none;
+    flex-direction: column;
+  }
 
-video {
-  width: 100%;
-  height: 100%;
-  background: #000;
-}
+  video {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    background: #000;
+  }
 
-/* ================= CONTROLS ================= */
-#controls {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 15px;
-  background: linear-gradient(transparent, rgba(0,0,0,0.7));
-  display: none;
-}
+  /* ================= CONTROLS ================= */
+  #controls {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.9));
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
 
-#controls.show {
-  display: block;
-}
+  #controls.show {
+    opacity: 1;
+    pointer-events: all;
+  }
 
-#controls button {
-  padding: 10px 15px;
-  margin-right: 10px;
-  font-size: 16px;
-}
+  #controls button {
+    padding: 12px 24px;
+    margin: 0 10px;
+    font-size: 18px;
+    background: #00e5ff;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
 
-/* ================= SIDE LIST ================= */
-#sideList {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 320px;
-  height: 100%;
-  background: rgba(0,0,0,0.9);
-  display: none;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
+  /* ================= SIDE LIST ================= */
+  #sideList {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 380px;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    display: none;
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    border-left: 2px solid #00e5ff;
+  }
 
-.side-item {
-  padding: 12px;
-  border-bottom: 1px solid #333;
-  cursor: pointer;
-}
+  .side-item {
+    padding: 16px;
+    font-size: 18px;
+    border-bottom: 1px solid #444;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
 
-.side-item.focused {
-  background: #00e5ff;
-  color: #000;
-}
+  .side-item.focused {
+    background: #00e5ff;
+    color: #000;
+    font-weight: bold;
+  }
 </style>
 </head>
-
 <body>
 
 <div id="grid"></div>
 
 <div id="playerContainer">
-  <video id="video" playsinline></video>
+  <video id="video" playsinline webkit-playsinline></video>
 
   <div id="controls">
-    <button onclick="togglePlay()">Play / Pause</button>
-    <button onclick="seek(-10)">-10s</button>
-    <button onclick="seek(10)">+10s</button>
+    <button onclick="togglePlay()">▶ / ❚❚ Play / Pause</button>
+    <button onclick="seek(-10)">◄◄ -10s</button>
+    <button onclick="seek(30)">+30s ►►</button>
   </div>
 
   <div id="sideList"></div>
 </div>
 
 <script>
-/* ================= DEVICE DETECT ================= */
-const isTV = /Android TV|TV|AFT|BRAVIA|FireTV/i.test(navigator.userAgent);
+/* ================= CONFIG ================= */
+const M3U_URL = "vod.m3u";  // Change to your actual M3U file path
 
 /* ================= STATE ================= */
-const M3U_URL = "vod.m3u";
-
 let items = [];
 let gridIndex = 0;
 let sideIndex = 0;
-let mode = "grid"; // grid | player | controls | list
+let mode = "grid"; // "grid", "player", "controls", "list"
 
 const grid = document.getElementById("grid");
+const playerContainer = document.getElementById("playerContainer");
 const video = document.getElementById("video");
-const player = document.getElementById("playerContainer");
 const controls = document.getElementById("controls");
 const sideList = document.getElementById("sideList");
 
+// Columns calculation
+let columns = 1;
+
 /* ================= LOAD M3U ================= */
 fetch(M3U_URL)
-  .then(r => r.text())
-  .then(parseM3U);
+  .then(r => {
+    if (!r.ok) throw new Error("M3U file not found");
+    return r.text();
+  })
+  .then(parseM3U)
+  .catch(err => {
+    grid.innerHTML = `<h2 style="text-align:center; color:red; grid-column:1/-1;">Error: ${err.message}<br>Check if vod.m3u exists!</h2>`;
+  });
 
 function parseM3U(data) {
-  const lines = data.split("\n");
+  const lines = data.trim().split("\n");
+  items = [];
   for (let i = 0; i < lines.length; i++) {
-    if (lines[i].startsWith("#EXTINF")) {
-      const title = lines[i].split(",").pop();
-      const url = lines[i + 1];
+    if (lines[i].trim().startsWith("#EXTINF:")) {
+      const titleMatch = lines[i].match(/,(.*)$/);
+      const title = titleMatch ? titleMatch[1].trim() : "Unknown Title";
+      i++;
+      const url = lines[i]?.trim();
       if (url && !url.startsWith("#")) {
         items.push({ title, url });
       }
     }
   }
+
+  if (items.length === 0) {
+    grid.innerHTML = "<h2 style='text-align:center; grid-column:1/-1;'>No videos found in M3U</h2>";
+    return;
+  }
+
+  calculateColumns();
   renderGrid();
   renderSideList();
+  focusGridItem();
 }
 
 /* ================= RENDER ================= */
@@ -171,89 +207,173 @@ function renderGrid() {
   grid.innerHTML = "";
   items.forEach((item, i) => {
     const card = document.createElement("div");
-    card.className = "card" + (i === gridIndex ? " focused" : "");
+    card.className = "card";
+    card.tabIndex = -1;
     card.innerHTML = `
-      <img src="https://via.placeholder.com/300x450?text=Hindi+VOD">
+      <img src="https://via.placeholder.com/300x450/111/fff?text=\( {encodeURIComponent(item.title.substring(0,20))}" alt=" \){item.title}">
       <h3>${item.title}</h3>
     `;
-    card.onclick = () => playItem(i);
+    card.addEventListener("click", () => playItem(i));
     grid.appendChild(card);
   });
+  focusGridItem();
 }
 
 function renderSideList() {
   sideList.innerHTML = "";
   items.forEach((item, i) => {
     const div = document.createElement("div");
-    div.className = "side-item" + (i === sideIndex ? " focused" : "");
+    div.className = "side-item";
     div.textContent = item.title;
-    div.onclick = () => playItem(i);
+    div.addEventListener("click", () => {
+      sideIndex = i;
+      playItem(i);
+    });
     sideList.appendChild(div);
   });
+  focusSideItem();
+}
+
+/* ================= FOCUS HELPERS ================= */
+function calculateColumns() {
+  if (items.length === 0) return;
+  const cardWidth = 200; // approx
+  const containerWidth = window.innerWidth - 60;
+  columns = Math.max(1, Math.floor(containerWidth / cardWidth));
+}
+
+function focusGridItem() {
+  const cards = grid.querySelectorAll(".card");
+  cards.forEach((c, i) => c.classList.toggle("focused", i === gridIndex));
+  if (cards[gridIndex]) {
+    cards[gridIndex].scrollIntoView({ block: "center", inline: "center", behavior: "smooth" });
+  }
+}
+
+function focusSideItem() {
+  const sides = sideList.querySelectorAll(".side-item");
+  sides.forEach((s, i) => s.classList.toggle("focused", i === sideIndex));
+  if (sides[sideIndex]) sides[sideIndex].scrollIntoView({ block: "nearest", behavior: "smooth" });
 }
 
 /* ================= PLAYER ================= */
 function playItem(index) {
+  if (index < 0 || index >= items.length) return;
   const item = items[index];
   video.src = item.url;
-  video.play();
-  player.style.display = "block";
+  video.play().catch(() => alert("Playback failed. Check video URL."));
+  
+  playerContainer.style.display = "flex";
   grid.style.display = "none";
+  
+  sideIndex = index;
+  renderSideList();
+  
+  mode = "player";
+  hideControlsTimeout();
+}
+
+function exitPlayer() {
+  video.pause();
+  video.src = "";
+  playerContainer.style.display = "none";
+  grid.style.display = "grid";
   controls.classList.remove("show");
   sideList.style.display = "none";
-  mode = "player";
+  mode = "grid";
+  focusGridItem();
 }
 
 /* ================= CONTROLS ================= */
+let controlsTimeout;
+function showControls() {
+  controls.classList.add("show");
+  clearTimeout(controlsTimeout);
+  controlsTimeout = setTimeout(() => controls.classList.remove("show"), 5000);
+}
+
+function hideControlsTimeout() {
+  clearTimeout(controlsTimeout);
+  controlsTimeout = setTimeout(() => controls.classList.remove("show"), 5000);
+}
+
 function togglePlay() {
-  video.paused ? video.play() : video.pause();
+  if (video.paused) video.play(); else video.pause();
+  showControls();
 }
 
 function seek(sec) {
-  video.currentTime += sec;
+  video.currentTime = Math.max(0, video.currentTime + sec);
+  showControls();
 }
 
-/* ================= DPAD & KEYS ================= */
+/* ================= KEY NAVIGATION ================= */
 document.addEventListener("keydown", e => {
+  // Common back keys
+  if (e.key === "Backspace" || e.key === "Escape" || e.keyCode === 461 /* Android TV Back */) {
+    if (mode !== "grid") {
+      e.preventDefault();
+      exitPlayer();
+    }
+    return;
+  }
 
   if (mode === "grid") {
-    if (e.key === "ArrowRight") gridIndex = Math.min(items.length - 1, gridIndex + 1);
-    if (e.key === "ArrowLeft") gridIndex = Math.max(0, gridIndex - 1);
-    if (e.key === "Enter") playItem(gridIndex);
-    renderGrid();
+    let moved = true;
+    if (e.key === "ArrowRight") {
+      gridIndex = Math.min(items.length - 1, gridIndex + 1);
+    } else if (e.key === "ArrowLeft") {
+      gridIndex = Math.max(0, gridIndex - 1);
+    } else if (e.key === "ArrowDown") {
+      gridIndex = Math.min(items.length - 1, gridIndex + columns);
+    } else if (e.key === "ArrowUp") {
+      gridIndex = Math.max(0, gridIndex - columns);
+    } else if (e.key === "Enter" || e.key === " " /* Space */) {
+      playItem(gridIndex);
+      return;
+    } else {
+      moved = false;
+    }
+
+    if (moved) {
+      e.preventDefault();
+      focusGridItem();
+    }
   }
 
-  if (mode === "player" && e.key === "ArrowDown") {
-    controls.classList.add("show");
-    mode = "controls";
-  }
+  else if (mode === "player" || mode === "controls" || mode === "list") {
+    showControls();
 
-  else if (mode === "controls" && e.key === "ArrowDown") {
-    sideList.style.display = "block";
-    mode = "list";
-    renderSideList();
+    if (e.key === "ArrowDown") {
+      if (mode === "player") {
+        mode = "controls";
+      } else if (mode === "controls") {
+        sideList.style.display = "block";
+        mode = "list";
+        focusSideItem();
+      } else if (mode === "list") {
+        sideIndex = Math.min(items.length - 1, sideIndex + 1);
+        focusSideItem();
+      }
+    } else if (e.key === "ArrowUp") {
+      if (mode === "list") {
+        if (sideIndex === 0) {
+          sideList.style.display = "none";
+          mode = "controls";
+        } else {
+          sideIndex = Math.max(0, sideIndex - 1);
+          focusSideItem();
+        }
+      }
+    } else if (e.key === "Enter" && mode === "list") {
+      playItem(sideIndex);
+    }
   }
+});
 
-  else if (mode === "list") {
-    if (e.key === "ArrowDown") sideIndex = Math.min(items.length - 1, sideIndex + 1);
-    if (e.key === "ArrowUp") sideIndex = Math.max(0, sideIndex - 1);
-    if (e.key === "Enter") playItem(sideIndex);
-    renderSideList();
-  }
-
-  if (e.key === "ArrowUp" && mode === "controls") {
-    controls.classList.remove("show");
-    mode = "player";
-  }
-
-  if ((e.key === "Backspace" || e.key === "Escape") && mode !== "grid") {
-    video.pause();
-    player.style.display = "none";
-    grid.style.display = "grid";
-    controls.classList.remove("show");
-    sideList.style.display = "none";
-    mode = "grid";
-  }
+// Auto-show controls on mouse move (for testing on PC)
+document.addEventListener("mousemove", () => {
+  if (mode !== "grid") showControls();
 });
 </script>
 
