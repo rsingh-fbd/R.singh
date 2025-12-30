@@ -73,16 +73,6 @@ https://cdn-6.pishow.tv/live/13/master.m3u8
 https://cdn-1.pishow.tv/live/36/master.m3u8
 #EXTINF:-1 tvg-id="Dhamaal.in@SD" tvg-logo="https://i.imgur.com/J6D56EF.png" group-title="Music","Dhamaal"
 https://cdn-1.pishow.tv/live/1291/master.m3u8
-#EXTINF:-1 tvg-id="DisneyChannel.bg@SD" tvg-logo="https://i.imgur.com/UxrAiAe.png" group-title="Kids","Disney Channel"
-http://84.54.128.52:9090/play/3006/index.m3u8
-#EXTINF:-1 tvg-id="DisneyChannel.de@SD" tvg-logo="https://i.postimg.cc/854KwmH1/disneychannel.png" group-title="Kids","Disney Channel"
-https://viamotionhsi.netplus.ch/live/eds/disneychannelde/browser-HLS8/disneychannelde.m3u8
-#EXTINF:-1 tvg-id="DisneyChannel.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_DISNEY_CHANNEL/images/LOGO_HD/image.png" group-title="Kids","Disney Channel"
-http://66.102.120.18:8000/play/a070/index.m3u8
-#EXTINF:-1 tvg-id="DisneyChannel.us@East" tvg-logo="https://i.postimg.cc/854KwmH1/disneychannel.png" group-title="Kids","Disney Channel"
-https://fl31.moveonjoy.com/DISNEY/index.m3u8
-#EXTINF:-1 tvg-id="DisneyChannel.in@HD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_DISNEY_CHANNEL_HD/images/LOGO_HD/image.png" group-title="Kids","Disney Channel"
-http://66.102.120.18:8000/play/a013/index.m3u8
 #EXTINF:-1 tvg-id="E24.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_E24/images/LOGO_HD/image.png" group-title="Entertainment","E 24"
 https://live-e24.dailyhunt.in/eternowsa/live/amlst:E24_,b256,b512,b1024,b1824,.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="FilamchiBhojpuri.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_FILAMCHI_BHOJPURI/images/LOGO_HD/image.png" group-title="Movies","Filamchi Bhojpuri"
@@ -101,8 +91,6 @@ https://indiatodaylive.akamaized.net/hls/live/2014320/indiatoday/indiatodaylive/
 https://pl-indiatvnews.akamaized.net/out/v1/db79179b608641ceaa5a4d0dd0dca8da/index.m3u8
 #EXTINF:-1 tvg-id="IndiaTVAapKiAdalat.in@SD" tvg-logo="https://play-lh.googleusercontent.com/2IlBX3IQHna8g4g-56vwGWb14K38spcviIh3i7uJCJ32ydfhcKZdOsacgijPkPeerEA" group-title="Documentary;News","India TV Aap Ki Adalat"
 https://amg01550-amg01550c6-samsung-in-4679.playouts.now.amagi.tv/playlist/amg01550-indiatvfast-indiatvakasamsung-samsungin/playlist.m3u8
-#EXTINF:-1 tvg-id="IndoOzTV.au@SD" tvg-logo="https://i.imgur.com/4LECwDh.png" group-title="Entertainment","Indo Oz TV"
-https://stream.e2is.in/hls/indoztv.m3u8
 #EXTINF:-1 tvg-id="IshwarBhaktiTV.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_ISHWAR_TV/images/LOGO_HD/image.png" group-title="Religious","Ishwar Bhakti TV"
 https://6n3yow8pl9ok-hls-live.5centscdn.com/ishwartvlive/tv.stream/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="" group-title="Undefined","Kiddo+"
@@ -117,12 +105,6 @@ https://cdn-2.pishow.tv/live/228/master.m3u8
 https://cdn-1.pishow.tv/live/1013/master.m3u8
 #EXTINF:-1 tvg-id="MBCBollywood.ae@SD" tvg-logo="https://i.imgur.com/TTAGFHG.png" group-title="Movies","MBC Bollywood"
 https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-bollywood/546eb40d7dcf9a209255dd2496903764/index.m3u8
-#EXTINF:-1 tvg-id="MetroTV.ar@SD" tvg-logo="https://i.imgur.com/7f7M7zl.png" group-title="Entertainment","Metro TV"
-https://streamtv12.ddns.net:5443/LiveApp/streams/193945633734205616732920.m3u8
-#EXTINF:-1 tvg-id="MetroTV.hn@SD" tvg-logo="https://i.imgur.com/BqS8BHi.png" group-title="Entertainment","Metro TV"
-https://s.emisoras.tv:8081/metrotv/index.m3u8
-#EXTINF:-1 tvg-id="MetroTV.in@SD" tvg-logo="https://i.ibb.co/CBgJ4QV/metro-logo.jpg" group-title="General","Metro TV"
-https://mercury.streambridge.link:8042/telugu/metrotv/index.m3u8
 #EXTINF:-1 tvg-id="MoviePlus.in@SD" tvg-logo="https://i.imgur.com/THJEAqJ.png" group-title="Movies","MoviePlus"
 http://202.164.50.194:8000/play/a03n/index.m3u8
 #EXTINF:-1 tvg-id="MoviesNow.in@HD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_MOVIES_NOW/images/LOGO_HD/image.png" group-title="Movies","Movies Now"
@@ -153,20 +135,6 @@ https://fl1.moveonjoy.com/NEWS_NATION/index.m3u8
 https://flexi-s1.purplecdn.xyz/NickJr/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 tvg-id="NickJr.in@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nick_Jr._logo_2023_(outline).svg/512px-Nick_Jr._logo_2023_(outline).svg.png" group-title="Kids","Nick Jr."
 http://66.102.120.18:8000/play/a00m/index.m3u8
-#EXTINF:-1 tvg-id="Nickelodeon.bg@SD" tvg-logo="https://i.imgur.com/E84jnP8.png" group-title="Kids","Nickelodeon"
-http://87.246.60.6:11004/?token=fas-tv.com
-#EXTINF:-1 tvg-id="Nickelodeon.br@SD" tvg-logo="https://i.imgur.com/E84jnP8.png" group-title="Kids","Nickelodeon"
-http://45.235.0.78/Nickelodeon/playlist.m3u8
-#EXTINF:-1 tvg-id="Nickelodeon.cz@SD" tvg-logo="https://i.imgur.com/E84jnP8.png" group-title="Kids","Nickelodeon"
-https://flexi-s1.purplecdn.xyz/Nickelodeon/tracks-v1a1/mono.ts.m3u8
-#EXTINF:-1 tvg-id="Nickelodeon.ee@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Nickelodeon_2023_logo_%28outline%29.svg/1200px-Nickelodeon_2023_logo_%28outline%29.svg.png" group-title="Animation;Kids","Nickelodeon"
-http://195.64.140.147:10121/121
-#EXTINF:-1 tvg-id="Nickelodeon.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NICK/images/LOGO_HD/image.png" group-title="Kids","Nickelodeon"
-http://66.102.120.18:8000/play/a00w/index.m3u8
-#EXTINF:-1 tvg-id="Nickelodeon.uk@SD" tvg-logo="https://i.imgur.com/E84jnP8.png" group-title="Kids","Nickelodeon"
-https://a1xs.vip/1000051
-#EXTINF:-1 tvg-id="Nickelodeon.us@East" tvg-logo="https://i.imgur.com/E84jnP8.png" group-title="Kids","Nickelodeon"
-http://23.237.104.106:8080/USA_NICKELODEON/index.m3u8
 #EXTINF:-1 tvg-id="OscarMoviesBhojpuri.in@SD" tvg-logo="https://dtil.tmsimg.com/assets/s143638_ld_h9_ab.png" group-title="Movies","Oscar Movies Bhojpuri"
 https://cdn-4.pishow.tv/live/233/master.m3u8
 #EXTINF:-1 tvg-id="PeaceofMindTV.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_PEACE_OF_MIND/images/LOGO_HD/image.png" group-title="Religious","Peace of Mind TV"
