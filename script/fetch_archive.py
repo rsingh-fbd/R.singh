@@ -14,7 +14,9 @@ SEARCH_URL = "https://archive.org/advancedsearch.php"
 META_URL = "https://archive.org/metadata/{}"
 
 # Hindi detection keywords
-HINDI_KEYWORDS = []
+HINDI_KEYWORDS = [
+"Hindi"
+]
 # =========================================
 
 
