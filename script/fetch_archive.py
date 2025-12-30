@@ -14,11 +14,7 @@ SEARCH_URL = "https://archive.org/advancedsearch.php"
 META_URL = "https://archive.org/metadata/{}"
 
 # Hindi detection keywords
-HINDI_KEYWORDS = [
-    "hindi", "हिंदी", "bollywood", "hindustani",
-    "doordarshan", "dd national", "films division",
-    "bharat", "india"
-]
+HINDI_KEYWORDS = []
 # =========================================
 
 
