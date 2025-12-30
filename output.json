@@ -1,22 +1,5 @@
 {
-  "generated_at": "2025-12-30T11:55:13.426231Z",
+  "generated_at": "2025-12-30T12:00:15.330410Z",
   "language": "Hindi",
-  "items": [
-    {
-      "type": "movie",
-      "title": "Spartacus - Hindi Drama",
-      "year": null,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "Spartacus-HindiDrama",
-      "poster": "https://archive.org/services/img/Spartacus-HindiDrama",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/Spartacus-HindiDrama/Spartcus-HindiDrama.mp4",
-          "https://archive.org/download/Spartacus-HindiDrama/Spartcus-HindiDrama_512kb.mp4"
-        ],
-        "hls": []
-      }
-    }
-  ]
+  "items": []
 }
