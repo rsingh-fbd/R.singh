@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-01-02T01:38:14.874529Z",
+  "generated_at": "2026-01-02T12:38:30.859800Z",
   "language": "Hindi",
-  "total_items": 4,
+  "total_items": 3,
   "items": [
     {
       "type": "movie",
@@ -50,22 +50,6 @@
         "hls": []
       },
       "play_url": "https://archive.org/download/6-a-new-krishna-shri-krishna-leela/6-A New Krishna-Shri Krishna Leela.mp4"
-    },
-    {
-      "type": "movie",
-      "title": "5 Mahabharat Begins Shri Krishna Leela",
-      "year": null,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "5-mahabharat-begins-shri-krishna-leela",
-      "poster": "https://archive.org/services/img/5-mahabharat-begins-shri-krishna-leela",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/5-mahabharat-begins-shri-krishna-leela/5-Mahabharat Begins-Shri Krishna Leela.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/5-mahabharat-begins-shri-krishna-leela/5-Mahabharat Begins-Shri Krishna Leela.mp4"
     }
   ]
 }
