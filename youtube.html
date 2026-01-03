@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Playlist Player from JSON</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 20px; }
+    h1 { text-align: center; }
+    .container { display: flex; flex-wrap: wrap; gap: 20px; max-width: 1200px; margin: auto; }
+    #player { flex: 2; min-width: 300px; }
+    #playlist { flex: 1; min-width: 300px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .video-item {
+      display: flex; align-items: center; padding: 10px; cursor: pointer; border-bottom: 1px solid #eee;
+    }
+    .video-item:hover { background: #f0f0f0; }
+    .video-item.active { background: #e0e0ff; font-weight: bold; }
+    .video-item img { width: 120px; height: 90px; object-fit: cover; margin-right: 10px; border-radius: 4px; }
+    .video-title { flex: 1; }
+  </style>
+</head>
+<body>
+  <h1>My YouTube Playlist</h1>
+  <div class="container">
+    <div id="player"></div>
+    <div id="playlist">
+      <h2>Playlist</h2>
+      <div id="video-list">Loading...</div>
+    </div>
+  </div>
+
+  <!-- Load YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+  <script>
+    let player;
+    let videos = [];
+    let currentIndex = 0;
+
+    // Called automatically by YouTube API when ready
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        height: '390',
+        width: '640',
+        videoId: '', // Will be set later
+        playerVars: {
+          autoplay: 0,
+          controls: 1,
+          rel: 0
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      loadPlaylist();
+    }
+
+    function onPlayerStateChange(event) {
+      // Optional: auto-play next video when current ends
+      if (event.data === YT.PlayerState.ENDED && currentIndex < videos.length - 1) {
+        currentIndex++;
+        playVideo(currentIndex);
+      }
+    }
+
+    // Fetch JSON and build playlist
+    async function loadPlaylist() {
+      try {
+        const response = await fetch('videos.json');
+        videos = await response.json();
+
+        const list = document.getElementById('video-list');
+        list.innerHTML = '';
+
+        videos.forEach((video, index) => {
+          const videoId = extractVideoId(video.url);
+          const thumb = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+
+          const item = document.createElement('div');
+          item.className = 'video-item';
+          item.innerHTML = `
+            <img src="\( {thumb}" alt=" \){video.title}">
+            <div class="video-title">${video.title}</div>
+          `;
+          item.onclick = () => playVideo(index);
+          list.appendChild(item);
+        });
+
+        // Play first video automatically
+        if (videos.length > 0) playVideo(0);
+      } catch (err) {
+        document.getElementById('video-list').innerHTML = 'Error loading videos.json';
+        console.error(err);
+      }
+    }
+
+    // Extract YouTube video ID from URL or use directly if it's just the ID
+    function extractVideoId(urlOrId) {
+      if (urlOrId.length === 11) return urlOrId; // Already an ID
+      const match = urlOrId.match(/(?:v=|\/embed\/|\/\d{4}\/\d{2}\/\d{2}\/|\/vi\/|youtu\.be\/)([^#\&\?]{11})/);
+      return match ? match[1] : urlOrId;
+    }
+
+    // Play video by index
+    function playVideo(index) {
+      currentIndex = index;
+      const videoId = extractVideoId(videos[index].url);
+      player.loadVideoById(videoId);
+
+      // Highlight active item
+      document.querySelectorAll('.video-item').forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+      });
+    }
+  </script>
+</body>
+</html>
