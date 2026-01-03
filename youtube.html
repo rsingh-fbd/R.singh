@@ -70,7 +70,7 @@
     // Fetch JSON and build playlist
     async function loadPlaylist() {
       try {
-        const response = await fetch('videos.json');
+        const response = await fetch('files/videos.json');
         videos = await response.json();
 
         const list = document.getElementById('video-list');
