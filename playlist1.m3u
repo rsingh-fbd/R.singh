@@ -252,7 +252,7 @@ https://dai.google.com/linear/hls/event/JCAm25qkRXiKcK1AJMlvKQ/master.m3u8
 #EXTINF:-1 tvg-id="MyLive.in@Hd","My Live"
 http://10.15.23.223:82/live/live.m3u8
 #EXTINF:-1 tvg-id="MyShare.in@Hd","My Share"
-http://10.107.211.67:82/live/screen.m3u8
+http://10.15.23.223:82/live/screen.m3u8
 #EXTINF:-1 tvg-id="AndTV.in@International","&TV International"
 https://amg01117-amg01117c1-amgplt0029.playout.now3.amagi.tv/playlist/amg01117-amg01117c1-amgplt0029/playlist.m3u8
 #EXTINF:-1 tvg-id="GoldminesMovies.in@SD","Goldmines Movie"
