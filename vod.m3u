@@ -1,9 +1,11 @@
 #EXTM3U
 #EXTINF:-1 tvg-logo="https://archive.org/services/img/dni.ncaa.ICCR-712-UM" group-title="Hindi VOD",Shri Krishna Leela (Vol. II)
 https://archive.org/download/dni.ncaa.ICCR-712-UM/ICCR-712-UM.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/dni.ncaa.ICCR-862-UM" group-title="Hindi VOD",Sita Swayamvar Organised by Swami Ram Swarup Sharma of Shri Krishna Leela Sansthan, Vrindavan (Vol. III)
-https://archive.org/download/dni.ncaa.ICCR-862-UM/ICCR-862-UM.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/7-a-prophecy-full-filled-shri-krishna-leela" group-title="Hindi VOD",7 A Prophecy Full Filled Shri Krishna Leela
-https://archive.org/download/7-a-prophecy-full-filled-shri-krishna-leela/7-A Prophecy full filled-Shri Krishna Leela.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/2-krishnas-childhood-shri-krishna-leela" group-title="Hindi VOD",2 Krishna's Childhood Shri Krishna Leela
+https://archive.org/download/2-krishnas-childhood-shri-krishna-leela/2-Krishna's Childhood-Shri Krishna Leela.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/6-a-new-krishna-shri-krishna-leela_202010" group-title="Hindi VOD",6 A New Krishna Shri Krishna Leela
+https://archive.org/download/6-a-new-krishna-shri-krishna-leela_202010/6-A New Krishna-Shri Krishna Leela.mp4
 #EXTINF:-1 tvg-logo="https://archive.org/services/img/1-birth-of-krishna-shri-krishna-leela" group-title="Hindi VOD",1 Birth Of Krishna Shri Krishna Leela
 https://archive.org/download/1-birth-of-krishna-shri-krishna-leela/1-Birth of Krishna-Shri Krishna Leela.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/5-mahabharat-begins-shri-krishna-leela" group-title="Hindi VOD",5 Mahabharat Begins Shri Krishna Leela
+https://archive.org/download/5-mahabharat-begins-shri-krishna-leela/5-Mahabharat Begins-Shri Krishna Leela.mp4
