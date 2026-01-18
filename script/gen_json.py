@@ -5,7 +5,7 @@ import os
 # Configuration
 START = 1
 END = 2000
-BASE_URL = "https://cdn-6.pishow.tv/live/{}/master.m3u8"
+# BASE_URL = "https://cdn-6.pishow.tv/live/{}/master.m3u8"
 BASE_URL = "https://cdn-1.pishow.tv/live/{}/master.m3u8"
 OUTPUT_PATH = "files/input.json"
 
