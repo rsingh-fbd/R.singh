@@ -1,25 +1,23 @@
 name: Manual m3u8 Links Checker
 
 on:
-  workflow_dispatch:          # Only manual trigger (Run workflow button)
+  workflow_dispatch:
 
 jobs:
   check-m3u8-links:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Get the repository code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Setup Python environment
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'        # 3.11, 3.12 or 3.10 — all fine
+          python-version: '3.11'
           cache: 'pip'
+          cache-dependency-path: requirements.txt
 
-      # 3. Install dependencies (if you ever add any)
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
@@ -27,23 +25,19 @@ jobs:
             pip install -r requirements.txt
           fi
 
-      # 4. Run the checker script
       - name: Check m3u8 links
         run: python script/m3u8_checker.py
 
-      # 5. Configure git user (needed for commit)
       - name: Configure Git
         run: |
           git config --global user.name "GitHub Action Bot"
           git config --global user.email "github-action[bot]@users.noreply.github.com"
 
-      # 6. Commit changes only if working.json was actually modified
       - name: Commit updated working.json (if changed)
         run: |
           git add files/working.json || true
-          git diff --staged --quiet || git commit -m "chore: update working m3u8 links [ci skip]"
+          git diff --staged --quiet && echo "No changes to commit" || git commit -m "chore: update working m3u8 links [ci skip]"
 
-      # 7. Push the commit back to the repository
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
         with:
