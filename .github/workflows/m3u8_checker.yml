@@ -1,5 +1,8 @@
 name: Manual m3u8 Links Checker
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
 
