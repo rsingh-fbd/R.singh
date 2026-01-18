@@ -1,0 +1,3 @@
+# Nothing needed — we use only standard library (urllib + json)
+# But you can add if you ever switch to requests:
+# requests
