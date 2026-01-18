@@ -1,0 +1,37 @@
+name: Generate m3u8 input.json (1-2000)
+
+on:
+  workflow_dispatch:           # Run only when you click "Run workflow"
+
+jobs:
+  generate-list:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Optional: Setup Python (not really needed for this simple script, but good practice)
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Generate input.json with 2000 channels
+        run: python script/gen_json.py
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Action Bot"
+          git config --global user.email "github-action[bot]@users.noreply.github.com"
+
+      - name: Commit generated input.json (if changed/new)
+        run: |
+          git add files/input.json || true
+          git diff --staged --quiet || git commit -m "chore: generate input.json with channels 1-2000 [ci skip]"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          github_token: ${{ secrets.PUSH_TOKEN }}    # ← use your working secret!
+          branch: ${{ github.ref_name }}
