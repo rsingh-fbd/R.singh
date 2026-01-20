@@ -29,7 +29,7 @@ jobs:
           fi
 
       - name: Check m3u8 links
-        run: python script/m3u8_checker.py
+        run: python script/m3u8_checker_multi.py
 
       - name: Configure Git
         run: |
