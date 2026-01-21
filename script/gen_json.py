@@ -3,10 +3,10 @@ import json
 import os
 
 # Configuration
-START = 1
-END = 2000
+START = 2001
+END = 5000
 # BASE_URL = "https://cdn-6.pishow.tv/live/{}/master.m3u8"
-BASE_URL = "https://cdn-5.pishow.tv/live/{}/master.m3u8"
+BASE_URL = "https://cdn-4.pishow.tv/live/{}/master.m3u8"
 OUTPUT_PATH = "files/input.json"
 
 def main():
