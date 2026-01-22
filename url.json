@@ -1,7 +1,7 @@
 {
   "sites": [
-    { "title": "Youtube Music", "url": "https://music.youtube.com/" },
-    { "title": "Knox meeting", "url": "https://meeting.samsung.net/@/j/11221266" },
+    { "title": "Yt Music", "url": "https://music.youtube.com/" },
+    { "title": "Kmeeting", "url": "https://meeting.samsung.net/@/j/11221266" },
     { "title": "Webpage", "url": "https://rsingh-fbd.github.io/R.singh/index.html" }
   ]
 }
