@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-01-23T01:39:27.585525Z",
+  "generated_at": "2026-01-23T12:42:53.870619Z",
   "language": "Hindi",
-  "total_items": 4,
+  "total_items": 5,
   "items": [
     {
       "type": "movie",
@@ -50,6 +50,22 @@
         "hls": []
       },
       "play_url": "https://archive.org/download/7-a-prophecy-full-filled-shri-krishna-leela/7-A Prophecy full filled-Shri Krishna Leela.mp4"
+    },
+    {
+      "type": "movie",
+      "title": "6 A New Krishna Shri Krishna Leela",
+      "year": null,
+      "language": "Hindi",
+      "source": "archive.org",
+      "identifier": "6-a-new-krishna-shri-krishna-leela_202010",
+      "poster": "https://archive.org/services/img/6-a-new-krishna-shri-krishna-leela_202010",
+      "streams": {
+        "mp4": [
+          "https://archive.org/download/6-a-new-krishna-shri-krishna-leela_202010/6-A New Krishna-Shri Krishna Leela.mp4"
+        ],
+        "hls": []
+      },
+      "play_url": "https://archive.org/download/6-a-new-krishna-shri-krishna-leela_202010/6-A New Krishna-Shri Krishna Leela.mp4"
     },
     {
       "type": "movie",
