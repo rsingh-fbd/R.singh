@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-01-27T01:45:18.691684Z",
+  "generated_at": "2026-01-27T12:45:41.076721Z",
   "language": "Hindi",
-  "total_items": 7,
+  "total_items": 6,
   "items": [
     {
       "type": "movie",
@@ -18,22 +18,6 @@
         "hls": []
       },
       "play_url": "https://archive.org/download/dli.akashvani.sangeet.29/Manipuri.Raas.Maha.Raas.mp4"
-    },
-    {
-      "type": "movie",
-      "title": "6 A New Krishna Shri Krishna Leela",
-      "year": null,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "6-a-new-krishna-shri-krishna-leela_202010",
-      "poster": "https://archive.org/services/img/6-a-new-krishna-shri-krishna-leela_202010",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/6-a-new-krishna-shri-krishna-leela_202010/6-A New Krishna-Shri Krishna Leela.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/6-a-new-krishna-shri-krishna-leela_202010/6-A New Krishna-Shri Krishna Leela.mp4"
     },
     {
       "type": "movie",

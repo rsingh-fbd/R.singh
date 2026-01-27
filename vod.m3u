@@ -1,8 +1,6 @@
 #EXTM3U
 #EXTINF:-1 tvg-logo="https://archive.org/services/img/dli.akashvani.sangeet.29" group-title="Hindi VOD",Maipuri Raas: Maha Raas
 https://archive.org/download/dli.akashvani.sangeet.29/Manipuri.Raas.Maha.Raas.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/6-a-new-krishna-shri-krishna-leela_202010" group-title="Hindi VOD",6 A New Krishna Shri Krishna Leela
-https://archive.org/download/6-a-new-krishna-shri-krishna-leela_202010/6-A New Krishna-Shri Krishna Leela.mp4
 #EXTINF:-1 tvg-logo="https://archive.org/services/img/dni.ncaa.ICCR-861-UM" group-title="Hindi VOD",Sita Swayamvar Organised by Swami Ram Swarup Sharma of Shri Krishna Leela Sansthan, Vrindavan (Vol. II)
 https://archive.org/download/dni.ncaa.ICCR-861-UM/ICCR-861-UM.mp4
 #EXTINF:-1 tvg-logo="https://archive.org/services/img/7-a-prophecy-full-filled-shri-krishna-leela" group-title="Hindi VOD",7 A Prophecy Full Filled Shri Krishna Leela
