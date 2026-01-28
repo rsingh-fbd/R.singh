@@ -14,24 +14,45 @@ html, body {
     background: black;
     overflow: hidden;
 }
-iframe {
-    width: 100%;
-    height: 100%;
+
+/* Wrapper that covers screen */
+#player-wrapper {
+    position: fixed;
+    inset: 0;
+    background: black;
+    overflow: hidden;
+}
+
+/* Force YouTube iframe to COVER screen */
+#player-wrapper iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 100vh;
+    transform: translate(-50%, -50%);
     border: 0;
 }
-#error {
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin-top: 40px;
+
+/* Landscape handling (TV / Android box) */
+@media (min-aspect-ratio: 16/9) {
+    #player-wrapper iframe {
+        height: 56.25vw; /* 9/16 */
+    }
+}
+
+/* Portrait handling (mobile) */
+@media (max-aspect-ratio: 16/9) {
+    #player-wrapper iframe {
+        width: 177.78vh; /* 16/9 */
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div id="player"></div>
-<div id="error" style="display:none;"></div>
+<div id="player-wrapper"></div>
 
 <script>
 const DEFAULT_CONFIG = {
@@ -47,50 +68,43 @@ const DEFAULT_CONFIG = {
 const JSON_FILE = "files/video.json";
 const DEFAULT_VIDEO_ID = "dQw4w9WgXcQ";
 
-/* Extract YouTube ID */
 function getYouTubeId(url) {
     if (!url) return DEFAULT_VIDEO_ID;
 
-    let match;
-    if ((match = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/))) {
-        return match[1];
-    }
-    if ((match = url.match(/[?&]v=([a-zA-Z0-9_-]+)/))) {
-        return match[1];
-    }
+    let m;
+    if ((m = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/))) return m[1];
+    if ((m = url.match(/[?&]v=([a-zA-Z0-9_-]+)/))) return m[1];
+
     return DEFAULT_VIDEO_ID;
 }
 
-/* Build embed URL */
 function buildEmbedUrl(videoId, cfg) {
-    const params = new URLSearchParams({
+    const p = new URLSearchParams({
         autoplay: Number(cfg.autoplay),
         mute: Number(cfg.mute),
         controls: Number(cfg.controls),
         rel: Number(cfg.rel),
-        start: Number(cfg.start)
+        start: Number(cfg.start),
+        playsinline: 1
     });
 
     if (Number(cfg.loop) === 1) {
-        params.append("loop", "1");
-        params.append("playlist", videoId);
+        p.append("loop", "1");
+        p.append("playlist", videoId);
     }
 
-    return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+    return `https://www.youtube.com/embed/${videoId}?${p.toString()}`;
 }
 
-/* Load JSON and initialize */
 fetch(JSON_FILE)
-    .then(res => {
-        if (!res.ok) throw new Error("Cannot load video.json");
-        return res.json();
-    })
-    .then(json => {
-        const config = Object.assign({}, DEFAULT_CONFIG, json);
-        const videoId = getYouTubeId(config.url);
-        const embedUrl = buildEmbedUrl(videoId, config);
+    .then(r => r.json())
+    .then(cfg => {
+        cfg = Object.assign({}, DEFAULT_CONFIG, cfg);
 
-        document.getElementById("player").innerHTML = `
+        const videoId = getYouTubeId(cfg.url);
+        const embedUrl = buildEmbedUrl(videoId, cfg);
+
+        document.getElementById("player-wrapper").innerHTML = `
             <iframe
                 src="${embedUrl}"
                 allow="autoplay; encrypted-media; fullscreen"
@@ -98,11 +112,9 @@ fetch(JSON_FILE)
             </iframe>
         `;
     })
-    .catch(err => {
-        console.error(err);
-        const e = document.getElementById("error");
-        e.style.display = "block";
-        e.innerText = "Failed to load video configuration.";
+    .catch(() => {
+        document.body.innerHTML =
+            "<h2 style='color:white;text-align:center'>video.json load failed</h2>";
     });
 </script>
 
