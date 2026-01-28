@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>YouTube Player</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 html, body {
     margin: 0;
@@ -10,31 +12,99 @@ html, body {
     width: 100%;
     height: 100%;
     background: black;
+    overflow: hidden;
 }
 iframe {
     width: 100%;
     height: 100%;
     border: 0;
 }
+#error {
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 40px;
+}
 </style>
 </head>
+
 <body>
 
-<iframe
-    src="https://www.youtube.com/embed/fO9e9jnhYK8
-    ?autoplay=1
-    &mute=1
-    &controls=0
-    &rel=0
-    &modestbranding=1
-    &fs=1
-    &iv_load_policy=3
-    &playsinline=1
-    &playlist=fO9e9jnhYK8
-    &loop=1"
-    allow="autoplay; fullscreen"
-    allowfullscreen>
-</iframe>
+<div id="player"></div>
+<div id="error" style="display:none;"></div>
+
+<script>
+const DEFAULT_CONFIG = {
+    url: "",
+    autoplay: 1,
+    mute: 1,
+    controls: 1,
+    loop: 0,
+    rel: 0,
+    start: 0
+};
+
+const JSON_FILE = "video.json";
+const DEFAULT_VIDEO_ID = "dQw4w9WgXcQ";
+
+/* Extract YouTube ID */
+function getYouTubeId(url) {
+    if (!url) return DEFAULT_VIDEO_ID;
+
+    let match;
+    if ((match = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/))) {
+        return match[1];
+    }
+    if ((match = url.match(/[?&]v=([a-zA-Z0-9_-]+)/))) {
+        return match[1];
+    }
+    return DEFAULT_VIDEO_ID;
+}
+
+/* Build embed URL */
+function buildEmbedUrl(videoId, cfg) {
+    const params = new URLSearchParams({
+        autoplay: Number(cfg.autoplay),
+        mute: Number(cfg.mute),
+        controls: Number(cfg.controls),
+        rel: Number(cfg.rel),
+        start: Number(cfg.start)
+    });
+
+    if (Number(cfg.loop) === 1) {
+        params.append("loop", "1");
+        params.append("playlist", videoId);
+    }
+
+    return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+}
+
+/* Load JSON and initialize */
+fetch(JSON_FILE)
+    .then(res => {
+        if (!res.ok) throw new Error("Cannot load video.json");
+        return res.json();
+    })
+    .then(json => {
+        const config = Object.assign({}, DEFAULT_CONFIG, json);
+        const videoId = getYouTubeId(config.url);
+        const embedUrl = buildEmbedUrl(videoId, config);
+
+        document.getElementById("player").innerHTML = `
+            <iframe
+                src="${embedUrl}"
+                allow="autoplay; encrypted-media; fullscreen"
+                allowfullscreen>
+            </iframe>
+        `;
+    })
+    .catch(err => {
+        console.error(err);
+        const e = document.getElementById("error");
+        e.style.display = "block";
+        e.innerText = "Failed to load video configuration.";
+    });
+</script>
 
 </body>
 </html>
