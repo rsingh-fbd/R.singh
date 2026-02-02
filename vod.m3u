@@ -1,9 +1,15 @@
 #EXTM3U
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/2-krishnas-childhood-shri-krishna-leela" group-title="Hindi VOD",2 Krishna's Childhood Shri Krishna Leela
-https://archive.org/download/2-krishnas-childhood-shri-krishna-leela/2-Krishna's Childhood-Shri Krishna Leela.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/dni.ncaa.ICCR-712-UM" group-title="Hindi VOD",Shri Krishna Leela (Vol. II)
-https://archive.org/download/dni.ncaa.ICCR-712-UM/ICCR-712-UM.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/dni.ncaa.ICCR-831-VHS" group-title="Hindi VOD",Sita Swayamvar: Musical Drama by Shri Krishna Leela Sansthan Vrindavan led by Swami Ram Swarup Sharma
+https://archive.org/download/dni.ncaa.ICCR-831-VHS/ICCR-831-VHS.ia.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/6-a-new-krishna-shri-krishna-leela_202010" group-title="Hindi VOD",6 A New Krishna Shri Krishna Leela
+https://archive.org/download/6-a-new-krishna-shri-krishna-leela_202010/6-A New Krishna-Shri Krishna Leela.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/4-the-blissful-trance-shri-krishna-leela" group-title="Hindi VOD",4 The Blissful Trance Shri Krishna Leela
+https://archive.org/download/4-the-blissful-trance-shri-krishna-leela/4-The Blissful Trance-Shri Krishna Leela.mp4
 #EXTINF:-1 tvg-logo="https://archive.org/services/img/dni.ncaa.ICCR-862-UM" group-title="Hindi VOD",Sita Swayamvar Organised by Swami Ram Swarup Sharma of Shri Krishna Leela Sansthan, Vrindavan (Vol. III)
 https://archive.org/download/dni.ncaa.ICCR-862-UM/ICCR-862-UM.mp4
 #EXTINF:-1 tvg-logo="https://archive.org/services/img/dli.akashvani.sangeet.29" group-title="Hindi VOD",Maipuri Raas: Maha Raas
 https://archive.org/download/dli.akashvani.sangeet.29/Manipuri.Raas.Maha.Raas.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/2-krishnas-childhood-shri-krishna-leela" group-title="Hindi VOD",2 Krishna's Childhood Shri Krishna Leela
+https://archive.org/download/2-krishnas-childhood-shri-krishna-leela/2-Krishna's Childhood-Shri Krishna Leela.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/dni.ncaa.ICCR-860-UM" group-title="Hindi VOD",Sita Swayamvar Organised by Swami Ram Swarup Sharma of Shri Krishna Leela Sansthan, Vrindavan (Vol. I)
+https://archive.org/download/dni.ncaa.ICCR-860-UM/ICCR-860-UM.mp4
