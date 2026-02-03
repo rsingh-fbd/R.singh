@@ -176,7 +176,7 @@ https://amg00862-amg00862c9-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-a
 #EXTINF:-1 tvg-id="Zoom.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_ZOOM/images/LOGO_HD/image.png" group-title="Music","Zoom"
 https://dai.google.com/linear/hls/event/JCAm25qkRXiKcK1AJMlvKQ/master.m3u8
 #EXTINF:-1 tvg-id="MyLive.in@Hd","My Live"
-http://10.15.23.223:82/live/live.m3u8
+http://10.197.57.94:82/final/screen.mp4
 #EXTINF:-1 tvg-id="MyShare.in@Hd","My Share"
 http://10.197.57.94:82/live/screen.m3u8
 #EXTINF:-1 tvg-id="AndTV.in@International","&TV International"
