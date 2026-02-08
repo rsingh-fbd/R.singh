@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube with Custom Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f0f0f;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Mode switcher */
+        #mode-switch {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 8px 12px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Main container */
+        #main-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* YouTube browsing iframe (top) */
+        #browser-frame {
+            flex: 1;
+            border: none;
+            background: white;
+        }
+
+        /* Custom player container (bottom) */
+        #custom-player-container {
+            flex: 0 0 60vh;
+            background: black;
+            display: none;
+        }
+
+        /* When player is active */
+        .player-active #browser-frame {
+            flex: 0 0 40vh;
+        }
+
+        .player-active #custom-player-container {
+            display: block;
+        }
+
+        /* Custom player styles */
+        #custom-player {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Video info display */
+        #video-info {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 1px solid #333;
+        }
+
+        #video-title {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        #video-channel {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        /* Controls */
+        #player-controls {
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .control-btn {
+            padding: 8px 15px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .control-btn:hover {
+            background: #cc0000;
+        }
+
+        /* Loading indicator */
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        /* Fullscreen mode */
+        .fullscreen-mode #browser-frame {
+            display: none !important;
+        }
+
+        .fullscreen-mode #custom-player-container {
+            flex: 1 !important;
+            height: 100vh !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="mode-switch" onclick="toggleFullscreen()">🎬 Fullscreen Player</div>
+    
+    <div id="main-container">
+        <!-- YouTube browsing iframe -->
+        <iframe 
+            id="browser-frame"
+            src="https://m.youtube.com"
+            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+            allow="autoplay; encrypted-media"
+        ></iframe>
+        
+        <!-- Custom player section -->
+        <div id="custom-player-container">
+            <div id="video-info">
+                <div id="video-title">No video selected</div>
+                <div id="video-channel">Click any YouTube video to play</div>
+            </div>
+            
+            <div id="player-controls">
+                <button class="control-btn" onclick="closePlayer()">Close Player</button>
+                <button class="control-btn" onclick="toggleFullscreen()">Toggle Fullscreen</button>
+            </div>
+            
+            <!-- Your custom player iframe -->
+            <iframe 
+                id="custom-player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                allowfullscreen
+            ></iframe>
+        </div>
+    </div>
+    
+    <div id="loading">Loading custom player...</div>
+
+    <script>
+        // Configuration
+        const config = {
+            autoplay: 1,
+            controls: 1,
+            rel: 0,
+            modestbranding: 1,
+            fs: 1
+        };
+
+        // DOM Elements
+        const mainContainer = document.getElementById('main-container');
+        const browserFrame = document.getElementById('browser-frame');
+        const customPlayer = document.getElementById('custom-player');
+        const videoTitle = document.getElementById('video-title');
+        const videoChannel = document.getElementById('video-channel');
+        const loading = document.getElementById('loading');
+        
+        let isFullscreen = false;
+        let currentVideoId = null;
+
+        // Extract video ID from YouTube URL
+        function extractVideoId(url) {
+            console.log('Extracting from URL:', url);
+            
+            // Handle various YouTube URL formats
+            let videoId = null;
+            
+            // youtube.com/watch?v=VIDEO_ID
+            if (url.includes('youtube.com/watch') && url.includes('v=')) {
+                const urlObj = new URL(url);
+                videoId = urlObj.searchParams.get('v');
+            }
+            // youtu.be/VIDEO_ID
+            else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1].split(/[?&#]/)[0];
+            }
+            // m.youtube.com/watch?v=VIDEO_ID
+            else if (url.includes('m.youtube.com/watch')) {
+                const urlObj = new URL(url);
+                videoId = urlObj.searchParams.get('v');
+            }
+            // /watch?v=VIDEO_ID (relative URLs)
+            else if (url.includes('/watch?v=')) {
+                videoId = url.split('/watch?v=')[1].split('&')[0];
+            }
+            
+            console.log('Extracted video ID:', videoId);
+            return videoId;
+        }
+
+        // Build custom player URL
+        function buildPlayerUrl(videoId) {
+            const params = new URLSearchParams({
+                autoplay: config.autoplay,
+                controls: config.controls,
+                rel: config.rel,
+                modestbranding: config.modestbranding,
+                fs: config.fs,
+                playsinline: 1,
+                enablejsapi: 1
+            });
+            
+            return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+        }
+
+        // Load video in custom player
+        function loadVideo(videoId, title = 'YouTube Video', channel = 'YouTube') {
+            if (!videoId) {
+                console.error('No video ID provided');
+                return;
+            }
+            
+            currentVideoId = videoId;
+            
+            // Update video info
+            videoTitle.textContent = title || 'YouTube Video';
+            videoChannel.textContent = channel || 'YouTube';
+            
+            // Show loading
+            loading.style.display = 'block';
+            
+            // Build and set player URL
+            const playerUrl = buildPlayerUrl(videoId);
+            console.log('Loading player URL:', playerUrl);
+            customPlayer.src = playerUrl;
+            
+            // Activate player view
+            mainContainer.classList.add('player-active');
+            
+            // Hide loading when player is ready
+            customPlayer.onload = () => {
+                loading.style.display = 'none';
+                console.log('Custom player loaded successfully');
+            };
+            
+            customPlayer.onerror = (error) => {
+                loading.style.display = 'none';
+                console.error('Error loading player:', error);
+                alert('Failed to load video. Please try again.');
+            };
+        }
+
+        // Close custom player
+        function closePlayer() {
+            mainContainer.classList.remove('player-active');
+            mainContainer.classList.remove('fullscreen-mode');
+            isFullscreen = false;
+            
+            // Stop the video
+            customPlayer.src = '';
+            currentVideoId = null;
+            
+            // Update mode switch text
+            document.getElementById('mode-switch').textContent = '🎬 Fullscreen Player';
+        }
+
+        // Toggle fullscreen mode
+        function toggleFullscreen() {
+            isFullscreen = !isFullscreen;
+            
+            if (isFullscreen) {
+                mainContainer.classList.add('fullscreen-mode');
+                document.getElementById('mode-switch').textContent = '📱 Browse YouTube';
+            } else {
+                mainContainer.classList.remove('fullscreen-mode');
+                document.getElementById('mode-switch').textContent = '🎬 Fullscreen Player';
+            }
+        }
+
+        // Intercept clicks in the YouTube iframe
+        function interceptClicks() {
+            // This is a simplified approach - in production you'd need more sophisticated handling
+            browserFrame.addEventListener('load', function() {
+                try {
+                    // Note: Due to cross-origin restrictions, we can't directly intercept clicks
+                    // inside the iframe. Alternative approaches include:
+                    // 1. Using a YouTube API wrapper
+                    // 2. Creating your own YouTube interface
+                    // 3. Using a proxy server to modify YouTube's HTML
+                    
+                    console.log('YouTube iframe loaded');
+                    
+                    // For demo purposes, we'll add a message listener
+                    window.addEventListener('message', function(event) {
+                        // Handle messages from iframe (if we set it up properly)
+                        console.log('Message from iframe:', event.data);
+                    });
+                    
+                } catch (error) {
+                    console.log('Cannot access iframe content due to CORS:', error);
+                }
+            });
+        }
+
+        // Alternative: Create a simple YouTube browser interface
+        function setupYouTubeBrowser() {
+            // This is a placeholder for a more advanced implementation
+            // where you would use YouTube Data API to search/browse videos
+            // and display them in your own interface (avoiding CORS issues)
+            
+            console.log('Setting up YouTube browser interface');
+            
+            // For now, we'll add a manual input for testing
+            const controls = document.createElement('div');
+            controls.style.cssText = `
+                position: fixed;
+                top: 50px;
+                right: 10px;
+                background: rgba(0,0,0,0.8);
+                padding: 15px;
+                border-radius: 5px;
+                z-index: 1000;
+            `;
+            
+            controls.innerHTML = `
+                <h4 style="margin-bottom:10px;color:#ff0000">Manual Test</h4>
+                <input type="text" id="video-url" placeholder="YouTube URL or ID" 
+                       style="padding:8px;width:200px;margin-bottom:5px;">
+                <button onclick="testVideo()" 
+                        style="padding:8px;background:#ff0000;color:white;border:none;border-radius:3px;">
+                    Test Player
+                </button>
+                <p style="font-size:12px;color:#aaa;margin-top:5px;">
+                    Try: dQw4w9WgXcQ
+                </p>
+            `;
+            
+            document.body.appendChild(controls);
+        }
+
+        // Test function for manual input
+        window.testVideo = function() {
+            const input = document.getElementById('video-url');
+            const value = input.value.trim();
+            
+            if (!value) return;
+            
+            // Extract video ID from input
+            let videoId = extractVideoId(value);
+            
+            // If no video ID found, assume it's already a video ID
+            if (!videoId && /^[a-zA-Z0-9_-]{11}$/.test(value)) {
+                videoId = value;
+            }
+            
+            if (videoId) {
+                loadVideo(videoId, 'Manually Loaded Video', 'Test');
+            } else {
+                alert('Invalid YouTube URL or Video ID');
+            }
+        };
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('YouTube Custom Player initialized');
+            
+            // Setup click interception (simplified)
+            interceptClicks();
+            
+            // Setup manual browser interface
+            setupYouTubeBrowser();
+            
+            // Example: Load a default video on startup
+            // setTimeout(() => {
+            //     loadVideo('dQw4w9WgXcQ', 'Never Gonna Give You Up', 'Rick Astley');
+            // }, 2000);
+        });
+
+        // Handle keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            // Escape key closes player
+            if (event.key === 'Escape' && (mainContainer.classList.contains('player-active') || isFullscreen)) {
+                closePlayer();
+            }
+            
+            // Space key toggles play/pause (would need YouTube API)
+            if (event.key === ' ' && currentVideoId) {
+                event.preventDefault();
+                // Implement play/pause via YouTube IFrame API
+            }
+        });
+    </script>
+</body>
+</html>
