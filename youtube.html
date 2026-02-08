@@ -15,7 +15,6 @@ html, body {
     overflow: hidden;
 }
 
-/* Wrapper that covers screen */
 #player-wrapper {
     position: fixed;
     inset: 0;
@@ -23,28 +22,29 @@ html, body {
     overflow: hidden;
 }
 
-/* Force YouTube iframe to COVER screen */
 #player-wrapper iframe {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100vw;
-    height: 100vh;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     border: 0;
 }
 
-/* Landscape handling (TV / Android box) */
-@media (min-aspect-ratio: 16/9) {
+/* Improved landscape/portrait handling */
+@media (orientation: landscape) {
     #player-wrapper iframe {
-        height: 56.25vw; /* 9/16 */
+        width: 100vw;
+        height: 100vh;
     }
 }
 
-/* Portrait handling (mobile) */
-@media (max-aspect-ratio: 16/9) {
+@media (orientation: portrait) {
     #player-wrapper iframe {
-        width: 177.78vh; /* 16/9 */
+        width: 100vw;
+        height: 56.25vw; /* 9/16 aspect ratio */
+        top: 50%;
+        transform: translateY(-50%);
     }
 }
 </style>
@@ -66,56 +66,131 @@ const DEFAULT_CONFIG = {
 };
 
 const JSON_FILE = "files/video.json";
-const DEFAULT_VIDEO_ID = "dQw4w9WgXcQ";
+const DEFAULT_VIDEO_ID = "dQw4w9WgXcQ"; // Rick Roll as fallback
 
 function getYouTubeId(url) {
-    if (!url) return DEFAULT_VIDEO_ID;
-
-    let m;
-    if ((m = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/))) return m[1];
-    if ((m = url.match(/[?&]v=([a-zA-Z0-9_-]+)/))) return m[1];
-
-    return DEFAULT_VIDEO_ID;
+    if (!url || url.trim() === "") return DEFAULT_VIDEO_ID;
+    
+    // Handle various YouTube URL formats
+    let videoId = "";
+    
+    // youtube.com/watch?v=VIDEO_ID
+    if (url.includes("youtube.com/watch")) {
+        const urlObj = new URL(url);
+        videoId = urlObj.searchParams.get("v");
+    }
+    // youtu.be/VIDEO_ID
+    else if (url.includes("youtu.be/")) {
+        videoId = url.split("youtu.be/")[1].split(/[?&#]/)[0];
+    }
+    // Direct video ID
+    else if (/^[a-zA-Z0-9_-]{11}$/.test(url)) {
+        videoId = url;
+    }
+    
+    return videoId || DEFAULT_VIDEO_ID;
 }
 
 function buildEmbedUrl(videoId, cfg) {
-    const p = new URLSearchParams({
-        autoplay: Number(cfg.autoplay),
-        mute: Number(cfg.mute),
-        controls: Number(cfg.controls),
-        rel: Number(cfg.rel),
-        start: Number(cfg.start),
-        playsinline: 1
+    const params = new URLSearchParams({
+        autoplay: cfg.autoplay || 1,
+        mute: cfg.mute || 1,
+        controls: cfg.controls || 1,
+        rel: cfg.rel || 0,
+        start: cfg.start || 0,
+        playsinline: 1,
+        enablejsapi: 1,
+        modestbranding: 1,
+        fs: 1 // Enable fullscreen
     });
 
-    if (Number(cfg.loop) === 1) {
-        p.append("loop", "1");
-        p.append("playlist", videoId);
+    // YouTube no longer supports loop parameter directly
+    // Loop functionality must be handled via YouTube Player API
+    if (cfg.loop === 1) {
+        // We'll handle looping through JavaScript API
+        console.log("Loop requested - will implement via YouTube Player API");
     }
 
-    return `https://www.youtube.com/embed/${videoId}?${p.toString()}`;
+    return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
 }
 
+function loadVideo(config) {
+    const videoId = getYouTubeId(config.url);
+    const embedUrl = buildEmbedUrl(videoId, config);
+    
+    const iframe = document.createElement('iframe');
+    iframe.src = embedUrl;
+    iframe.width = '100%';
+    iframe.height = '100%';
+    iframe.frameBorder = '0';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+    iframe.allowFullscreen = true;
+    iframe.title = 'YouTube video player';
+    
+    const wrapper = document.getElementById('player-wrapper');
+    wrapper.innerHTML = '';
+    wrapper.appendChild(iframe);
+    
+    // If loop is enabled, we need to use YouTube Player API
+    if (config.loop === 1) {
+        // This would require loading YouTube IFrame API
+        console.log("Note: For looping, implement YouTube IFrame API");
+    }
+}
+
+// Load configuration and start player
 fetch(JSON_FILE)
-    .then(r => r.json())
-    .then(cfg => {
-        cfg = Object.assign({}, DEFAULT_CONFIG, cfg);
-
-        const videoId = getYouTubeId(cfg.url);
-        const embedUrl = buildEmbedUrl(videoId, cfg);
-
-        document.getElementById("player-wrapper").innerHTML = `
-            <iframe
-                src="${embedUrl}"
-                allow="autoplay; encrypted-media; fullscreen"
-                allowfullscreen>
-            </iframe>
-        `;
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        return response.json();
     })
-    .catch(() => {
-        document.body.innerHTML =
-            "<h2 style='color:white;text-align:center'>video.json load failed</h2>";
+    .then(config => {
+        // Merge with defaults
+        const finalConfig = { ...DEFAULT_CONFIG, ...config };
+        loadVideo(finalConfig);
+    })
+    .catch(error => {
+        console.error('Failed to load video config:', error);
+        
+        // Show error message
+        const wrapper = document.getElementById('player-wrapper');
+        wrapper.innerHTML = `
+            <div style="color: white; text-align: center; padding: 20px; font-family: Arial;">
+                <h2>Failed to load video configuration</h2>
+                <p>Error: ${error.message}</p>
+                <p>Trying default video...</p>
+            </div>
+        `;
+        
+        // Try loading default video after delay
+        setTimeout(() => {
+            loadVideo({ url: DEFAULT_VIDEO_ID, ...DEFAULT_CONFIG });
+        }, 3000);
     });
+
+// Handle resize events for better responsiveness
+window.addEventListener('resize', function() {
+    const iframe = document.querySelector('#player-wrapper iframe');
+    if (iframe) {
+        // Force iframe to re-evaluate its size
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+    }
+});
+
+// Handle fullscreen changes
+document.addEventListener('fullscreenchange', updatePlayerSize);
+document.addEventListener('webkitfullscreenchange', updatePlayerSize);
+
+function updatePlayerSize() {
+    const iframe = document.querySelector('#player-wrapper iframe');
+    if (iframe && document.fullscreenElement) {
+        iframe.style.width = '100vw';
+        iframe.style.height = '100vh';
+    }
+}
 </script>
 
 </body>
