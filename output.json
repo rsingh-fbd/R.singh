@@ -1,56 +1,39 @@
 {
-  "generated_at": "2026-02-14T01:54:22.645869Z",
+  "generated_at": "2026-02-14T12:43:07.754625Z",
   "language": "Hindi",
-  "total_items": 3,
+  "total_items": 2,
   "items": [
     {
       "type": "movie",
-      "title": "Sita Swayamvar Organised by Swami Ram Swarup Sharma of Shri Krishna Leela Sansthan, Vrindavan (Vol. III)",
+      "title": "Shri Krishna Leela (Vol. III)",
       "year": 1992,
       "language": "Hindi",
       "source": "archive.org",
-      "identifier": "dni.ncaa.ICCR-862-UM",
-      "poster": "https://archive.org/services/img/dni.ncaa.ICCR-862-UM",
+      "identifier": "dni.ncaa.ICCR-713-UM",
+      "poster": "https://archive.org/services/img/dni.ncaa.ICCR-713-UM",
       "streams": {
         "mp4": [
-          "https://archive.org/download/dni.ncaa.ICCR-862-UM/ICCR-862-UM.mp4"
+          "https://archive.org/download/dni.ncaa.ICCR-713-UM/ICCR-713-UM.mp4"
         ],
         "hls": []
       },
-      "play_url": "https://archive.org/download/dni.ncaa.ICCR-862-UM/ICCR-862-UM.mp4"
+      "play_url": "https://archive.org/download/dni.ncaa.ICCR-713-UM/ICCR-713-UM.mp4"
     },
     {
       "type": "movie",
-      "title": "Sita Swayamvar: Musical Drama by Shri Krishna Leela Sansthan Vrindavan led by Swami Ram Swarup Sharma",
-      "year": 1992,
+      "title": "6 A New Krishna Shri Krishna Leela",
+      "year": null,
       "language": "Hindi",
       "source": "archive.org",
-      "identifier": "dni.ncaa.ICCR-831-VHS",
-      "poster": "https://archive.org/services/img/dni.ncaa.ICCR-831-VHS",
+      "identifier": "6-a-new-krishna-shri-krishna-leela_202010",
+      "poster": "https://archive.org/services/img/6-a-new-krishna-shri-krishna-leela_202010",
       "streams": {
         "mp4": [
-          "https://archive.org/download/dni.ncaa.ICCR-831-VHS/ICCR-831-VHS.ia.mp4",
-          "https://archive.org/download/dni.ncaa.ICCR-831-VHS/ICCR-831-VHS.mp4"
+          "https://archive.org/download/6-a-new-krishna-shri-krishna-leela_202010/6-A New Krishna-Shri Krishna Leela.mp4"
         ],
         "hls": []
       },
-      "play_url": "https://archive.org/download/dni.ncaa.ICCR-831-VHS/ICCR-831-VHS.ia.mp4"
-    },
-    {
-      "type": "movie",
-      "title": "Sita Swayamvar Organised by Swami Ram Swarup Sharma of Shri Krishna Leela Sansthan, Vrindavan (Vol. II)",
-      "year": 1992,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "dni.ncaa.ICCR-861-UM",
-      "poster": "https://archive.org/services/img/dni.ncaa.ICCR-861-UM",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/dni.ncaa.ICCR-861-UM/ICCR-861-UM.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/dni.ncaa.ICCR-861-UM/ICCR-861-UM.mp4"
+      "play_url": "https://archive.org/download/6-a-new-krishna-shri-krishna-leela_202010/6-A New Krishna-Shri Krishna Leela.mp4"
     }
   ]
 }
