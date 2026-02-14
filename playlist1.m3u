@@ -213,6 +213,40 @@ https://amg00862-amg00862c9-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-a
 http://161.248.38.40:8000/play/a08v/index.m3u8
 #EXTINF:-1 tvg-id="Zoom.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_ZOOM/images/LOGO_HD/image.png" group-title="Music","Zoom"
 https://dai.google.com/linear/hls/event/JCAm25qkRXiKcK1AJMlvKQ/master.m3u8
+#EXTINF:0 tvg-id="ApkaColors.in@Hd","Aapka Colors"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6568/index.m3u8
+#EXTINF:0,"Colors Cineplex IN"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6592/index.m3u8
+#EXTINF:0,"Colors Rishtey IN"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6586/index.m3u8
+#EXTINF:0 tvg-id="SonyMax2.in@Hd","Sony Max 2"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6625/index.m3u8
+#EXTINF:0 tvg-id="SonySab.in@Hd","Sony SAB"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6571/index.m3u8
+#EXTINF:0 tvg-id="SonyYay.in@Hd","Sony Yay"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6627/index.m3u8
+#EXTINF:0,"SET IN"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6575/index.m3u8
+#EXTINF:0,"SET Max"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6574/index.m3u8
+#EXTINF:0,"Star Sports 1 IN"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/2508/index.m3u8
+#EXTINF:0,"Star Sports 2 IN"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/2507/index.m3u8
+#EXTINF:0,"Zee Anmol IN"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6597/index.m3u8
+#EXTINF:0,"Zee Cinema HD IN"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6595/index.m3u8
+#EXTINF:0,"Zee Cinema IN"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6577/index.m3u8
+#EXTINF:0,"Zee Classic IN"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6596/index.m3u8
+#EXTINF:0,"Zee Smile IN"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6622/index.m3u8
+#EXTINF:0,"Zee TV HD IN"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6576/index.m3u8
+#EXTINF:0,"ZEE TV orig"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/9149/index.m3u8
 #EXTINF:-1 tvg-id="SonyKal.in@Hd","Sony Kal"
 https://wurlsonypicturestv.global.transmit.live/hls/68deeb1c0238cda82df543dd/v1/spt_sonykal_1/lg_us/latest/main/hls/playlist.m3u8
 #EXTINF:-1 tvg-id="MyLive.in@Hd","My Live"
