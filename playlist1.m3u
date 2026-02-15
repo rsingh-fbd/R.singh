@@ -245,8 +245,6 @@ http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6596/index.m3u8
 http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6622/index.m3u8
 #EXTINF:0,"Zee TV HD IN"
 http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6576/index.m3u8
-#EXTINF:0,"ZEE TV orig"
-http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/9149/index.m3u8
 #EXTINF:-1 tvg-id="SonyKal.in@Hd","Sony Kal"
 https://wurlsonypicturestv.global.transmit.live/hls/68deeb1c0238cda82df543dd/v1/spt_sonykal_1/lg_us/latest/main/hls/playlist.m3u8
 #EXTINF:-1 tvg-id="MyLive.in@Hd","My Live"
