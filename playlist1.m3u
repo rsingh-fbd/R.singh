@@ -101,6 +101,8 @@ https://mumt03.tangotv.in/1STINDIANEWS/index.m3u8
 http://45.148.145.57/IN_FOODFOOD/index.m3u8
 #EXTINF:-1 tvg-id="Goldmines.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_GOLDMINES/images/LOGO_HD/image.png" group-title="Movies","Goldmines"
 http://103.78.149.54:8000/play/a00z/index.m3u8
+#EXTINF:-1 tvg-id="Goldmines2.in@SD" tvg-logo="https://www.lyngsat.com/logo/tv/gg/goldmines-2-in.png" group-title="Movies","Goldmines 2"
+https://cdn-2.pishow.tv/live/1460/master.m3u8
 #EXTINF:-1 tvg-id="Gubbare.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_GUBBARE/images/LOGO_HD/image.png" group-title="Kids","Gubbare"
 https://epiconvh.akamaized.net/live/gubbare/master.m3u8
 #EXTINF:-1 tvg-id="HareKrsnaTV.in@SD" tvg-logo="https://dtil.tmsimg.com/assets/s143102_ld_h15_aa.png?lock=720x540" group-title="Religious","Hare Krsna TV"
@@ -337,8 +339,6 @@ https://amg01117-amg01117c1-amgplt0029.playout.now3.amagi.tv/playlist/amg01117-a
 https://cdn-2.pishow.tv/live/1461/master.m3u8
 #EXTINF:-1 tvg-id="HiDost.in@SD" tvg-logo="" group-title="Pishow TV","Hi Dost"
 https://cdn-1.pishow.tv/live/224/master.m3u8
-#EXTINF:-1 tvg-id="Goldmines2.in@SD" tvg-logo="" group-title="Pishow TV (CDN-2)","Goldmines 2"
-https://cdn-2.pishow.tv/live/1460/master.m3u8
 #EXTINF:-1 tvg-id="GadgaurTv.in@SD" tvg-logo="" group-title="Pishow TV (CDN-2)","Gadgaur TV"
 https://cdn-2.pishow.tv/live/1221/master.m3u8
 #EXTINF:-1 tvg-id="HindiDubbed.in@HD","Hindi Dubbed movie"
