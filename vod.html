@@ -1,83 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>VOD Player - MP4 Support</title>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<style>
-:root{--bg:#000;--accent:#00ff9d;--text:#fff}
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Segoe UI',Roboto,Arial,sans-serif;overflow:hidden}
-video{width:100%;height:100%;position:fixed;top:0;left:0;background:#000;object-fit:contain;z-index:1}
-.now-playing{
-  position:fixed;top:20px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,0.5);padding:8px 18px;border-radius:50px;
-  font-size:20px;font-weight:600;z-index:10;opacity:0;transition:.5s;
-  white-space:nowrap;max-width:88%;overflow:hidden;text-overflow:ellipsis;
-}
-.now-playing.show{opacity:1}
-.menu-btn{
-  position:fixed;padding:8px;background:rgba(0,0,0,0.5);color:white;
-  border:2px solid var(--accent);border-radius:50%;font-size:20px;
-  z-index:15;opacity:0;transition:.4s;cursor:pointer
-}
-.controls{
-  position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,0.5);padding:12px 20px;border-radius:999px;
-  display:flex;gap:24px;z-index:10;opacity:0;transition:.5s
-}
-.controls.show{opacity:1}
-.btn{padding:10px 16px;background:rgba(255,255,255,0.15);border:2px solid var(--accent);border-radius:999px;font-size:20px;color:#fff;cursor:pointer}
-.sidebar{
-  position:fixed;top:0;left:-320px;width:320px;height:100%;
-  background:rgba(0,0,0,0.85);backdrop-filter:blur(16px);
-  transition:left .4s;z-index:20;padding:16px;display:flex;flex-direction:column;gap:12px
-}
-.sidebar.visible{left:0}
-.search{width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.1);border:none;color:#fff;font-size:17px;outline:none}
-.channel-list{flex:1;overflow-y:auto}
-.channel{padding:10px 12px;border-radius:10px;cursor:pointer;transition:.15s;display:flex;justify-content:space-between;align-items:center}
-.channel:hover,.channel:focus{background:rgba(0,255,157,0.2)}
-.channel.active{background:var(--accent);color:#000;font-weight:bold}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>VOD Player</title>
+  <style>
+    :root {
+      --bg: #000;
+      --accent: #00ff9d;
+      --text: #fff;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+      overflow: hidden;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0; left: 0;
+      background: #000;
+      object-fit: contain;
+    }
+    .now-playing {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.6);
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: 19px;
+      font-weight: 600;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.5s;
+      white-space: nowrap;
+      max-width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      pointer-events: none;
+    }
+    .now-playing.show {
+      opacity: 1;
+    }
+    .menu-btn {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      padding: 10px 14px;
+      background: rgba(0,0,0,0.6);
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      color: white;
+      font-size: 22px;
+      z-index: 15;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .menu-btn.show {
+      opacity: 1;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -340px;
+      width: 340px;
+      height: 100%;
+      background: rgba(0,0,0,0.92);
+      backdrop-filter: blur(16px);
+      transition: left 0.4s ease;
+      z-index: 20;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .sidebar.visible {
+      left: 0;
+    }
+    .search {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.12);
+      border: none;
+      color: white;
+      font-size: 17px;
+      outline: none;
+    }
+    .channel-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+    .channel {
+      padding: 12px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-size: 16px;
+    }
+    .channel:hover,
+    .channel:focus {
+      background: rgba(0,255,157,0.18);
+    }
+    .channel.active {
+      background: var(--accent);
+      color: #000;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
-<div id="videoContainer">
   <video id="video" playsinline controls></video>
-  <div id="buffering" style="position:absolute;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:28px;font-weight:bold;opacity:0;transition:opacity .4s;pointer-events:none;z-index:5">
-    <div>Loading...</div>
-  </div>
-</div>
 
-<div id="nowPlaying" class="now-playing">Select a video</div>
-<button id="menuBtn" class="menu-btn">☰</button>
+  <div id="nowPlaying" class="now-playing">Select a video to start</div>
+  <button id="menuBtn" class="menu-btn">☰</button>
 
-<div id="controls" class="controls">
-  <button class="btn" id="prev">⏮</button>
-  <button class="btn" id="playpause">⏯</button>
-  <button class="btn" id="next">⏭</button>
-</div>
-
-<aside id="sidebar" class="sidebar">
-  <input type="text" id="search" class="search" placeholder="Search videos...">
-  <div id="channelList" class="channel-list"></div>
-</aside>
+  <aside id="sidebar" class="sidebar">
+    <input type="text" id="search" class="search" placeholder="Search videos…">
+    <div id="channelList" class="channel-list"></div>
+  </aside>
 
 <script>
 // ────────────────────────────────────────────────
-const video      = document.getElementById('video');
-const nowPlaying = document.getElementById('nowPlaying');
-const menuBtn    = document.getElementById('menuBtn');
-const sidebar    = document.getElementById('sidebar');
-const channelList= document.getElementById('channelList');
-const search     = document.getElementById('search');
-const buffering  = document.getElementById('buffering');
+const video       = document.getElementById('video');
+const nowPlaying  = document.getElementById('nowPlaying');
+const menuBtn     = document.getElementById('menuBtn');
+const sidebar     = document.getElementById('sidebar');
+const channelList = document.getElementById('channelList');
+const searchInput = document.getElementById('search');
 
 let channels = [];
 let currentIndex = -1;
-let hls = null;
 
 function escapeHtml(str) {
   const div = document.createElement('div');
@@ -85,32 +150,28 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-function showBuffering() { buffering.style.opacity = '1'; }
-function hideBuffering() { buffering.style.opacity = '0'; }
-
 function showUI() {
   nowPlaying.classList.add('show');
   menuBtn.classList.add('show');
-  controls.classList.add('show');
 }
 
 function hideUI() {
   if (sidebar.classList.contains('visible')) return;
   nowPlaying.classList.remove('show');
   menuBtn.classList.remove('show');
-  controls.classList.remove('show');
 }
 
-// ─── Load & Parse M3U ───────────────────────────────
-fetch('vod.m3u?t=' + Date.now())
+// Load & parse M3U
+fetch('https://raw.githubusercontent.com/rsingh-fbd/R.singh/refs/heads/main/vod.m3u?t=' + Date.now())
   .then(r => r.text())
   .then(text => {
     const lines = text.split(/\r?\n/);
     channels = [];
     for (let i = 0; i < lines.length; i++) {
-      if (lines[i].startsWith('#EXTINF')) {
-        let title = lines[i].split(',').slice(1).join(',').trim();
-        let url   = lines[i+1]?.trim();
+      if (lines[i].startsWith('#EXTINF:')) {
+        const parts = lines[i].split(',');
+        const title = parts.slice(1).join(',').trim();
+        const url = lines[i + 1]?.trim();
         if (url && !url.startsWith('#')) {
           channels.push({ title, url });
         }
@@ -120,19 +181,22 @@ fetch('vod.m3u?t=' + Date.now())
     renderList();
     if (channels.length > 0) playVideo(0);
   })
-  .catch(() => nowPlaying.textContent = "Cannot load playlist");
+  .catch(err => {
+    console.error(err);
+    nowPlaying.textContent = "Failed to load playlist";
+  });
 
-// ─── Render video list ──────────────────────────────
+// Render video list
 function renderList() {
   channelList.innerHTML = '';
-  const term = search.value.toLowerCase().trim();
+  const term = searchInput.value.toLowerCase().trim();
 
   channels.forEach((item, idx) => {
     if (term && !item.title.toLowerCase().includes(term)) return;
 
     const div = document.createElement('div');
     div.className = 'channel';
-    div.textContent = item.title;
+    div.innerHTML = escapeHtml(item.title);
     div.dataset.idx = idx;
 
     if (idx === currentIndex) div.classList.add('active');
@@ -146,63 +210,30 @@ function renderList() {
   });
 }
 
-// ─── Play video (MP4 or HLS fallback) ───────────────
+// Play selected video
 function playVideo(idx) {
   if (idx < 0 || idx >= channels.length) return;
-  if (idx === currentIndex) {
-    video.paused ? video.play() : video.pause();
-    return;
-  }
 
-  showBuffering();
   currentIndex = idx;
-
   const item = channels[idx];
+
   nowPlaying.textContent = item.title;
   showUI();
 
-  // Clean up previous player
-  if (hls) {
-    hls.destroy();
-    hls = null;
-  }
+  // Reset video element
   video.pause();
   video.src = '';
   video.removeAttribute('src');
   video.load();
 
-  // ── Decide playback method ────────────────────────
-  const url = item.url.trim();
+  // Most archive.org MP4s support seeking well
+  video.src = item.url;
+  video.play().catch(e => {
+    console.warn("Autoplay prevented or failed", e);
+    nowPlaying.textContent = item.title + " (tap to play)";
+  });
 
-  if (Hls.isSupported() && url.toLowerCase().includes('.m3u8')) {
-    // HLS stream
-    hls = new Hls({ enableWorker: true });
-    hls.loadSource(url);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      video.play().catch(()=>{});
-      hideBuffering();
-    });
-    hls.on(Hls.Events.ERROR, (e, data) => {
-      if (data.fatal) {
-        hideBuffering();
-        nowPlaying.textContent = "Stream error";
-      }
-    });
-  }
-  else {
-    // Direct MP4 (most of your VODs)
-    video.src = url;
-    video.play()
-      .then(() => hideBuffering())
-      .catch(err => {
-        hideBuffering();
-        console.warn("Playback failed:", err);
-        nowPlaying.textContent = "Cannot play this video";
-      });
-  }
-
-  // Update active item
+  // Highlight active item
   document.querySelectorAll('.channel').forEach(el => {
     el.classList.toggle('active', Number(el.dataset.idx) === idx);
   });
@@ -211,28 +242,39 @@ function playVideo(idx) {
 // ─── Event listeners ────────────────────────────────
 menuBtn.onclick = () => sidebar.classList.toggle('visible');
 
-search.oninput = renderList;
+searchInput.oninput = renderList;
 
-document.getElementById('prev').onclick = () =>
-  playVideo((currentIndex - 1 + channels.length) % channels.length);
+// Auto-show UI on interaction
+['mousemove', 'keydown', 'touchstart'].forEach(ev =>
+  document.addEventListener(ev, showUI)
+);
 
-document.getElementById('next').onclick = () =>
-  playVideo((currentIndex + 1) % channels.length);
+// Hide UI after inactivity (except when sidebar is open)
+let hideTimeout;
+function scheduleHide() {
+  clearTimeout(hideTimeout);
+  hideTimeout = setTimeout(hideUI, 4500);
+}
+document.addEventListener('mousemove', scheduleHide);
+document.addEventListener('keydown', scheduleHide);
+document.addEventListener('touchstart', scheduleHide);
 
-document.getElementById('playpause').onclick = () =>
-  video.paused ? video.play() : video.pause();
-
-video.addEventListener('playing', hideBuffering);
-video.addEventListener('canplay', hideBuffering);
-video.addEventListener('error', () => {
-  hideBuffering();
-  nowPlaying.textContent = "Playback error";
+// Close sidebar when clicking outside
+document.addEventListener('click', e => {
+  if (sidebar.classList.contains('visible') &&
+      !sidebar.contains(e.target) &&
+      e.target !== menuBtn) {
+    sidebar.classList.remove('visible');
+  }
 });
 
-// Show UI on interaction
-document.addEventListener('mousemove', showUI);
-document.addEventListener('keydown', showUI);
-document.addEventListener('touchstart', showUI);
+// Keyboard: M = toggle menu
+document.addEventListener('keydown', e => {
+  if (e.key.toLowerCase() === 'm') {
+    e.preventDefault();
+    sidebar.classList.toggle('visible');
+  }
+});
 </script>
 </body>
 </html>
