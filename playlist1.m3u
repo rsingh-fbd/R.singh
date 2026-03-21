@@ -189,6 +189,8 @@ http://116.90.120.151:8000/play/a0jf/index.m3u8
 http://116.90.120.151:8000/play/a0km/index.m3u8
 #EXTINF:-1 tvg-id="SonyPix.in@HD" tvg-logo="https://i.postimg.cc/Z5G8j67L/PIX-HD-WHITE.png" group-title="Movies","Sony Pix"
 http://103.229.254.25:7001/play/a0ed/index.m3u8
+#EXTINF:-1 tvg-id="SonySAB.in@HD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_SONY_SAB/images/LOGO_HD/image.png" group-title="Entertainment","Sony SAB"
+http://103.99.249.139/sonysab/index.m3u8
 #EXTINF:-1 tvg-id="SonySportsTen2.in@HD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_SONY_SPORTS_TEN_2/images/LOGO_HD/image.png" group-title="Sports","Sony Sports Ten 2"
 http://103.229.254.25:7001/play/a02t/index.m3u8
 #EXTINF:-1 tvg-id="SonySportsTen5.in@HD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_SONY_SPORTS_TEN_5/images/LOGO_HD/image.png" group-title="Sports","Sony Sports Ten 5"
@@ -271,10 +273,6 @@ https://amg00862-amg00862c7-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-a
 https://dknttpxmr0dwf.cloudfront.net/index_57.m3u8
 #EXTINF:-1 tvg-id="ZeeSouthFlix.in@HD" tvg-logo="https://d3bd0tgyk368z1.cloudfront.net/zeelg/LG%20logo%20artwork/400x200/zsouthflix.png" group-title="Movies","Zee South Flix"
 https://amg00862-amg00862c9-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-amg00862c9-amgplt0173/playlist.m3u8
-#EXTINF:-1 tvg-id="ZeeTV.in@HD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_ZEE_TV/images/LOGO_HD/LOGO_HD_image.png" group-title="Entertainment","Zee TV"
-http://103.229.254.25:7001/play/a0cs/index.m3u8
-#EXTINF:-1 tvg-id="Zing.in@SD" tvg-logo="https://dtil.tmsimg.com/assets/GNLZZGG0025L26R.png?lock=720x540" group-title="Music","Zing!"
-http://iptvcasomsapi.jprdigital.in/x-media/C0307/master.m3u8
 #EXTINF:-1 tvg-id="Zoom.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_ZOOM/images/LOGO_HD/image.png" group-title="Music","Zoom"
 https://dai.google.com/linear/hls/event/JCAm25qkRXiKcK1AJMlvKQ/master.m3u8
 #EXTINF:0 tvg-id="ApkaColors.in@Hd","Aapka Colors"
@@ -283,8 +281,6 @@ http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6568/index.m3u8
 http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6592/index.m3u8
 #EXTINF:0,"Colors Rishtey IN"
 http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6586/index.m3u8
-#EXTINF:0 tvg-id="SonySab.in@Hd","Sony SAB"
-http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6571/index.m3u8
 #EXTINF:0 tvg-id="SonyYay.in@Hd","Sony Yay"
 http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6627/index.m3u8
 #EXTINF:0,"SET IN"
@@ -305,6 +301,8 @@ http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6577/index.m3u8
 http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6596/index.m3u8
 #EXTINF:0,"Zee Smile IN"
 http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6622/index.m3u8
+#EXTINF:0,"ZEE TV"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/1001/index.m3u8
 #EXTINF:0,"Zee TV HD IN"
 http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6576/index.m3u8
 #EXTINF:-1 tvg-id="SonyKal.in@Hd","Sony Kal"
