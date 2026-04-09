@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-04-09T02:05:17.591873Z",
+  "generated_at": "2026-04-09T13:23:33.701922Z",
   "language": "Hindi",
-  "total_items": 6,
+  "total_items": 5,
   "items": [
     {
       "type": "movie",
@@ -82,22 +82,6 @@
         "hls": []
       },
       "play_url": "https://archive.org/download/dni.ncaa.ICCR-861-UM/ICCR-861-UM.mp4"
-    },
-    {
-      "type": "movie",
-      "title": "7 A Prophecy Full Filled Shri Krishna Leela",
-      "year": null,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "7-a-prophecy-full-filled-shri-krishna-leela",
-      "poster": "https://archive.org/services/img/7-a-prophecy-full-filled-shri-krishna-leela",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/7-a-prophecy-full-filled-shri-krishna-leela/7-A Prophecy full filled-Shri Krishna Leela.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/7-a-prophecy-full-filled-shri-krishna-leela/7-A Prophecy full filled-Shri Krishna Leela.mp4"
     }
   ]
 }
