@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-05-18T03:30:39.401349Z",
+  "generated_at": "2026-05-18T15:27:56.853181Z",
   "language": "Hindi",
-  "total_items": 6,
+  "total_items": 4,
   "items": [
     {
       "type": "movie",
@@ -37,22 +37,6 @@
     },
     {
       "type": "movie",
-      "title": "4 The Blissful Trance Shri Krishna Leela",
-      "year": null,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "4-the-blissful-trance-shri-krishna-leela",
-      "poster": "https://archive.org/services/img/4-the-blissful-trance-shri-krishna-leela",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/4-the-blissful-trance-shri-krishna-leela/4-The Blissful Trance-Shri Krishna Leela.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/4-the-blissful-trance-shri-krishna-leela/4-The Blissful Trance-Shri Krishna Leela.mp4"
-    },
-    {
-      "type": "movie",
       "title": "Shri Krishna Leela (Vol. III)",
       "year": 1992,
       "language": "Hindi",
@@ -66,22 +50,6 @@
         "hls": []
       },
       "play_url": "https://archive.org/download/dni.ncaa.ICCR-713-UM/ICCR-713-UM.mp4"
-    },
-    {
-      "type": "movie",
-      "title": "5 Mahabharat Begins Shri Krishna Leela",
-      "year": null,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "5-mahabharat-begins-shri-krishna-leela",
-      "poster": "https://archive.org/services/img/5-mahabharat-begins-shri-krishna-leela",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/5-mahabharat-begins-shri-krishna-leela/5-Mahabharat Begins-Shri Krishna Leela.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/5-mahabharat-begins-shri-krishna-leela/5-Mahabharat Begins-Shri Krishna Leela.mp4"
     },
     {
       "type": "movie",
