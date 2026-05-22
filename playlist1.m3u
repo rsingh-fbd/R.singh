@@ -187,8 +187,6 @@ http://149.71.34.166:8000/play/a00z/index.m3u8
 http://103.122.249.134:8000/play/a05a
 #EXTINF:-1 tvg-id="SonyPix.in@HD" tvg-logo="https://i.postimg.cc/Z5G8j67L/PIX-HD-WHITE.png" group-title="Movies","Sony Pix"
 https://sl.vodep39240327.workers.dev/channel/SONY%20PIX%20HD.m3u8
-#EXTINF:-1 tvg-id="SonySAB.in@HD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_SONY_SAB/images/LOGO_HD/image.png" group-title="Entertainment","Sony SAB"
-http://103.122.249.134:8000/play/a04h
 #EXTINF:-1 tvg-id="SonySportsTen1.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_SONY_SPORTS_TEN_1/images/LOGO_HD/image.png" group-title="Sports","Sony Sports Ten 1"
 https://sl.vodep39240327.workers.dev/channel/SONY%20TEN%201.m3u8
 #EXTINF:-1 tvg-id="SonySportsTen1.in@HD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_SONY_SPORTS_TEN_1/images/LOGO_HD/image.png" group-title="Sports","Sony Sports Ten 1"
@@ -287,6 +285,8 @@ http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6592/index.m3u8
 http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6586/index.m3u8
 #EXTINF:0 tvg-id="SonyPal.in@Hd","Sony Pal"
 http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6626/index.m3u8
+#EXTINF:0 tvg-id="SonySab.in@Hd","Sony SAB"
+http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6571/index.m3u8
 #EXTINF:0 tvg-id="SonyYay.in@Hd","Sony Yay"
 http://qnh9pyox.russtv.net/iptv/BQG985S7RZNZCG/6627/index.m3u8
 #EXTINF:0,"SET IN"
