@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-15T04:04:18.034872Z",
+  "generated_at": "2026-06-15T17:11:26.273962Z",
   "language": "Hindi",
-  "total_items": 5,
+  "total_items": 4,
   "items": [
     {
       "type": "movie",
@@ -18,22 +18,6 @@
         "hls": []
       },
       "play_url": "https://archive.org/download/dni.ncaa.ICCR-832-VHS/ICCR-832-VHS.mp4"
-    },
-    {
-      "type": "movie",
-      "title": "2 Krishna's Childhood Shri Krishna Leela",
-      "year": null,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "2-krishnas-childhood-shri-krishna-leela",
-      "poster": "https://archive.org/services/img/2-krishnas-childhood-shri-krishna-leela",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/2-krishnas-childhood-shri-krishna-leela/2-Krishna's Childhood-Shri Krishna Leela.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/2-krishnas-childhood-shri-krishna-leela/2-Krishna's Childhood-Shri Krishna Leela.mp4"
     },
     {
       "type": "movie",
