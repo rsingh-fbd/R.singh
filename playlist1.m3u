@@ -41,8 +41,6 @@ https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26
 https://idvd.multitvsolution.com/idvo/bharatsamachar.m3u8
 #EXTINF:-1 tvg-id="BhojpuriCinema.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_BHOJPURI_CINEMA/images/LOGO_HD/image.png" group-title="Movies","Bhojpuri Cinema"
 http://103.213.31.109:90/BhojpuriCinema/playlist.m3u8
-#EXTINF:-1 tvg-id="BigMagic.in@SD" tvg-logo="https://dtil.tmsimg.com/assets/GNLZZGG002YJ850.png?lock=720x540" group-title="Entertainment","Big Magic"
-https://mumt05.tangotv.in/BIGMAGIC/index.m3u8
 #EXTINF:-1 tvg-id="ChannelDivya.in@SD" tvg-logo="https://dtil.tmsimg.com/assets/s143010_ld_h15_aa.png?lock=720x540" group-title="Religious","Channel Divya"
 https://vg-pitaaratvlive.akamaized.net/v1/vglive-sk-906482/playlist.m3u8
 #EXTINF:-1 tvg-id="Colors.in@SD" tvg-logo="https://i.imgur.com/M8uCJ0D.png" group-title="Entertainment","Colors"
