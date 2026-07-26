@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-26T02:33:57.123541Z",
+  "generated_at": "2026-07-26T13:15:39.938660Z",
   "language": "Hindi",
-  "total_items": 6,
+  "total_items": 5,
   "items": [
     {
       "type": "movie",
@@ -50,22 +50,6 @@
         "hls": []
       },
       "play_url": "https://archive.org/download/6-a-new-krishna-shri-krishna-leela_202010/6-A New Krishna-Shri Krishna Leela.mp4"
-    },
-    {
-      "type": "movie",
-      "title": "6 A New Krishna Shri Krishna Leela",
-      "year": null,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "6-a-new-krishna-shri-krishna-leela",
-      "poster": "https://archive.org/services/img/6-a-new-krishna-shri-krishna-leela",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/6-a-new-krishna-shri-krishna-leela/6-A New Krishna-Shri Krishna Leela.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/6-a-new-krishna-shri-krishna-leela/6-A New Krishna-Shri Krishna Leela.mp4"
     },
     {
       "type": "movie",
