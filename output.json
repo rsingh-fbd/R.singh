@@ -1,24 +1,8 @@
 {
-  "generated_at": "2026-08-05T02:14:23.472493Z",
+  "generated_at": "2026-08-05T14:02:36.390968Z",
   "language": "Hindi",
-  "total_items": 7,
+  "total_items": 6,
   "items": [
-    {
-      "type": "movie",
-      "title": "4 The Blissful Trance Shri Krishna Leela",
-      "year": null,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "4-the-blissful-trance-shri-krishna-leela",
-      "poster": "https://archive.org/services/img/4-the-blissful-trance-shri-krishna-leela",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/4-the-blissful-trance-shri-krishna-leela/4-The Blissful Trance-Shri Krishna Leela.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/4-the-blissful-trance-shri-krishna-leela/4-The Blissful Trance-Shri Krishna Leela.mp4"
-    },
     {
       "type": "movie",
       "title": "Interpretation of Gita Govinda in Indian Classical Dance Forms (Vol. III)",
