@@ -1,40 +1,8 @@
 {
-  "generated_at": "2026-08-07T02:32:09.839656Z",
+  "generated_at": "2026-08-07T12:57:03.472600Z",
   "language": "Hindi",
-  "total_items": 5,
+  "total_items": 3,
   "items": [
-    {
-      "type": "movie",
-      "title": "4 The Blissful Trance Shri Krishna Leela",
-      "year": null,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "4-the-blissful-trance-shri-krishna-leela",
-      "poster": "https://archive.org/services/img/4-the-blissful-trance-shri-krishna-leela",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/4-the-blissful-trance-shri-krishna-leela/4-The Blissful Trance-Shri Krishna Leela.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/4-the-blissful-trance-shri-krishna-leela/4-The Blissful Trance-Shri Krishna Leela.mp4"
-    },
-    {
-      "type": "movie",
-      "title": "1 Birth Of Krishna Shri Krishna Leela",
-      "year": null,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "1-birth-of-krishna-shri-krishna-leela",
-      "poster": "https://archive.org/services/img/1-birth-of-krishna-shri-krishna-leela",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/1-birth-of-krishna-shri-krishna-leela/1-Birth of Krishna-Shri Krishna Leela.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/1-birth-of-krishna-shri-krishna-leela/1-Birth of Krishna-Shri Krishna Leela.mp4"
-    },
     {
       "type": "movie",
       "title": "6 A New Krishna Shri Krishna Leela",
