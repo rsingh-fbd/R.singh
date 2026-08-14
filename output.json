@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-14T01:44:29.114742Z",
+  "generated_at": "2026-08-14T12:59:50.603680Z",
   "language": "Hindi",
-  "total_items": 8,
+  "total_items": 9,
   "items": [
     {
       "type": "movie",
@@ -50,6 +50,22 @@
         "hls": []
       },
       "play_url": "https://archive.org/download/4-the-blissful-trance-shri-krishna-leela/4-The Blissful Trance-Shri Krishna Leela.mp4"
+    },
+    {
+      "type": "movie",
+      "title": "7 A Prophecy Full Filled Shri Krishna Leela",
+      "year": null,
+      "language": "Hindi",
+      "source": "archive.org",
+      "identifier": "7-a-prophecy-full-filled-shri-krishna-leela",
+      "poster": "https://archive.org/services/img/7-a-prophecy-full-filled-shri-krishna-leela",
+      "streams": {
+        "mp4": [
+          "https://archive.org/download/7-a-prophecy-full-filled-shri-krishna-leela/7-A Prophecy full filled-Shri Krishna Leela.mp4"
+        ],
+        "hls": []
+      },
+      "play_url": "https://archive.org/download/7-a-prophecy-full-filled-shri-krishna-leela/7-A Prophecy full filled-Shri Krishna Leela.mp4"
     },
     {
       "type": "movie",
