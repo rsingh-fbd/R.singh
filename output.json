@@ -1,24 +1,8 @@
 {
-  "generated_at": "2026-08-28T09:30:37.289245Z",
+  "generated_at": "2026-08-28T21:42:30.162592Z",
   "language": "Hindi",
-  "total_items": 10,
+  "total_items": 8,
   "items": [
-    {
-      "type": "movie",
-      "title": "Maipuri Raas: Vasant Raas",
-      "year": null,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "dli.akashvani.sangeet.30",
-      "poster": "https://archive.org/services/img/dli.akashvani.sangeet.30",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/dli.akashvani.sangeet.30/Manipuri.Raas.Vasant.Raas.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/dli.akashvani.sangeet.30/Manipuri.Raas.Vasant.Raas.mp4"
-    },
     {
       "type": "movie",
       "title": "Sita Swayamvar Organised by Swami Ram Swarup Sharma of Shri Krishna Leela Sansthan, Vrindavan (Vol. III)",
@@ -83,22 +67,6 @@
         "hls": []
       },
       "play_url": "https://archive.org/download/dni.ncaa.ICCR-831-VHS/ICCR-831-VHS.ia.mp4"
-    },
-    {
-      "type": "movie",
-      "title": "2 Krishna's Childhood Shri Krishna Leela",
-      "year": null,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "2-krishnas-childhood-shri-krishna-leela",
-      "poster": "https://archive.org/services/img/2-krishnas-childhood-shri-krishna-leela",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/2-krishnas-childhood-shri-krishna-leela/2-Krishna's Childhood-Shri Krishna Leela.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/2-krishnas-childhood-shri-krishna-leela/2-Krishna's Childhood-Shri Krishna Leela.mp4"
     },
     {
       "type": "movie",
