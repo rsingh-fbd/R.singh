@@ -53,6 +53,8 @@ https://streams.tangotv.in/B4UBHOJPURI/ORIGIN/index.m3u8
 https://cdn-2.pishow.tv/live/227/master.m3u8
 #EXTINF:-1 tvg-id="B4UKadak.in@SD",B4U Kadak (576p)
 https://streams.tangotv.in/B4UKADAK/ORIGIN/index.m3u8
+#EXTINF:-1 tvg-id="B4UKadak.in@SD",B4U Kadak (576p)
+https://tvsen3.aynaott.com/X9E6bxg3/index.m3u8
 #EXTINF:-1 tvg-id="B4UMovies.in@India",B4U Movies
 https://cdn-2.pishow.tv/live/419/master.m3u8
 #EXTINF:-1 tvg-id="B4UMovies.in@India",B4U Movies (576p)
@@ -75,8 +77,6 @@ https://d1msejlow1t3l4.cloudfront.net/fta/bharatsamachar/playlist.m3u8
 https://idvd.multitvsolution.com/idvo/bharatsamachar.m3u8
 #EXTINF:-1 tvg-id="BharatSamachar.in@SD",Bharat Samachar (576p)
 https://mumt03.tangotv.in/Dsly5z3HBHARATSAMACHAR/index.m3u8
-#EXTINF:-1 tvg-id="BharatSamachar.in@SD",Bharat Samachar (576p)
-https://tvsen3.aynaott.com/m94BZDYb/index.m3u8
 #EXTINF:-1 tvg-id="BhojpuriCinema.in@SD",Bhojpuri Cinema
 https://cdn-4.pishow.tv/live/1033/master.m3u8
 #EXTINF:-1 tvg-id="BhojpuriCinema.in@SD",Bhojpuri Cinema (720p)
@@ -95,6 +95,8 @@ http://59.103.38.46:8000/play/a00b/index.m3u8
 https://live-dangal2.akamaized.net/liveabr/playlist.m3u8
 #EXTINF:-1 tvg-id="Dangal2.in@SD",Dangal 2 (576p)
 https://streams.tangotv.in/DANGAL2/ORIGIN/index.m3u8
+#EXTINF:-1 tvg-id="Dangal2.in@SD",Dangal 2 (576p)
+https://tvsen3.aynaott.com/8KfZvBYS/index.m3u8
 #EXTINF:-1 tvg-id="DangalTV.in@SD",Dangal TV (720p)
 https://live-dangal.akamaized.net/liveabr/playlist.m3u8
 #EXTINF:-1 tvg-id="DangalTV.in@SD",Dangal TV (576p)
