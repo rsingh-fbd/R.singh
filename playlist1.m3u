@@ -1,6 +1,10 @@
 #EXTM3U
+#EXTINF:-1 tvg-id="AndTV.in@HD",&TV
+http://202.70.146.135:8000/play/a06c/index.m3u8
 #EXTINF:-1 tvg-id="AndTV.in@International",&TV International
 https://amg01117-amg01117c1-amgplt0029.playout.now3.amagi.tv/playlist/amg01117-amg01117c1-amgplt0029/playlist.m3u8
+#EXTINF:-1 tvg-id="AndxplorHD.in@HD",&xplor
+http://66.102.126.10:8000/play/a028/index.m3u8
 #EXTINF:-1 tvg-id="9XJalwa.in@SD",9X Jalwa
 https://wiselp.wiseplayout.com/9X_Jalwa/master.m3u8
 #EXTINF:-1 tvg-id="9XJhakaas.in@SD",9X Jhakaas
@@ -10,7 +14,7 @@ https://amg01281-9xmediapvtltd-9xtashan-samsungin-xz1sd.amagi.tv/playlist/amg012
 #EXTINF:-1 tvg-id="9XM.in@SD",9XM
 https://9xjio.wiseplayout.com/9XM/master.m3u8
 #EXTINF:-1 tvg-id="AajTak.in@HD",Aaj Tak
-https://livehub-voidnet.onrender.com/cluster/streamcore/in/AAJTAK_REDIS.m3u8
+https://feeds.intoday.in/aajtak/api/aajtakhd/master.m3u8
 #EXTINF:-1 tvg-id="AasthaBhajan.in@SD",Aastha Bhajan
 https://aasthaott.akamaized.net/110923/smil:bhajan.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="ABPNews.in@SD",ABP News
@@ -34,7 +38,13 @@ https://xykt-fix.github.io/cinerama_edge01/hls/BOLLYWOOD_RU/Movie009.m3u8
 #EXTINF:-1 tvg-id="ChannelDivya.in@SD",Channel Divya
 https://vg-pitaaratvlive.akamaized.net/v1/vglive-sk-906482/playlist.m3u8
 #EXTINF:-1 tvg-id="Colors.in@HD",Colors
-http://59.103.38.46:8000/play/a00b/index.m3u8
+http://66.102.126.10:8000/play/a00a/index.m3u8
+#EXTINF:-1 tvg-id="ColorsCineplex.in@HD",Colors Cineplex
+http://66.102.126.10:8000/play/a076/index.m3u8
+#EXTINF:-1 tvg-id="ColorsCineplexBollywood.in@SD",Colors Cineplex Bollywood
+http://202.70.146.135:8000/play/a058/index.m3u8
+#EXTINF:-1 tvg-id="ColorsInfinity.in@HD",Colors Infinity
+http://66.102.126.10:8000/play/a014/index.m3u8
 #EXTINF:-1 tvg-id="Dangal2.in@SD",Dangal 2
 https://live-dangal2.akamaized.net/liveabr/playlist.m3u8
 #EXTINF:-1 tvg-id="DangalTV.in@SD",Dangal TV
@@ -51,8 +61,6 @@ https://cdn-2.pishow.tv/live/12/master.m3u8
 https://cdn-6.pishow.tv/live/13/master.m3u8
 #EXTINF:-1 tvg-id="DDUttarPradesh.in@SD",DD Uttar Pradesh
 https://cdn-1.pishow.tv/live/36/master.m3u8
-#EXTINF:-1 tvg-id="FirstIndiaNews.in@SD",First India News
-https://mumt03.tangotv.in/Dsly5z3H1STINDIANEWS/index.m3u8
 #EXTINF:-1 tvg-id="FoodFood.in@SD",Food Food
 https://mumt03.tangotv.in/Dsly5z3HFOODFOOD/index.m3u8
 #EXTINF:-1 tvg-id="GadgaurTv.in@SD" tvg-logo="" group-title="Pishow TV (CDN-2)",Gadgaur TV
@@ -65,6 +73,8 @@ https://cdn-2.pishow.tv/live/1460/master.m3u8
 https://airtelapp.shemaroo.com/harekrsnatv/smil:harekrsnatvadp.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="HiDost.in@SD" tvg-logo="" group-title="Pishow TV",Hi Dost
 https://cdn-1.pishow.tv/live/224/master.m3u8
+#EXTINF:-1 tvg-id="HungamaTV.in@SD",Hungama TV
+http://103.185.24.134:3001/HUNGAMA/index.m3u8
 #EXTINF:-1 tvg-id="IndiaToday.in@SD",India Today
 https://livehub-voidnet.onrender.com/cluster/streamcore/in/INDIATODAY_StreamOrchestrator.m3u8
 #EXTINF:-1 tvg-id="IndiaTV.in@SD",India TV
@@ -75,8 +85,6 @@ https://cdn-2.pishow.tv/live/1464/master.m3u8
 https://cdn-6.pishow.tv/live/10007/master.m3u8
 #EXTINF:-1 tvg-id="ManoranjanGrand.in@SD",Manoranjan Grand
 https://cdn-1.pishow.tv/live/1011/master.m3u8
-#EXTINF:-1 tvg-id="ManoranjanMovies.in@SD",Manoranjan Movies
-https://mumt04.tangotv.in/m18aqlK4MANORANJANMOVIES/index.m3u8
 #EXTINF:-1 tvg-id="ManoranjanTV.in@SD",Manoranjan TV
 https://cdn-1.pishow.tv/live/1013/master.m3u8
 #EXTINF:-1 tvg-id="MBCBollywood.ae@SD" tvg-logo="https://i.imgur.com/TTAGFHG.png" group-title="Movies",MBC Bollywood
@@ -93,6 +101,8 @@ https://raw.githubusercontent.com/amazeyourself/adaptive-streams/refs/heads/main
 https://vidcdn.vidgyor.com/news24-origin/liveabr/playlist.m3u8
 #EXTINF:-1 tvg-id="NewsNation.in@SD",News Nation
 https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/6cd2f649739a45ca9de1daf81cc7d0f2/index.m3u8
+#EXTINF:-1 tvg-id="NickJr.in@SD",Nick Jr.
+http://103.185.24.134:3001/NICK-JR/index.m3u8
 #EXTINF:-1 tvg-id="OscarMoviesBhojpuri.in@SD",Oscar Movies Bhojpuri
 https://cdn-4.pishow.tv/live/233/master.m3u8
 #EXTINF:-1 tvg-id="PeaceofMindTV.in@SD",Peace of Mind TV
@@ -135,24 +145,38 @@ https://cdn-3.pishow.tv/live/230/master.m3u8
 https://airtelapp.shemaroo.com/shemarooumang/smil:shemarooumangadp.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="ShubhTV.in@SD",Shubh TV
 https://d2g1vdc6ozl2o8.cloudfront.net/out/v1/0a0dc7d7911b4fddbb4dfc963fdd4b9e/index.m3u8
+#EXTINF:-1 tvg-id="Sonic.in@SD",Sonic
+http://103.185.24.134:3001/SONIC/index.m3u8
 #EXTINF:-1 tvg-id="SonyEntertainmentTelevision.in@HD",Sony Entertainment Television
 http://38.96.178.205/SONYHD/index.m3u8
 #EXTINF:-1 tvg-id="SonyKal.in@Hd",Sony Kal
 https://wurlsonypicturestv.global.transmit.live/hls/68deeb1c0238cda82df543dd/v1/spt_sonykal_1/lg_us/latest/main/hls/playlist.m3u8
+#EXTINF:-1 tvg-id="SonyPal.in@SD",Sony Pal
+http://59.103.38.46:8000/play/a0ac/index.m3u8
+#EXTINF:-1 tvg-id="SonyYay.in@SD",Sony Yay!
+http://103.165.93.31:8095/sonyYay/index.m3u8
+#EXTINF:-1 tvg-id="StarGold.in@HD",Star Gold
+http://66.102.126.10:8000/play/a00f/index.m3u8
+#EXTINF:-1 tvg-id="StarGold2.in@HD",Star Gold 2
+http://66.102.126.10:8000/play/a077/index.m3u8
+#EXTINF:-1 tvg-id="StarGoldRomance.in@SD",Star Gold Romance
+http://66.102.126.10:8000/play/a00r/index.m3u8
+#EXTINF:-1 tvg-id="StarGoldSelect.in@HD",Star Gold Select
+http://66.102.126.10:8000/play/a01s/index.m3u8
+#EXTINF:-1 tvg-id="StarMovies.in@HD",Star Movies
+http://66.102.126.10:8000/play/a021/index.m3u8
+#EXTINF:-1 tvg-id="StarMoviesSelect.in@HD",Star Movies Select
+http://66.102.126.10:8000/play/a020/index.m3u8
 #EXTINF:-1 tvg-id="StarPravah.in@HD",Star Pravah
 https://da86m1sqpm3o0.cloudfront.net/28072023/smil:starpravah.smil/chunklist_b1928000.m3u8
-#EXTINF:-1 tvg-id="StarSports2Hindi.in@SD",Star Sports 2 Hindi
-https://tvsen5.aynaott.com/cXPB2LKkErN9/index.m3u8
-#EXTINF:-1 tvg-id="StarSportsSelect2.in@HD",Star Sports Select 2
-http://tvsen7.aynascope.net/ssport2hd/index.m3u8
 #EXTINF:-1 tvg-id="StarPlus.in@HD",StarPlus
-http://202.70.146.135:8000/play/a009/index.m3u8
+http://66.102.126.10:8000/play/a008/index.m3u8
 #EXTINF:-1 tvg-id="SudarshanNews.in@SD",Sudarshan News
 https://cdn-2.pishow.tv/live/1516/master.m3u8
 #EXTINF:-1 tvg-id="SVBC4.in@SD",SVBC 4
 https://cdn-2.pishow.tv/live/1607/master.m3u8
 #EXTINF:-1 tvg-id="TimesNowNavbharat.in@SD",Times Now Navbharat
-https://raw.githubusercontent.com/amazeyourself/adaptive-streams/refs/heads/main/streams/in/YuppTV/TimesNowNavbharat.m3u8
+https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/a5ee7c4e7a2a4b15a22a3bcf523b9776/index.m3u8
 #EXTINF:-1 tvg-id="TotalBhakti.in@SD",Total Bhakti
 https://d34z4embz0hjf6.cloudfront.net/out/v1/d55b3323a9f142638f897378f0b526fe/index.m3u8
 #EXTINF:-1 tvg-id="TV9Bharatvarsh.in@SD",TV9 Bharatvarsh
