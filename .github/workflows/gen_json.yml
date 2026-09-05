@@ -1,10 +1,10 @@
 name: Generate m3u8 input.json (1-2000)
 
-permissions:
-  contents: write
-
 on:
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   generate-list:
@@ -13,29 +13,37 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
+          cache: pip
 
       - name: Generate input.json with 2000 channels
         run: python script/gen_json.py
 
       - name: Configure Git
         run: |
-          git config --global user.name "GitHub Action Bot"
-          git config --global user.email "github-action[bot]@users.noreply.github.com"
+          git config user.name "GitHub Action Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit generated input.json (if changed/new)
+      - name: Commit generated input.json
+        id: commit
         run: |
-          git add files/input.json || true
-          git diff --staged --quiet && echo "No changes to commit" || \
-          git commit -m "chore: generate input.json with channels 1-2000 [ci skip]"
+          git add files/input.json
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore: generate input.json with channels 1-2000 [skip ci]"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Push changes
-        uses: ad-m/github-push-action@v0.8.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref_name }}
+        if: steps.commit.outputs.changed == 'true'
+        run: |
+          git push origin HEAD:${{ github.ref_name }}
