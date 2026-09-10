@@ -12,7 +12,7 @@ https://amg01281-9xmediapvtltd-9xtashan-samsungin-xz1sd.amagi.tv/playlist/amg012
 #EXTINF:-1 tvg-id="9XM.in@SD",9XM
 https://9xjio.wiseplayout.com/9XM/master.m3u8
 #EXTINF:-1 tvg-id="AajTak.in@HD",Aaj Tak
-https://feeds.intoday.in/aajtak/api/aajtakhd/master.m3u8
+https://livehub-voidnet.onrender.com/cluster/streamcore/in/AAJTAK_REDIS.m3u8
 #EXTINF:-1 tvg-id="AasthaBhajan.in@SD",Aastha Bhajan
 https://aasthaott.akamaized.net/110923/smil:bhajan.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="ABPNews.in@SD",ABP News
@@ -56,11 +56,11 @@ https://xlbor37ydvaj-hls-live.wmncdn.net/firstindianewstv1/live.stream/index.m3u
 #EXTINF:-1 tvg-id="FoodFood.in@SD",Food Food
 https://mumt03.tangotv.in/Dsly5z3HFOODFOOD/index.m3u8
 #EXTINF:-1 tvg-id="Goldmines.in@SD",Goldmines
-https://tvsen3.aynaott.com/VamXuQH8/index.m3u8
+https://streams.tangotv.in/GOLDMINES/ORIGIN/index.m3u8
 #EXTINF:-1 tvg-id="GoldminesBollywood.in@SD",Goldmines Bollywood
-https://mumt03.tangotv.in/Dsly5z3HGOLDMINESBOLLYWOOD/index.m3u8
+https://tvsen6.aynaott.com/55xNrLdf/index.m3u8
 #EXTINF:-1 tvg-id="GoldminesMovies.in@SD",Goldmines Movies
-https://streams.tangotv.in/GOLDMINEMOVIES/ORIGIN/index.m3u8
+https://tvsen3.aynaott.com/5CGfPvGp/index.m3u8
 #EXTINF:-1 tvg-id="HareKrsnaTV.in@SD",Hare Krsna TV
 https://airtelapp.shemaroo.com/harekrsnatv/smil:harekrsnatvadp.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="HungamaTV.in@SD",Hungama TV
@@ -161,12 +161,12 @@ https://cloudplay-sonyliv.pages.dev/pal.m3u8
 https://cloudplay-sonyliv.pages.dev/pixhd.m3u8
 #EXTINF:-1 tvg-id="SonySAB.in@HD",Sony SAB
 https://cloudplay-sonyliv.pages.dev/sabhd.m3u8
-#EXTINF:-1 tvg-id="SonySportsTen1.in@HD",Sony Sports Ten 1
-https://cloudplay-sonyliv.pages.dev/ten1hd.m3u8
+#EXTINF:-1 tvg-id="SonySportsTen1.in@SD",Sony Sports Ten 1
+https://cloudplay-sonyliv.pages.dev/ten1.m3u8
 #EXTINF:-1 tvg-id="SonySportsTen2.in@SD",Sony Sports Ten 2
 https://cloudplay-sonyliv.pages.dev/ten2.m3u8
-#EXTINF:-1 tvg-id="SonySportsTen5.in@SD",Sony Sports Ten 5
-https://cloudplay-sonyliv.pages.dev/ten5.m3u8
+#EXTINF:-1 tvg-id="SonySportsTen5.in@HD",Sony Sports Ten 5
+https://cloudplay-sonyliv.pages.dev/ten5hd.m3u8
 #EXTINF:-1 tvg-id="SonyWah.in@SD",Sony Wah
 https://cloudplay-sonyliv.pages.dev/wah.m3u8
 #EXTINF:-1 tvg-id="SonyYay.in@SD",Sony Yay!
@@ -193,6 +193,8 @@ https://amg01448-samsungin-tinnavbharat-samsungin-ad-m8.amagi.tv/playlist/amg014
 https://d34z4embz0hjf6.cloudfront.net/out/v1/d55b3323a9f142638f897378f0b526fe/index.m3u8
 #EXTINF:-1 tvg-id="TV9Bharatvarsh.in@SD",TV9 Bharatvarsh
 https://vg-tv9yupp.vgcdn.net/vglive-sk-468570/v1/019dfce4b3371ea55784752988544/019dfce515ea1ea540a871e333259/main.m3u8
+#EXTINF:-1 tvg-id="Unite8Sports2.in@SD",Unite8 Sports 2
+http://59.103.38.46:8000/play/a126/index.m3u8
 #EXTINF:-1 tvg-id="YRFMusic.in@SD",YRF Music
 https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01412-xiaomiasia-yrfmusic-xiaomi/playlist.m3u8
 #EXTINF:-1 tvg-id="ZeeBharat.in@SD",Zee Bharat
