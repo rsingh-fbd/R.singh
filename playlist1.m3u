@@ -12,7 +12,7 @@ https://amg01281-9xmediapvtltd-9xtashan-samsungin-xz1sd.amagi.tv/playlist/amg012
 #EXTINF:-1 tvg-id="9XM.in@SD",9XM
 https://9xjio.wiseplayout.com/9XM/master.m3u8
 #EXTINF:-1 tvg-id="AajTak.in@HD",Aaj Tak
-https://livehub-voidnet.onrender.com/cluster/streamcore/in/AAJTAK_REDIS.m3u8
+https://feeds.intoday.in/aajtak/api/aajtakhd/master.m3u8
 #EXTINF:-1 tvg-id="AasthaBhajan.in@SD",Aastha Bhajan
 https://aasthaott.akamaized.net/110923/smil:bhajan.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="ABPNews.in@SD",ABP News
@@ -20,13 +20,13 @@ https://d2l4ar6y3mrs4k.cloudfront.net/live-streaming/abpnews-livetv/master.m3u8
 #EXTINF:-1 tvg-id="B4UBhojpuri.in@SD",B4U Bhojpuri
 https://cdnb4u.wiseplayout.com/B4U_Bhojpuri/master.m3u8
 #EXTINF:-1 tvg-id="B4UKadak.in@SD",B4U Kadak
-http://107.167.16.138/b4ukadak/index.m3u8?token=test
+https://cdn.pishow.tv/ott/live/227/master.m3u8
 #EXTINF:-1 tvg-id="B4UMovies.in@India",B4U Movies
-https://streams.tangotv.in/B4UMOVIES/ORIGIN/index.m3u8
+https://cdn.pishow.tv/ott/live/419/master.m3u8
 #EXTINF:-1 tvg-id="B4UMusic.in@India",B4U Music
-https://streams.tangotv.in/B4UMUSIC/ORIGIN/index.m3u8
+https://cdn.pishow.tv/ott/live/415/master.m3u8
 #EXTINF:-1 tvg-id="BalleBalle.in@SD",Balle Balle
-https://mcncdndigital.com/balleballetv/index.m3u8
+https://cdn.pishow.tv/ott/live/987/master.m3u8
 #EXTINF:-1 tvg-id="BharatSamachar.in@SD",Bharat Samachar
 https://idvd.multitvsolution.com/idvo/bharatsamachar.m3u8
 #EXTINF:-1 tvg-id="BhojpuriCinema.in@SD",Bhojpuri Cinema
@@ -41,14 +41,20 @@ http://202.70.146.135:8000/play/a058/index.m3u8
 https://live-dangal2.akamaized.net/liveabr/playlist.m3u8
 #EXTINF:-1 tvg-id="DangalTV.in@SD",Dangal TV
 https://live-dangal.akamaized.net/liveabr/playlist.m3u8
+#EXTINF:-1 tvg-id="DDBharati.in@SD",DD Bharati
+https://cdn.pishow.tv/ott/live/10/master.m3u8
 #EXTINF:-1 tvg-id="DDHaryana.in@SD" tvg-logo="https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/transparentImages/DD-Haryana-Logo_2000_X_1125_Transpharent.png" group-title="General",DD Haryana
 https://d2lk5u59tns74c.cloudfront.net/out/v1/950fc69666474351bde0a32b9600c804/index.m3u8
+#EXTINF:-1 tvg-id="DDKisan.in@SD",DD Kisan
+https://cdn.pishow.tv/ott/live/9/master.m3u8
 #EXTINF:-1 tvg-id="DDNational.in@HD" tvg-logo="https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/transparentImages/DD%20National.png" group-title="Entertainment",DD National
 https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/40492a64c1db4a1385ba1a397d357d3a/index.m3u8
 #EXTINF:-1 tvg-id="DDNews.in@HD" tvg-logo="https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/transparentImages/DD%20News%20HD.png" group-title="News",DD News
 https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/0811cd8c37ca4c409d5385a6cd2fa18b/index.m3u8
 #EXTINF:-1 tvg-id="DDSports.in@SD" tvg-logo="https://dtil.tmsimg.com/assets/s158255_ld_h15_aa.png?lock=720x540" group-title="Sports",DD Sports
 https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/b17adfe543354fdd8d189b110617cddd/index.m3u8
+#EXTINF:-1 tvg-id="DDUttarPradesh.in@SD",DD Uttar Pradesh
+https://cdn.pishow.tv/ott/live/36/master.m3u8
 #EXTINF:-1 tvg-id="EpicBhojpuri.in@SD",Epic Bhojpuri
 https://mumt01.tangotv.in/O5aw8Zn3EPICBHOJPURI/index.m3u8
 #EXTINF:-1 tvg-id="FirstIndiaNews.in@SD",First India News
@@ -56,11 +62,11 @@ https://xlbor37ydvaj-hls-live.wmncdn.net/firstindianewstv1/live.stream/index.m3u
 #EXTINF:-1 tvg-id="FoodFood.in@SD",Food Food
 https://mumt03.tangotv.in/Dsly5z3HFOODFOOD/index.m3u8
 #EXTINF:-1 tvg-id="Goldmines.in@SD",Goldmines
-https://streams.tangotv.in/GOLDMINES/ORIGIN/index.m3u8
+https://cdn.pishow.tv/ott/live/1459/master.m3u8
 #EXTINF:-1 tvg-id="GoldminesBollywood.in@SD",Goldmines Bollywood
-https://mumt03.tangotv.in/Dsly5z3HGOLDMINESBOLLYWOOD/index.m3u8
+https://streams.tangotv.in/GOLDMINESBOLLYWOOD/ORIGIN/index.m3u8
 #EXTINF:-1 tvg-id="GoldminesMovies.in@SD",Goldmines Movies
-https://streams.tangotv.in/GOLDMINEMOVIES/ORIGIN/index.m3u8
+https://cdn.pishow.tv/ott/live/1461/master.m3u8
 #EXTINF:-1 tvg-id="HareKrsnaTV.in@SD",Hare Krsna TV
 https://airtelapp.shemaroo.com/harekrsnatv/smil:harekrsnatvadp.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="HungamaTV.in@SD",Hungama TV
@@ -79,16 +85,20 @@ https://d1msejlow1t3l4.cloudfront.net/fta/insync/playlist.m3u8
 https://mumt05.tangotv.in/87NeALx2ISHWARBHAKTI/index.m3u8
 #EXTINF:-1 tvg-id="JungleBook.in@HD",Jungle Book
 https://cc-4bhi5osabejc9.akamaized.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-4bhi5osabejc9/junglebook.m3u8
+#EXTINF:-1 tvg-id="MahaMovie.in@SD",Maha Movie
+https://cdn.pishow.tv/ott/live/10007/master.m3u8
+#EXTINF:-1 tvg-id="ManoranjanGrand.in@SD",Manoranjan Grand
+https://cdn.pishow.tv/ott/live/1011/master.m3u8
 #EXTINF:-1 tvg-id="ManoranjanMovies.in@SD",Manoranjan Movies
 http://107.167.16.138/manoranjanmovies/index.m3u8?token=test
 #EXTINF:-1 tvg-id="ManoranjanTV.in@SD",Manoranjan TV
-https://streams.tangotv.in/MANORANJANTV/ORIGIN/index.m3u8
+https://cdn.pishow.tv/ott/live/1013/master.m3u8
 #EXTINF:-1 tvg-id="MBCBollywood.ae@SD" tvg-logo="https://i.imgur.com/TTAGFHG.png" group-title="Movies",MBC Bollywood
 https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-bollywood/546eb40d7dcf9a209255dd2496903764/index.m3u8
 #EXTINF:-1 tvg-id="MTV.in@SD",MTV
 https://da86m1sqpm3o0.cloudfront.net/28072023/smil:mtvindia.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="MusicIndia.in@SD",Music India
-https://streams.tangotv.in/MUSICINDIA/ORIGIN/index.m3u8
+https://cdn.pishow.tv/ott/live/226/master.m3u8
 #EXTINF:-1 tvg-id="NDTV24x7.in@SD",NDTV 24x7
 https://raw.githubusercontent.com/amazeyourself/adaptive-streams/refs/heads/main/streams/in/YuppTV/NDTV24x7.m3u8
 #EXTINF:-1 tvg-id="NDTVIndia.in@SD",NDTV India
@@ -102,7 +112,7 @@ https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/6cd2f649739a45ca9de1daf81cc7d0f2/in
 #EXTINF:-1 tvg-id="NickJr.in@SD",Nick Jr.
 http://103.185.24.134:3001/NICK-JR/index.m3u8
 #EXTINF:-1 tvg-id="OscarMoviesBhojpuri.in@SD",Oscar Movies Bhojpuri
-https://mumt05.tangotv.in/87NeALx2OSCARMOVIESBHOJPURI/index.m3u8
+https://cdn.pishow.tv/ott/live/233/master.m3u8
 #EXTINF:-1 tvg-id="PeaceofMindTV.in@SD",Peace of Mind TV
 https://yuppnimrestreammum.akamaized.net/181224/smil:peaceofmind.smil/playlist.m3u8?hdnts=st=1735898689~exp=1835898688~acl=*~hmac=f5fe24724fe05481e3841f9eb5ab8efdee0a3dd83645ae9dcf45703f525bab7b
 #EXTINF:-1 tvg-id="PunjabiHits.in@SD",Punjabi Hits
@@ -116,7 +126,7 @@ https://6n3yow8pl9ok-hls-live.5centscdn.com/sadhananewstv/live.stream/playlist.m
 #EXTINF:-1 tvg-id="SadhnaTV.in@SD",Sadhna TV
 https://mumt05.tangotv.in/87NeALx2SADHNATV/index.m3u8
 #EXTINF:-1 tvg-id="SangeetBhojpuri.in@SD",Sangeet Bhojpuri
-https://mumt01.tangotv.in/O5aw8Zn3SANGEETBHOJPURI/index.m3u8
+https://cdn.pishow.tv/ott/live/1293/master.m3u8
 #EXTINF:-1 tvg-id="SansadTV1.in@HD",Sansad TV 1
 https://d2lk5u59tns74c.cloudfront.net/out/v1/fff8f20221d5456e8922e689d71dedc3/index.m3u8
 #EXTINF:-1 tvg-id="SansadTV2.in@HD",Sansad TV 2
@@ -138,7 +148,7 @@ https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg00864-shemarooenterta-shemabollywoo
 #EXTINF:-1 tvg-id="ShemarooJosh.in@SD",Shemaroo Josh
 https://airtelapp.shemaroo.com/shemarooChumbakTV/smil:shemarooChumbakTVadp.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="ShemarooTV.in@SD",Shemaroo TV
-https://streams.tangotv.in/SHEMAROOTV/ORIGIN/index.m3u8
+https://cdn.pishow.tv/ott/live/230/master.m3u8
 #EXTINF:-1 tvg-id="ShemarooUmang.in@SD",Shemaroo Umang
 https://airtelapp.shemaroo.com/shemarooumang/smil:shemarooumangadp.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="ShubhTV.in@SD",Shubh TV
@@ -149,8 +159,8 @@ http://103.185.24.134:3001/SONIC/index.m3u8
 https://cloudplay-sonyliv.pages.dev/sethd.m3u8
 #EXTINF:-1 tvg-id="SonyKal.in@Hd",Sony Kal
 https://wurlsonypicturestv.global.transmit.live/hls/68deeb1c0238cda82df543dd/v1/spt_sonykal_1/lg_us/latest/main/hls/playlist.m3u8
-#EXTINF:-1 tvg-id="SonyMax.in@SD",Sony Max
-https://cloudplay-sonyliv.pages.dev/max.m3u8
+#EXTINF:-1 tvg-id="SonyMax.in@HD",Sony Max
+https://cloudplay-sonyliv.pages.dev/maxhd.m3u8
 #EXTINF:-1 tvg-id="SonyMax2.in@SD",Sony Max 2
 https://cloudplay-sonyliv.pages.dev/max2.m3u8
 #EXTINF:-1 tvg-id="SonyPal.in@SD",Sony Pal
@@ -159,8 +169,8 @@ https://cloudplay-sonyliv.pages.dev/pal.m3u8
 https://cloudplay-sonyliv.pages.dev/pixhd.m3u8
 #EXTINF:-1 tvg-id="SonySAB.in@HD",Sony SAB
 https://cloudplay-sonyliv.pages.dev/sabhd.m3u8
-#EXTINF:-1 tvg-id="SonySportsTen1.in@HD",Sony Sports Ten 1
-https://cloudplay-sonyliv.pages.dev/ten1hd.m3u8
+#EXTINF:-1 tvg-id="SonySportsTen1.in@SD",Sony Sports Ten 1
+https://cloudplay-sonyliv.pages.dev/ten1.m3u8
 #EXTINF:-1 tvg-id="SonySportsTen2.in@SD",Sony Sports Ten 2
 https://cloudplay-sonyliv.pages.dev/ten2.m3u8
 #EXTINF:-1 tvg-id="SonySportsTen5.in@SD",Sony Sports Ten 5
@@ -180,7 +190,7 @@ http://tvsen7.aynascope.net/ssport2hd/index.m3u8
 #EXTINF:-1 tvg-id="StarPlus.in@HD",StarPlus
 http://41.205.93.154/STAR-PLUS/index.m3u8
 #EXTINF:-1 tvg-id="SudarshanNews.in@SD",Sudarshan News
-https://d1msejlow1t3l4.cloudfront.net/fta/sudarshan/playlist.m3u8
+https://cdn.pishow.tv/ott/live/1516/master.m3u8
 #EXTINF:-1 tvg-id="SVBC4.in@SD",SVBC 4
 https://player.mslivestream.net/mslive/13a2927187b9700ae7ea82d7841d5b68.sdp/playlist.m3u8
 #EXTINF:-1 tvg-id="TimesNow.in@SD",Times Now
