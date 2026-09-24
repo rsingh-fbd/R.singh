@@ -181,12 +181,12 @@ https://cloudplay-sonyliv.pages.dev/pixhd.m3u8
 https://cloudplay-sonyliv.pages.dev/sabhd.m3u8
 #EXTINF:-1 tvg-id="SonySportsTen1.in@SD",Sony Sports Ten 1
 https://cloudplay-sonyliv.pages.dev/ten1.m3u8
-#EXTINF:-1 tvg-id="SonySportsTen2.in@SD",Sony Sports Ten 2
-https://cloudplay-sonyliv.pages.dev/ten2.m3u8
+#EXTINF:-1 tvg-id="SonySportsTen2.in@HD",Sony Sports Ten 2
+https://cloudplay-sonyliv.pages.dev/ten2hd.m3u8
 #EXTINF:-1 tvg-id="SonySportsTen3Hindi.in@HD",Sony Sports Ten 3 Hindi
 https://cloudplay-sonyliv.pages.dev/ten3hd.m3u8
-#EXTINF:-1 tvg-id="SonySportsTen5.in@HD",Sony Sports Ten 5
-https://cloudplay-sonyliv.pages.dev/ten5hd.m3u8
+#EXTINF:-1 tvg-id="SonySportsTen5.in@SD",Sony Sports Ten 5
+https://cloudplay-sonyliv.pages.dev/ten5.m3u8
 #EXTINF:-1 tvg-id="SonyWah.in@SD",Sony Wah
 https://cloudplay-sonyliv.pages.dev/wah.m3u8
 #EXTINF:-1 tvg-id="SonyYay.in@SD",Sony Yay!
@@ -222,7 +222,7 @@ https://vg-zeefta.akamaized.net/ptnr-yupptv/title-zeehindustan/v1/master/611d79b
 #EXTINF:-1 tvg-id="ZeeBiharJharkhand.in@SD",Zee Bihar Jharkhand
 https://raw.githubusercontent.com/amazeyourself/adaptive-streams/refs/heads/main/streams/in/YuppTV/ZeeBiharJharkhand.m3u8
 #EXTINF:-1 tvg-id="ZeeBusiness.in@SD",Zee Business
-https://dwby15d04agvq.cloudfront.net/index_5.m3u8
+https://dwby15d04agvq.cloudfront.net/index_1.m3u8
 #EXTINF:-1 tvg-id="ZeeCineClassic.in@SD",Zee Cine Classic
 https://amg00862-amg00862c8-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-amg00862c8-amgplt0173/playlist.m3u8
 #EXTINF:-1 tvg-id="ZeeCinema.in@SD",Zee Cinema
@@ -247,6 +247,8 @@ https://dt3lrqnyx3dks.cloudfront.net/index.m3u8
 https://vg-zeefta.akamaized.net/ptnr-yupptv/title-zeepunjabharyanahima/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/65eed269-2f3a-4dd0-ac89-d18959af28e3/main.m3u8
 #EXTINF:-1 tvg-id="ZeeSouthFlix.in@HD",Zee South Flix
 https://amg00862-amg00862c9-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-amg00862c9-amgplt0173/playlist.m3u8
+#EXTINF:-1 tvg-id="ZeeTV.in@HD",Zee TV
+http://41.205.93.154/ZEE-TV/index.m3u8
 #EXTINF:-1 tvg-id="Zing.in@SD",Zing!
 http://107.167.16.138/zing/index.m3u8?token=test
 #EXTINF:-1 tvg-id="Zoom.in@SD",Zoom
