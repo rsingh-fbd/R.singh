@@ -12,7 +12,7 @@ https://amg01281-9xmediapvtltd-9xtashan-samsungin-xz1sd.amagi.tv/playlist/amg012
 #EXTINF:-1 tvg-id="9XM.in@SD",9XM
 https://9xjio.wiseplayout.com/9XM/master.m3u8
 #EXTINF:-1 tvg-id="AajTak.in@HD",Aaj Tak
-https://livehub-voidnet.onrender.com/cluster/streamcore/in/AAJTAK_REDIS.m3u8
+https://feeds.intoday.in/aajtak/api/aajtakhd/master.m3u8
 #EXTINF:-1 tvg-id="AasthaBhajan.in@SD",Aastha Bhajan
 https://aasthaott.akamaized.net/110923/smil:bhajan.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="ABPNews.in@SD",ABP News
@@ -114,7 +114,7 @@ https://raw.githubusercontent.com/amazeyourself/adaptive-streams/refs/heads/main
 #EXTINF:-1 tvg-id="NDTVProfit.in@HD",NDTV Profit
 https://ndtvprofit.akamaized.net/hls/live/2107404/ndtvprofit/master_1.m3u8
 #EXTINF:-1 tvg-id="News24.in@SD",News 24
-https://tvsen5.aynaott.com/News24/index.m3u8
+http://tvsen5.aynascope.net/News24/index.m3u8
 #EXTINF:-1 tvg-id="NewsNation.in@SD",News Nation
 https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/6cd2f649739a45ca9de1daf81cc7d0f2/index.m3u8
 #EXTINF:-1 tvg-id="NickJr.in@SD",Nick Jr.
@@ -169,20 +169,18 @@ http://103.185.24.134:3001/SONIC/index.m3u8
 https://cloudplay-sonyliv.pages.dev/sethd.m3u8
 #EXTINF:-1 tvg-id="SonyKal.in@Hd",Sony Kal
 https://wurlsonypicturestv.global.transmit.live/hls/68deeb1c0238cda82df543dd/v1/spt_sonykal_1/lg_us/latest/main/hls/playlist.m3u8
-#EXTINF:-1 tvg-id="SonyMax.in@SD",Sony Max
-https://cloudplay-sonyliv.pages.dev/max.m3u8
 #EXTINF:-1 tvg-id="SonyMax2.in@SD",Sony Max 2
-https://cloudplay-sonyliv.pages.dev/max2.m3u8
+http://107.167.16.138/sonymax2/index.m3u8?token=test
 #EXTINF:-1 tvg-id="SonyPal.in@SD",Sony Pal
 https://cloudplay-sonyliv.pages.dev/pal.m3u8
 #EXTINF:-1 tvg-id="SonyPix.in@HD",Sony Pix
 https://cloudplay-sonyliv.pages.dev/pixhd.m3u8
 #EXTINF:-1 tvg-id="SonySAB.in@HD",Sony SAB
 https://cloudplay-sonyliv.pages.dev/sabhd.m3u8
-#EXTINF:-1 tvg-id="SonySportsTen1.in@SD",Sony Sports Ten 1
-https://cloudplay-sonyliv.pages.dev/ten1.m3u8
-#EXTINF:-1 tvg-id="SonySportsTen2.in@SD",Sony Sports Ten 2
-https://cloudplay-sonyliv.pages.dev/ten2.m3u8
+#EXTINF:-1 tvg-id="SonySportsTen1.in@HD",Sony Sports Ten 1
+https://cloudplay-sonyliv.pages.dev/ten1hd.m3u8
+#EXTINF:-1 tvg-id="SonySportsTen2.in@HD",Sony Sports Ten 2
+https://cloudplay-sonyliv.pages.dev/ten2hd.m3u8
 #EXTINF:-1 tvg-id="SonySportsTen3Hindi.in@SD",Sony Sports Ten 3 Hindi
 https://cloudplay-sonyliv.pages.dev/ten3.m3u8
 #EXTINF:-1 tvg-id="SonySportsTen5.in@SD",Sony Sports Ten 5
@@ -191,8 +189,6 @@ https://cloudplay-sonyliv.pages.dev/ten5.m3u8
 https://cloudplay-sonyliv.pages.dev/wah.m3u8
 #EXTINF:-1 tvg-id="SonyYay.in@SD",Sony Yay!
 https://cloudplay-sonyliv.pages.dev/yay.m3u8
-#EXTINF:-1 tvg-id="StarGold2.in@SD",Star Gold 2
-http://107.167.16.138/stargold2/index.m3u8?token=test
 #EXTINF:-1 tvg-id="StarPravah.in@HD",Star Pravah
 https://da86m1sqpm3o0.cloudfront.net/28072023/smil:starpravah.smil/chunklist_b1928000.m3u8
 #EXTINF:-1 tvg-id="StarSports2Hindi.in@SD",Star Sports 2 Hindi
@@ -247,6 +243,8 @@ https://dt3lrqnyx3dks.cloudfront.net/index.m3u8
 https://vg-zeefta.akamaized.net/ptnr-yupptv/title-zeepunjabharyanahima/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/65eed269-2f3a-4dd0-ac89-d18959af28e3/main.m3u8
 #EXTINF:-1 tvg-id="ZeeSouthFlix.in@HD",Zee South Flix
 https://amg00862-amg00862c9-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-amg00862c9-amgplt0173/playlist.m3u8
+#EXTINF:-1 tvg-id="ZeeTV.in@HD",Zee TV
+http://41.205.93.154/ZEE-TV/index.m3u8
 #EXTINF:-1 tvg-id="Zing.in@SD",Zing!
 http://107.167.16.138/zing/index.m3u8?token=test
 #EXTINF:-1 tvg-id="Zoom.in@SD",Zoom
