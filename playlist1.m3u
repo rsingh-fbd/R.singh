@@ -12,7 +12,7 @@ https://amg01281-9xmediapvtltd-9xjhakaas-samsungin-ci2cs.amagi.tv/playlist/amg01
 #EXTINF:-1 tvg-id="9XTashan.in@SD",9X Tashan
 https://amg01281-9xmediapvtltd-9xtashan-samsungin-xz1sd.amagi.tv/playlist/amg01281-9xmediapvtltd-9xtashan-samsungin/playlist.m3u8
 #EXTINF:-1 tvg-id="9XM.in@SD",9XM
-https://9xjio.wiseplayout.com/9XM/master.m3u8
+https://wiselp.wiseplayout.com/9XM/master.m3u8
 #EXTINF:-1 tvg-id="AajTak.in@HD",Aaj Tak
 https://feeds.intoday.in/aajtak/api/aajtakhd/master.m3u8
 #EXTINF:-1 tvg-id="AasthaBhajan.in@SD",Aastha Bhajan
@@ -191,12 +191,12 @@ http://107.167.16.138/sonymax2/index.m3u8?token=test
 https://cloudplay-sonyliv.pages.dev/pal.m3u8
 #EXTINF:-1 tvg-id="SonyPix.in@HD",Sony Pix
 https://cloudplay-sonyliv.pages.dev/pixhd.m3u8
-#EXTINF:-1 tvg-id="SonySportsTen1.in@SD",Sony Sports Ten 1
-https://cloudplay-sonyliv.pages.dev/ten1.m3u8
+#EXTINF:-1 tvg-id="SonySportsTen1.in@HD",Sony Sports Ten 1
+https://cloudplay-sonyliv.pages.dev/ten1hd.m3u8
 #EXTINF:-1 tvg-id="SonySportsTen2.in@SD",Sony Sports Ten 2
 https://cloudplay-sonyliv.pages.dev/ten2.m3u8
-#EXTINF:-1 tvg-id="SonySportsTen3Hindi.in@HD",Sony Sports Ten 3 Hindi
-https://cloudplay-sonyliv.pages.dev/ten3hd.m3u8
+#EXTINF:-1 tvg-id="SonySportsTen3Hindi.in@SD",Sony Sports Ten 3 Hindi
+https://cloudplay-sonyliv.pages.dev/ten3.m3u8
 #EXTINF:-1 tvg-id="SonySportsTen5.in@SD",Sony Sports Ten 5
 https://cloudplay-sonyliv.pages.dev/ten5.m3u8
 #EXTINF:-1 tvg-id="SonyWah.in@SD",Sony Wah
@@ -233,6 +233,8 @@ https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/a5ee7c4e7a2a4b15a22a3bcf523b9776/in
 https://d34z4embz0hjf6.cloudfront.net/out/v1/d55b3323a9f142638f897378f0b526fe/index.m3u8
 #EXTINF:-1 tvg-id="TV9Bharatvarsh.in@SD",TV9 Bharatvarsh
 https://vg-tv9yupp.vgcdn.net/vglive-sk-468570/v1/019dfce4b3371ea55784752988544/019dfce515ea1ea540a871e333259/main.m3u8
+#EXTINF:-1 tvg-id="Unite8Sports2.in@SD",Unite8 Sports 2
+http://59.103.38.46:8000/play/a126/index.m3u8
 #EXTINF:-1 tvg-id="YRFMusic.in@SD",YRF Music
 https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01412-xiaomiasia-yrfmusic-xiaomi/playlist.m3u8
 #EXTINF:-1 tvg-id="ZeeAction.in@SD",Zee Action
