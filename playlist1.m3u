@@ -1,8 +1,6 @@
 #EXTM3U
 #EXTINF:-1 tvg-id="AndTV.in@International",&TV International
 https://amg01117-amg01117c1-amgplt0029.playout.now3.amagi.tv/playlist/amg01117-amg01117c1-amgplt0029/playlist.m3u8
-#EXTINF:-1 tvg-id="AndxplorHD.in@HD",&xplor
-http://51.75.127.199:3141/andxplorehd/index.m3u8
 #EXTINF:-1 tvg-id="9XJalwa.in@SD",9X Jalwa
 https://wiselp.wiseplayout.com/9X_Jalwa/master.m3u8
 #EXTINF:-1 tvg-id="9XJhakaas.in@SD",9X Jhakaas
@@ -33,8 +31,6 @@ http://103.151.60.162:2122/play/a01e/index.m3u8?hls
 https://idvd.multitvsolution.com/idvo/bharatsamachar.m3u8
 #EXTINF:-1 tvg-id="BhojpuriCinema.in@SD",Bhojpuri Cinema
 https://live-bhojpuri.akamaized.net/liveabr/playlist.m3u8
-#EXTINF:-1 tvg-id="BigMagic.in@SD",Big Magic
-http://51.75.127.199:3141/bigmagic/index.m3u8
 #EXTINF:-1 tvg-id="BollywoodHD.ro@SD" tvg-logo="https://i.imgur.com/scDKOLS.png" group-title="Movies",Bollywood
 https://xykt-fix.github.io/cinerama_edge01/hls/BOLLYWOOD_RU/Movie009.m3u8
 #EXTINF:-1 tvg-id="BoogleBollywood.in@SD",Boogle Bollywood
@@ -208,7 +204,7 @@ http://103.151.60.162:2122/play/a01v/index.m3u8?hls
 #EXTINF:-1 tvg-id="StarGoldSelect.in@HD",Star Gold Select
 http://51.75.127.199:3141/stargoldselecthd/index.m3u8
 #EXTINF:-1 tvg-id="StarMovies.in@HD",Star Movies
-http://51.75.127.199:3141/starmovieshd/index.m3u8
+http://103.185.24.134:3001/Star-Movies/index.m3u8
 #EXTINF:-1 tvg-id="StarMoviesSelect.in@HD",Star Movies Select
 http://51.75.127.199:3141/starmoviesselecthd/index.m3u8
 #EXTINF:-1 tvg-id="StarPravah.in@HD",Star Pravah
@@ -242,7 +238,7 @@ https://vg-zeefta.akamaized.net/ptnr-yupptv/title-zeehindustan/v1/master/611d79b
 #EXTINF:-1 tvg-id="ZeeBiharJharkhand.in@SD",Zee Bihar Jharkhand
 https://raw.githubusercontent.com/amazeyourself/adaptive-streams/refs/heads/main/streams/in/YuppTV/ZeeBiharJharkhand.m3u8
 #EXTINF:-1 tvg-id="ZeeBusiness.in@SD",Zee Business
-https://dwby15d04agvq.cloudfront.net/index_5.m3u8
+https://dwby15d04agvq.cloudfront.net/index_1.m3u8
 #EXTINF:-1 tvg-id="ZeeCineClassic.in@SD",Zee Cine Classic
 https://amg00862-amg00862c8-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-amg00862c8-amgplt0173/playlist.m3u8
 #EXTINF:-1 tvg-id="ZeeCinema.in@SD",Zee Cinema
@@ -250,7 +246,7 @@ https://d1g8wgjurz8via.cloudfront.net/bpk-tv/NGCHD/default/NGCHD.m3u8
 #EXTINF:-1 tvg-id="ZeeCinema.in@APAC" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_ZEE_CINEMA/images/LOGO_HD/LOGO_HD_image.png" group-title="Movies",Zee Cinema APAC
 https://amg17931-zee-amg17931c5-samsung-au-8873.playouts.now.amagi.tv/playlist.m3u8
 #EXTINF:-1 tvg-id="ZeeClassic.in@SD",Zee Classic
-http://51.75.127.199:3141/zeeclassic/index.m3u8
+http://107.167.16.138/zeeclassic/index.m3u8?token=test
 #EXTINF:-1 tvg-id="ZeeComedyNation.in@HD",Zee Comedy Nation
 https://amg00862-amg00862c5-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-amg00862c5-amgplt0173/playlist.m3u8
 #EXTINF:-1 tvg-id="ZeeDelhiNCRHaryana.in@SD",Zee Delhi NCR Haryana
