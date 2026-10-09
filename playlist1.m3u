@@ -10,7 +10,7 @@ https://amg01281-9xmediapvtltd-9xtashan-samsungin-xz1sd.amagi.tv/playlist/amg012
 #EXTINF:-1 tvg-id="9XM.in@SD",9XM
 https://wiselp.wiseplayout.com/9XM/master.m3u8
 #EXTINF:-1 tvg-id="AajTak.in@HD",Aaj Tak
-https://livehub-voidnet.onrender.com/cluster/streamcore/in/AAJTAK_REDIS.m3u8
+https://feeds.intoday.in/aajtak/api/aajtakhd/master.m3u8
 #EXTINF:-1 tvg-id="AasthaBhajan.in@SD",Aastha Bhajan
 https://aasthaott.akamaized.net/110923/smil:bhajan.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="ABPNews.in@SD",ABP News
@@ -74,7 +74,7 @@ https://mumt03.tangotv.in/Dsly5z3HGOLDMINES2/index.m3u8
 #EXTINF:-1 tvg-id="GoldminesAction.in@SD",Goldmines Action
 https://mumt03.tangotv.in/Dsly5z3HGOLDMINESACTION/index.m3u8
 #EXTINF:-1 tvg-id="GoldminesBollywood.in@SD",Goldmines Bollywood
-https://streams.tangotv.in/GOLDMINESBOLLYWOOD/ORIGIN/index.m3u8
+https://tvsen6.aynaott.com/55xNrLdf/index.m3u8
 #EXTINF:-1 tvg-id="GoldminesMovies.in@SD",Goldmines Movies
 https://cdn.pishow.tv/ott/live/1461/master.m3u8
 #EXTINF:-1 tvg-id="HareKrsnaTV.in@SD",Hare Krsna TV
@@ -179,8 +179,6 @@ https://wurlsonypicturestv.global.transmit.live/hls/68deeb1c0238cda82df543dd/v1/
 http://103.185.24.134:3001/SonyMAX/index.m3u8
 #EXTINF:-1 tvg-id="SonyMax2.in@SD",Sony Max 2
 http://107.167.16.138/sonymax2/index.m3u8?token=test
-#EXTINF:-1 tvg-id="SonyPix.in@HD",Sony Pix
-http://103.151.60.162:2122/play/a01d/index.m3u8?hls
 #EXTINF:-1 tvg-id="SonySAB.in@SD",Sony SAB
 http://103.151.60.162:2122/play/a01q/index.m3u8?hls
 #EXTINF:-1 tvg-id="SonySportsTen1.in@HD",Sony Sports Ten 1
