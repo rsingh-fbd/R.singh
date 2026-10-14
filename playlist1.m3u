@@ -74,7 +74,7 @@ https://mumt03.tangotv.in/Dsly5z3HGOLDMINES2/index.m3u8
 #EXTINF:-1 tvg-id="GoldminesAction.in@SD",Goldmines Action
 https://mumt03.tangotv.in/Dsly5z3HGOLDMINESACTION/index.m3u8
 #EXTINF:-1 tvg-id="GoldminesBollywood.in@SD",Goldmines Bollywood
-https://mumt03.tangotv.in/Dsly5z3HGOLDMINESBOLLYWOOD/index.m3u8
+https://streams.tangotv.in/GOLDMINESBOLLYWOOD/ORIGIN/index.m3u8
 #EXTINF:-1 tvg-id="GoldminesMovies.in@SD",Goldmines Movies
 https://cdn.pishow.tv/ott/live/1461/master.m3u8
 #EXTINF:-1 tvg-id="HareKrsnaTV.in@SD",Hare Krsna TV
@@ -199,8 +199,6 @@ http://103.185.24.134:3001/Star-Gold/index.m3u8
 http://103.151.60.162:2122/play/a01v/index.m3u8?hls
 #EXTINF:-1 tvg-id="StarMovies.in@HD",Star Movies
 http://103.185.24.134:3001/Star-Movies/index.m3u8
-#EXTINF:-1 tvg-id="StarMoviesSelect.in@HD",Star Movies Select
-http://103.151.60.162:2122/play/a02l/index.m3u8?hls
 #EXTINF:-1 tvg-id="StarPravah.in@HD",Star Pravah
 https://da86m1sqpm3o0.cloudfront.net/28072023/smil:starpravah.smil/chunklist_b1928000.m3u8
 #EXTINF:-1 tvg-id="StarSportsSelect1.in@HD",Star Sports Select 1
@@ -228,7 +226,7 @@ https://vg-zeefta.akamaized.net/ptnr-yupptv/title-zeehindustan/v1/master/611d79b
 #EXTINF:-1 tvg-id="ZeeBiharJharkhand.in@SD",Zee Bihar Jharkhand
 https://raw.githubusercontent.com/amazeyourself/adaptive-streams/refs/heads/main/streams/in/YuppTV/ZeeBiharJharkhand.m3u8
 #EXTINF:-1 tvg-id="ZeeBusiness.in@SD",Zee Business
-https://dwby15d04agvq.cloudfront.net/index_1.m3u8
+https://dwby15d04agvq.cloudfront.net/index_5.m3u8
 #EXTINF:-1 tvg-id="ZeeCineClassic.in@SD",Zee Cine Classic
 https://amg00862-amg00862c8-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-amg00862c8-amgplt0173/playlist.m3u8
 #EXTINF:-1 tvg-id="ZeeCinema.in@HD",Zee Cinema
@@ -253,8 +251,8 @@ https://dt3lrqnyx3dks.cloudfront.net/index.m3u8
 https://vg-zeefta.akamaized.net/ptnr-yupptv/title-zeepunjabharyanahima/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/65eed269-2f3a-4dd0-ac89-d18959af28e3/main.m3u8
 #EXTINF:-1 tvg-id="ZeeSouthFlix.in@HD",Zee South Flix
 https://amg00862-amg00862c9-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-amg00862c9-amgplt0173/playlist.m3u8
-#EXTINF:-1 tvg-id="ZeeTV.in@SD",Zee TV
-http://103.151.60.162:2122/play/a01u/index.m3u8?hls
+#EXTINF:-1 tvg-id="ZeeTV.in@HD",Zee TV
+http://41.205.93.154/ZEE-TV/index.m3u8
 #EXTINF:-1 tvg-id="Zing.in@SD",Zing!
 http://107.167.16.138/zing/index.m3u8?token=test
 #EXTINF:-1 tvg-id="Zoom.in@SD",Zoom
