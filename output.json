@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-16T03:06:58.792933Z",
+  "generated_at": "2026-10-16T16:04:05.503105Z",
   "language": "Hindi",
-  "total_items": 6,
+  "total_items": 4,
   "items": [
     {
       "type": "movie",
@@ -34,38 +34,6 @@
         "hls": []
       },
       "play_url": "https://archive.org/download/dli.akashvani.sangeet.30/Manipuri.Raas.Vasant.Raas.mp4"
-    },
-    {
-      "type": "movie",
-      "title": "Krishna Leela: Musical Drama by Shri Krishna Lila Sansthan Vrindavan",
-      "year": 1992,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "dni.ncaa.ICCR-832-VHS",
-      "poster": "https://archive.org/services/img/dni.ncaa.ICCR-832-VHS",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/dni.ncaa.ICCR-832-VHS/ICCR-832-VHS.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/dni.ncaa.ICCR-832-VHS/ICCR-832-VHS.mp4"
-    },
-    {
-      "type": "movie",
-      "title": "Shri Krishna Leela (Vol. II)",
-      "year": 1992,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "dni.ncaa.ICCR-712-UM",
-      "poster": "https://archive.org/services/img/dni.ncaa.ICCR-712-UM",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/dni.ncaa.ICCR-712-UM/ICCR-712-UM.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/dni.ncaa.ICCR-712-UM/ICCR-712-UM.mp4"
     },
     {
       "type": "movie",
