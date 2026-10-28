@@ -78,7 +78,7 @@ https://mumt03.tangotv.in/Dsly5z3HGOLDMINES2/index.m3u8
 #EXTINF:-1 tvg-id="GoldminesAction.in@SD",Goldmines Action
 https://mumt03.tangotv.in/Dsly5z3HGOLDMINESACTION/index.m3u8
 #EXTINF:-1 tvg-id="GoldminesBollywood.in@SD",Goldmines Bollywood
-https://streams.tangotv.in/GOLDMINESBOLLYWOOD/ORIGIN/index.m3u8
+https://mumt03.tangotv.in/Dsly5z3HGOLDMINESBOLLYWOOD/index.m3u8
 #EXTINF:-1 tvg-id="GoldminesMovies.in@SD",Goldmines Movies
 https://cdn.pishow.tv/ott/live/1461/master.m3u8
 #EXTINF:-1 tvg-id="HareKrsnaTV.in@SD",Hare Krsna TV
@@ -132,7 +132,7 @@ https://cdn.pishow.tv/ott/live/233/master.m3u8
 #EXTINF:-1 tvg-id="PeaceofMindTV.in@SD",Peace of Mind TV
 https://yuppnimrestreammum.akamaized.net/181224/smil:peaceofmind.smil/playlist.m3u8?hdnts=st=1735898689~exp=1835898688~acl=*~hmac=f5fe24724fe05481e3841f9eb5ab8efdee0a3dd83645ae9dcf45703f525bab7b
 #EXTINF:-1 tvg-id="PunjabiHits.in@SD",Punjabi Hits
-https://livingindiaottlive.akamaized.net/punjabihits/index.m3u8
+https://stream.ottlive.co.in/punjabihits/index.m3u8
 #EXTINF:-1 tvg-id="RepublicBharat.in@SD",Republic Bharat
 https://cdn.pishow.tv/ott/live/1053/master.m3u8
 #EXTINF:-1 tvg-id="RepublicTV.in@SD",Republic TV
@@ -175,10 +175,8 @@ https://cdn.pishow.tv/ott/live/457/master.m3u8
 http://38.96.178.205/SONYHD/index.m3u8
 #EXTINF:-1 tvg-id="SonyKal.in@Hd",Sony Kal
 https://wurlsonypicturestv.global.transmit.live/hls/68deeb1c0238cda82df543dd/v1/spt_sonykal_1/lg_us/latest/main/hls/playlist.m3u8
-#EXTINF:-1 tvg-id="SonyMax.in@HD" tvg-logo="https://dtil.tmsimg.com/assets/s157590_ld_h15_aa.png?lock=720x540" group-title="Movies",Sony Max
+#EXTINF:-1 tvg-id="SonyMax.in@HD",Sony Max
 http://103.151.60.162:2122/play/a014/index.m3u8?hls
-#EXTINF:-1 tvg-id="SonyPix.in@HD" tvg-logo="https://i.postimg.cc/Z5G8j67L/PIX-HD-WHITE.png" group-title="Movies",Sony Pix
-http://103.151.60.162:2122/play/a01d/index.m3u8?hls
 #EXTINF:-1 tvg-id="SonySAB.in@SD",Sony SAB
 https://drk6xq0vhn.gpcdn.net/live/sub_hd_abr/index.m3u8
 #EXTINF:-1 tvg-id="SonySportsTen1.in@SD",Sony Sports Ten 1
@@ -193,6 +191,8 @@ http://103.151.60.162:2122/play/a028/index.m3u8?hls
 https://raw.githubusercontent.com/amazeyourself/adaptive-streams/refs/heads/main/streams/gb/YuppTV/UtsavBharat.m3u8
 #EXTINF:-1 tvg-id="StarGold2.in@HD",Star Gold 2
 http://103.151.60.162:2122/play/a01v/index.m3u8?hls
+#EXTINF:-1 tvg-id="StarMovies.in@HD",Star Movies
+http://103.151.60.162:2122/play/a02k/index.m3u8?hls
 #EXTINF:-1 tvg-id="StarPravah.in@HD",Star Pravah
 https://da86m1sqpm3o0.cloudfront.net/28072023/smil:starpravah.smil/chunklist_b1928000.m3u8
 #EXTINF:-1 tvg-id="StarSportsSelect1.in@HD",Star Sports Select 1
@@ -216,7 +216,7 @@ https://vg-zeefta.akamaized.net/ptnr-yupptv/title-zeehindustan/v1/master/611d79b
 #EXTINF:-1 tvg-id="ZeeBiharJharkhand.in@SD",Zee Bihar Jharkhand
 https://raw.githubusercontent.com/amazeyourself/adaptive-streams/refs/heads/main/streams/in/YuppTV/ZeeBiharJharkhand.m3u8
 #EXTINF:-1 tvg-id="ZeeBusiness.in@SD",Zee Business
-https://dwby15d04agvq.cloudfront.net/index_1.m3u8
+https://dwby15d04agvq.cloudfront.net/index_5.m3u8
 #EXTINF:-1 tvg-id="ZeeCineClassic.in@SD",Zee Cine Classic
 https://amg00862-amg00862c8-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-amg00862c8-amgplt0173/playlist.m3u8
 #EXTINF:-1 tvg-id="ZeeCinema.in@SD",Zee Cinema
@@ -239,7 +239,7 @@ https://dt3lrqnyx3dks.cloudfront.net/index.m3u8
 https://vg-zeefta.akamaized.net/ptnr-yupptv/title-zeepunjabharyanahima/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/65eed269-2f3a-4dd0-ac89-d18959af28e3/main.m3u8
 #EXTINF:-1 tvg-id="ZeeSouthFlix.in@HD",Zee South Flix
 https://amg00862-amg00862c9-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-amg00862c9-amgplt0173/playlist.m3u8
-#EXTINF:-1 tvg-id="ZeeTV.in@HD",Zee TV
-http://41.205.93.154/ZEE-TV/index.m3u8
+#EXTINF:-1 tvg-id="ZeeTV.in@SD",Zee TV
+http://103.151.60.162:2122/play/a01u/index.m3u8?hls
 #EXTINF:-1 tvg-id="Zoom.in@SD",Zoom
 https://dai.google.com/linear/hls/event/JCAm25qkRXiKcK1AJMlvKQ/master.m3u8
