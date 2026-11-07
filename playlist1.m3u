@@ -184,7 +184,7 @@ https://cdn.pishow.tv/ott/live/337/master.m3u8
 #EXTINF:-1 tvg-id="ShemarooTV.in@SD",Shemaroo TV
 https://cdn.pishow.tv/ott/live/230/master.m3u8
 #EXTINF:-1 tvg-id="ShemarooUmang.in@SD",Shemaroo Umang
-https://mumt04.tangotv.in/m18aqlK4SHEMAROOUMANG/index.m3u8
+https://streams.tangotv.in/SHEMAROOUMANG/ORIGIN/index.m3u8
 #EXTINF:-1 tvg-id="ShubhTV.in@SD",Shubh TV
 https://d2g1vdc6ozl2o8.cloudfront.net/out/v1/0a0dc7d7911b4fddbb4dfc963fdd4b9e/index.m3u8
 #EXTINF:-1 tvg-id="ShubhsandeshTV.in@SD",Shubhsandesh TV
@@ -204,7 +204,7 @@ https://livetv.shamon-cable.net:8443/StarGold/index.m3u8
 #EXTINF:-1 tvg-id="StarGoldSelect.in@SD",Star Gold Select
 https://livetv.shamon-cable.net:8443/StarGoldSelect/index.m3u8
 #EXTINF:-1 tvg-id="StarMovies.in@HD",Star Movies
-https://livetv.shamon-cable.net:8443/Star-Movies/index.m3u8
+http://103.135.253.32:8080/STAR-MOVIES/index.m3u8
 #EXTINF:-1 tvg-id="StarMoviesSelect.in@HD",Star Movies Select
 https://livetv.shamon-cable.net:8443/Star-movies-select/index.m3u8
 #EXTINF:-1 tvg-id="StarPravah.in@HD",Star Pravah
@@ -212,7 +212,7 @@ https://da86m1sqpm3o0.cloudfront.net/28072023/smil:starpravah.smil/chunklist_b19
 #EXTINF:-1 tvg-id="StarSportsSelect2.in@HD",Star Sports Select 2
 http://tvsen7.aynascope.net/ssport2hd/index.m3u8
 #EXTINF:-1 tvg-id="StarPlus.in@HD",StarPlus
-https://livetv.shamon-cable.net:8443/Star-Plus-HD/index.m3u8
+http://103.135.253.32:8080/STAR-PLUS/index.m3u8
 #EXTINF:-1 tvg-id="SudarshanNews.in@SD",Sudarshan News
 https://cdn.pishow.tv/ott/live/1516/master.m3u8
 #EXTINF:-1 tvg-id="SVBC4.in@SD",SVBC 4
@@ -234,7 +234,7 @@ https://vg-zeefta.akamaized.net/ptnr-yupptv/title-zee_business/v1/master/611d79b
 #EXTINF:-1 tvg-id="ZeeCineClassic.in@SD",Zee Cine Classic
 https://amg00862-amg00862c8-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-amg00862c8-amgplt0173/playlist.m3u8
 #EXTINF:-1 tvg-id="ZeeCinema.in@HD",Zee Cinema
-http://103.135.253.32:8080/ZEE-CINEMA/index.m3u8
+https://livetv.shamon-cable.net:8443/Z-Cinema/index.m3u8
 #EXTINF:-1 tvg-id="ZeeCinema.in@APAC" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_ZEE_CINEMA/images/LOGO_HD/LOGO_HD_image.png" group-title="Movies",Zee Cinema APAC
 https://amg17931-zee-amg17931c5-samsung-au-8873.playouts.now.amagi.tv/playlist.m3u8
 #EXTINF:-1 tvg-id="ZeeComedyNation.in@HD",Zee Comedy Nation
