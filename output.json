@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-08T17:35:50.434867Z",
+  "generated_at": "2026-11-09T04:39:07.572766Z",
   "language": "Hindi",
-  "total_items": 4,
+  "total_items": 3,
   "items": [
     {
       "type": "movie",
@@ -34,22 +34,6 @@
         "hls": []
       },
       "play_url": "https://archive.org/download/dni.ncaa.ICCR-861-UM/ICCR-861-UM.mp4"
-    },
-    {
-      "type": "movie",
-      "title": "4 The Blissful Trance Shri Krishna Leela",
-      "year": null,
-      "language": "Hindi",
-      "source": "archive.org",
-      "identifier": "4-the-blissful-trance-shri-krishna-leela",
-      "poster": "https://archive.org/services/img/4-the-blissful-trance-shri-krishna-leela",
-      "streams": {
-        "mp4": [
-          "https://archive.org/download/4-the-blissful-trance-shri-krishna-leela/4-The Blissful Trance-Shri Krishna Leela.mp4"
-        ],
-        "hls": []
-      },
-      "play_url": "https://archive.org/download/4-the-blissful-trance-shri-krishna-leela/4-The Blissful Trance-Shri Krishna Leela.mp4"
     },
     {
       "type": "series",
