@@ -10,7 +10,7 @@ https://amg01281-9xmediapvtltd-9xtashan-samsungin-xz1sd.amagi.tv/playlist/amg012
 #EXTINF:-1 tvg-id="9XM.in@SD",9XM
 https://wiselp.wiseplayout.com/9XM/master.m3u8
 #EXTINF:-1 tvg-id="AajTak.in@HD",Aaj Tak
-https://feeds.intoday.in/aajtak/api/aajtakhd/master.m3u8
+https://livehub-voidnet.onrender.com/cluster/streamcore/in/AAJTAK_REDIS.m3u8
 #EXTINF:-1 tvg-id="AasthaBhajan.in@SD",Aastha Bhajan
 https://aasthaott.akamaized.net/110923/smil:bhajan.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="AasthaPrime1.in@SD",Aastha Prime 1
@@ -146,7 +146,7 @@ https://d2lk5u59tns74c.cloudfront.net/out/v1/500a6b45f5ae41dda445d912b59eaa09/in
 #EXTINF:-1 tvg-id="PitaaraComedy.in@SD",Pitaara Comedy
 https://vglivessai.akamaized.net/ptnr-lgtv/title-Pitaara_Comedy_LG/sg/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/5a5410c0-1b79-4adc-9243-0139b249798b/playlist.m3u8
 #EXTINF:-1 tvg-id="PunjabiHits.in@SD",Punjabi Hits
-https://stream.ottlive.co.in/punjabihits/index.m3u8
+https://livingindia.ottlive.co.in/punjabihits/index.m3u8
 #EXTINF:-1 tvg-id="QTV.in@SD",Q TV
 https://samitaorigin.tangotv.in/THEQ/SAMITAORIGIN/index.m3u8
 #EXTINF:-1 tvg-id="RepublicBharat.in@SD",Republic Bharat
@@ -233,7 +233,5 @@ https://dt3lrqnyx3dks.cloudfront.net/index.m3u8
 https://vg-zeefta.akamaized.net/ptnr-yupptv/title-zeepunjabharyanahima/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/65eed269-2f3a-4dd0-ac89-d18959af28e3/main.m3u8
 #EXTINF:-1 tvg-id="ZeeSouthFlix.in@HD",Zee South Flix
 https://amg00862-amg00862c9-amgplt0173.playout.now3.amagi.tv/playlist/amg00862-amg00862c9-amgplt0173/playlist.m3u8
-#EXTINF:-1 tvg-id="ZeeTV.in@HD",Zee TV
-http://41.205.93.154/ZEE-TV/index.m3u8
 #EXTINF:-1 tvg-id="Zoom.in@SD",Zoom
-https://dai.google.com/linear/hls/event/JCAm25qkRXiKcK1AJMlvKQ/master.m3u8
+https://d2esfk1pb9cdob.cloudfront.net/master.m3u8
