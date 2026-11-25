@@ -81,6 +81,8 @@ https://xlbor37ydvaj-hls-live.wmncdn.net/firstindianewstv1/live.stream/index.m3u
 https://d2lk5u59tns74c.cloudfront.net/out/v1/ffc601b3dc8d41c5b09115702538d75a/index.m3u8
 #EXTINF:-1 tvg-id="Goldmines.in@SD",Goldmines
 https://cdn.pishow.tv/ott/live/1459/master.m3u8
+#EXTINF:-1 tvg-id="Goldmines2.in@SD",Goldmines 2
+https://samitaorigin.tangotv.in/GOLDMINES2/SAMITAORIGIN/index.m3u8
 #EXTINF:-1 tvg-id="GoldminesAction.in@SD",Goldmines Action
 https://samitaorigin.tangotv.in/GOLDMINESACTION/SAMITAORIGIN/index.m3u8
 #EXTINF:-1 tvg-id="GoldminesBollywood.in@SD",Goldmines Bollywood
@@ -119,8 +121,6 @@ https://cdn.pishow.tv/ott/live/1013/master.m3u8
 https://mumbai-edge.smartplaytv.in/MastiMusic/index.m3u8
 #EXTINF:-1 tvg-id="MBCBollywood.ae@SD" tvg-logo="https://i.imgur.com/TTAGFHG.png" group-title="Movies",MBC Bollywood
 https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-bollywood/546eb40d7dcf9a209255dd2496903764/index.m3u8
-#EXTINF:-1 tvg-id="MoviesNow.in@HD",Movies Now
-http://27.124.71.27/Movies_Now/index.m3u8
 #EXTINF:-1 tvg-id="MusicIndia.in@SD",Music India
 https://cdn.pishow.tv/ott/live/226/master.m3u8
 #EXTINF:-1 tvg-id="NDTV24x7.in@SD",NDTV 24x7
@@ -144,9 +144,9 @@ https://yuppnimrestreammum.akamaized.net/181224/smil:peaceofmind.smil/playlist.m
 #EXTINF:-1 tvg-id="Pitaara.in@SD",Pitaara
 https://d2lk5u59tns74c.cloudfront.net/out/v1/500a6b45f5ae41dda445d912b59eaa09/index.m3u8
 #EXTINF:-1 tvg-id="PitaaraComedy.in@SD",Pitaara Comedy
-https://vglivessai.akamaized.net/ptnr-lgtv/title-Pitaara_Comedy_LG/sg/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/5a5410c0-1b79-4adc-9243-0139b249798b/playlist.m3u8
+https://pitaara-lg.vgcdn.net/v1/vglive-sk-217489/playlist.m3u8
 #EXTINF:-1 tvg-id="PunjabiHits.in@SD",Punjabi Hits
-https://stream.ottlive.co.in/punjabihits/index.m3u8
+https://livingindia.ottlive.co.in/punjabihits/index.m3u8
 #EXTINF:-1 tvg-id="QTV.in@SD",Q TV
 https://samitaorigin.tangotv.in/THEQ/SAMITAORIGIN/index.m3u8
 #EXTINF:-1 tvg-id="RepublicBharat.in@SD",Republic Bharat
